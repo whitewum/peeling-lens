@@ -1,0 +1,16 @@
+peeltraj
+*.txt
+!figures/*.txt
+__pycache__/
+.DS_Store
+
+# LaTeX build products (keep paper/main.pdf)
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.xdv
+.build/

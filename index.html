@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Peeling Lens</title>
+<meta name="description" content="An interactive lab for peeling thresholds and failure-conditioned measurements: run degree-one peeling in the browser and watch the critical window and the Doob decomposition.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
+<style>
+/* Layout: sticky control rail on the left, 2x2 chart bench on the right; one column on phones. */
+:root {
+  --bg: #f3f6f5;
+  --panel: #ffffff;
+  --ink: #17201d;
+  --muted: #5b6864;
+  --line: #d9e1de;
+  --grid: #e7ecea;
+  --ok: #2c6cb0;
+  --fail: #cc4129;
+  --fluid: #17201d;
+  --accent: #0d7a6a;
+  --accent-soft: #dcefeb;
+  --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111614; --panel: #18201d; --ink: #e3ebe8; --muted: #93a29d; --line: #2b3632; --grid: #222b28;
+    --ok: #6ba7ee; --fail: #ff7b5e; --fluid: #f2f6f4; --accent: #4cc3ae; --accent-soft: #1d3530;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111614; --panel: #18201d; --ink: #e3ebe8; --muted: #93a29d; --line: #2b3632; --grid: #222b28;
+  --ok: #6ba7ee; --fail: #ff7b5e; --fluid: #f2f6f4; --accent: #4cc3ae; --accent-soft: #1d3530;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 15px; line-height: 1.6; }
+.wrap { max-width: 1320px; margin: 0 auto; padding-inline: 20px; padding-block: 28px 48px; }
+header { display: grid; gap: 4px; margin-bottom: 22px; max-width: 78ch; }
+h1 { font-family: var(--font-display); font-weight: 600; font-size: 2rem; line-height: 1.2; margin: 0; }
+.sub { font-family: var(--font-display); font-size: 1.1rem; color: var(--muted); margin: 0 0 6px; text-wrap: balance; }
+header p { margin: 0; color: var(--muted); }
+.layout { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 860px) { .layout { grid-template-columns: minmax(0, 1fr); } }
+aside { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); display: grid; gap: 16px;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px; }
+@media (max-width: 860px) { aside { position: static; } }
+.ctl { display: grid; gap: 4px; }
+.ctl-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.ctl label, .ctl .lbl { font-weight: 600; font-size: 0.9rem; }
+.ctl output { font-family: var(--font-mono); font-size: 0.88rem; font-variant-numeric: tabular-nums; color: var(--accent); }
+.ctl small { color: var(--muted); font-size: 0.8rem; line-height: 1.45; }
+input[type=range] { width: 100%; accent-color: var(--accent); }
+.seg { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
+.seg.two { grid-template-columns: repeat(2, 1fr); }
+.seg button { font: inherit; font-family: var(--font-mono); font-size: 0.88rem; padding: 5px 0; border-radius: 6px; border: 1px solid var(--line);
+  background: transparent; color: var(--ink); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--panel); }
+.btn { font: inherit; font-weight: 500; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--accent); background: var(--accent-soft);
+  color: var(--ink); cursor: pointer; }
+button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.status { font-size: 0.82rem; color: var(--muted); font-family: var(--font-mono); min-height: 1.3em; }
+.bar { height: 3px; background: var(--grid); border-radius: 2px; overflow: hidden; }
+.bar > i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .15s; }
+.sep { border: 0; border-top: 1px solid var(--line); margin: 0; }
+.presets { display: grid; gap: 6px; }
+.presets h3 { font-size: 0.78rem; text-transform: uppercase; letter-spacing: .07em; color: var(--muted); margin: 0; font-weight: 600; }
+.presets button { font: inherit; font-size: 0.85rem; text-align: left; padding: 7px 10px; border-radius: 7px; border: 1px solid var(--line);
+  background: transparent; color: var(--ink); cursor: pointer; display: grid; gap: 1px; }
+.presets button span { color: var(--muted); font-size: 0.78rem; }
+.presets button:hover { border-color: var(--accent); }
+main { display: grid; gap: 16px; min-width: 0; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(155px, 1fr)); gap: 1px; background: var(--line);
+  border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.stat { background: var(--panel); padding: 10px 14px; display: grid; gap: 2px; min-width: 0; }
+.stat b { font-size: 0.76rem; font-weight: 500; color: var(--muted); }
+.stat span { font-family: var(--font-mono); font-size: 1.05rem; font-variant-numeric: tabular-nums; }
+.stat em { font-style: normal; font-size: 0.76rem; color: var(--muted); font-family: var(--font-mono); overflow-wrap: anywhere; }
+.charts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 1100px) { .charts { grid-template-columns: minmax(0, 1fr); } }
+figure { margin: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 14px 12px; display: grid; gap: 8px; min-width: 0; }
+figure h2 { font-family: var(--font-display); font-weight: 600; font-size: 1.08rem; margin: 0; line-height: 1.35; }
+figure h2 .tag { font-family: var(--font-mono); font-size: 0.8rem; color: var(--muted); font-weight: 400; margin-right: 6px; }
+canvas { width: 100%; display: block; aspect-ratio: 16 / 10.5; max-width: 100%; }
+figcaption { font-size: 0.86rem; color: var(--muted); line-height: 1.55; }
+figcaption strong { color: var(--ink); font-weight: 600; }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 0.8rem; color: var(--muted); }
+.legend i { display: inline-block; width: 14px; height: 3px; vertical-align: middle; margin-right: 5px; border-radius: 2px; }
+.legend i.dash { background: none !important; border-top: 2px dashed; height: 0; }
+.notes { display: grid; gap: 8px; font-size: 0.87rem; color: var(--muted); max-width: 90ch; }
+.notes h2 { font-family: var(--font-display); font-size: 1.05rem; color: var(--ink); margin: 6px 0 0; font-weight: 600; }
+.notes ul { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
+code { font-family: var(--font-mono); font-size: 0.9em; }
+a { color: var(--accent); }
+@media (prefers-reduced-motion: reduce) { .bar > i { transition: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Peeling Lens</h1>
+    <p class="sub">An Interactive Lab for Peeling Thresholds and Failure-Conditioned Measurements</p>
+    <p>Degree-one peeling runs live in your browser on a random k-uniform hypergraph with M vertices (cells) and d edges (keys). Move the controls to re-simulate. Red runs got stuck (peeling failed); blue runs peeled every edge.</p>
+    <p><a href="paper/main.pdf">Read the working paper (v0.1, PDF)</a> · <a href="paper/main.tex">LaTeX source</a> · <a href="https://github.com/whitewum/peeling-lens">GitHub</a></p>
+  </header>
+
+  <div class="layout">
+    <aside>
+      <div class="ctl">
+        <div class="ctl-head"><span class="lbl" id="modelLbl">Mapping model</span><output id="modelOut">plain</output></div>
+        <div class="seg two" id="modelSeg" role="group" aria-labelledby="modelLbl">
+          <button type="button" data-model="plain" aria-pressed="true">plain</button>
+          <button type="button" data-model="config" aria-pressed="false">configuration</button>
+        </div>
+        <small>Plain: each key uses k distinct cells (the model of the main theorem). Configuration: the k endpoints are iid uniform, repeats allowed (the model of the core proof). Both have the same limit.</small>
+      </div>
+      <div class="ctl">
+        <div class="ctl-head"><span class="lbl" id="kLbl">k (cells per key)</span><output id="kOut">3</output></div>
+        <div class="seg" id="kSeg" role="group" aria-labelledby="kLbl">
+          <button type="button" data-k="3" aria-pressed="true">3</button>
+          <button type="button" data-k="4" aria-pressed="false">4</button>
+          <button type="button" data-k="5" aria-pressed="false">5</button>
+          <button type="button" data-k="6" aria-pressed="false">6</button>
+          <button type="button" data-k="7" aria-pressed="false">7</button>
+        </div>
+      </div>
+      <div class="ctl">
+        <div class="ctl-head"><label for="logM">M (cells)</label><output id="mOut">100,000</output></div>
+        <input type="range" id="logM" min="3" max="6" step="0.25" value="5">
+        <small>Larger M tracks the limit more closely. At M = 10⁶ one run takes about 0.3 s.</small>
+      </div>
+      <div class="ctl">
+        <div class="ctl-head"><label for="r">r (load offset)</label><output id="rOut">+0.00</output></div>
+        <input type="range" id="r" min="-2.5" max="2.5" step="0.05" value="0">
+        <small>d/M = α<sub>k</sub> + r/√M. Positive r adds keys and makes failure more likely.</small>
+      </div>
+      <div class="ctl">
+        <div class="ctl-head"><label for="runs">Runs</label><output id="runsOut">80</output></div>
+        <input type="range" id="runs" min="10" max="300" step="10" value="80">
+      </div>
+      <div class="ctl">
+        <button type="button" class="btn" id="reseed">Draw new random graphs</button>
+        <div class="bar"><i id="prog"></i></div>
+        <div class="status" id="status" aria-live="polite">Starting</div>
+      </div>
+      <hr class="sep">
+      <div class="presets">
+        <h3>Try this</h3>
+        <button type="button" data-p='{"r":1}'>r = +1<span>The parabola sinks; most runs fail</span></button>
+        <button type="button" data-p='{"r":-1}'>r = −1<span>The parabola lifts; almost every run succeeds</span></button>
+        <button type="button" data-p='{"logM":3,"r":0}'>M = 10³<span>Small graphs: rough paths, visible finite-size bias</span></button>
+        <button type="button" data-p='{"logM":6,"r":0,"runs":60}'>M = 10⁶<span>Large graphs: paths hug the fluid limit</span></button>
+        <button type="button" data-p='{"k":5,"r":0}'>k = 5<span>Other threshold, other constants</span></button>
+      </div>
+    </aside>
+
+    <main>
+      <div class="stats">
+        <div class="stat"><b>Failure rate (simulated)</b><span id="sFail">–</span><em id="sFailSe"></em></div>
+        <div class="stat"><b>Failure rate (limit)</b><span id="sFailTh">–</span><em>Φ(−β<sub>k</sub> r / σ<sub>k</sub>)</em></div>
+        <div class="stat"><b>Degree-one cells at start</b><span id="sQ0">–</span><em id="sQ0f"></em></div>
+        <div class="stat"><b>Fewest degree-one cells near t*</b><span id="sQmin">–</span><em id="sQminf">median over successful runs</em></div>
+        <div class="stat"><b>Critical window M<sup>−1/4</sup></b><span id="sWin">–</span><em id="sWinN"></em></div>
+      </div>
+
+      <div class="charts">
+        <figure>
+          <h2><span class="tag">A</span>Degree-one cells over the whole run</h2>
+          <div class="legend"><span><i style="background:var(--ok)"></i>succeeded</span><span><i style="background:var(--fail)"></i>failed</span><span><i style="background:var(--fluid)"></i>fluid limit ℓ(t)</span></div>
+          <canvas id="c1" role="img" aria-label="Fraction of degree-one cells against time"></canvas>
+          <figcaption>Height is the fraction of cells holding exactly one key, the fuel for the next peeling step. For large M every path follows the deterministic fluid curve (law of large numbers). At r = 0 the curve touches zero at t*; that tangency is what defines the threshold α<sub>k</sub>.</figcaption>
+        </figure>
+        <figure>
+          <h2><span class="tag">B</span>Zoom into the bottleneck</h2>
+          <div class="legend"><span><i style="background:var(--ok)"></i>succeeded</span><span><i style="background:var(--fail)"></i>failed</span><span><i style="background:var(--fluid)"></i>M·ℓ / √M</span></div>
+          <canvas id="c2" role="img" aria-label="Rescaled degree-one count near the bottleneck"></canvas>
+          <figcaption>Time is stretched by M<sup>1/4</sup> and height by √M. In this scaling the local shape converges to a parabola as M grows. Near t* the paths look like the parabola <strong>shifted up or down as a whole</strong>; a downward shift reaches zero and the run fails. That vertical shift is the score R of the proof, and failure ≈ {R ≤ 0}.</figcaption>
+        </figure>
+        <figure>
+          <h2><span class="tag">C</span>Drift-corrected fluctuations of V</h2>
+          <div class="legend"><span><i style="background:var(--ok)"></i>succeeded</span><span><i style="background:var(--fail)"></i>failed</span><span><i style="background:var(--fluid)"></i>mean</span><span><i class="dash" style="border-color:var(--fluid)"></i>mean drift correction</span></div>
+          <canvas id="c3" role="img" aria-label="Martingale part of V"></canvas>
+          <figcaption>V<sub>s</sub> = Σ<sub>j</sub> f<sub>j</sub>(a<sub>c</sub>/a(s)) U<sub>j</sub>(s) weights the degree profile so that its leading drift cancels. Plotted is the approximately compensated fluctuation V<sub>s</sub> − V<sub>0</sub> − A<sup>V</sup><sub>s</sub>; the dashed line is the first-order drift correction A<sup>V</sup>, which stays near zero on this scale. High V means few degree-one cells at t*, so red paths end high.</figcaption>
+        </figure>
+        <figure>
+          <h2><span class="tag">D</span>Two sources of randomness</h2>
+          <div class="legend"><span><i style="background:var(--accent)"></i>sd of corrected fluctuation</span><span><i style="background:var(--fluid)"></i>sd of score R</span><span><i class="dash" style="border-color:var(--accent)"></i>τ<sub>k</sub></span><span><i class="dash" style="border-color:var(--fluid)"></i>σ<sub>k</sub></span></div>
+          <canvas id="c4" role="img" aria-label="Standard deviations against time"></canvas>
+          <figcaption>R = (initial randomness of the graph) + (noise collected while peeling). The score already varies at t = 0; the corrected fluctuation starts at zero and accumulates. In the limit σ<sub>k</sub>² = (initial variance) + τ<sub>k</sub>², with both constants evaluated at t*. Curves stop once more than 1% of runs have failed, since the survivors are a selected sample.</figcaption>
+        </figure>
+      </div>
+
+      <section class="notes">
+        <h2>Notes</h2>
+        <ul>
+          <li>Notation follows the accompanying working paper: Q<sub>n</sub> is the number of degree-one vertices after n peeled edges, t = n/M, x<sub>c</sub>, a<sub>c</sub>, β<sub>k</sub>, τ<sub>k</sub>, σ<sub>k</sub> are the closed-form constants. Every black curve comes from the analytic formulas; nothing is fitted to the simulation.</li>
+          <li>The drift correction uses a first-order uniform-partner transition. It is an approximation to the Doob compensator, not the exact finite-graph conditional drift, especially for Plain mappings. The 99% survival cutoff limits but does not remove survivor selection.</li>
+          <li>Finite-size failure rates can differ from the limiting value. A threshold-center correction of order M<sup>−1/6</sup> in the window coordinate is known for the configuration setting; this page does not assert a finite-size error bound for Plain mappings.</li>
+          <li>Out of scope: k = 2, rates of convergence, the rare-failure regime far below the threshold.</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+</div>
+
+<script id="worker-src" type="text/plain">
+function sfc32(a, b, c, d) {
+  return function () {
+    a >>>= 0; b >>>= 0; c >>>= 0; d >>>= 0;
+    let t = (a + b) | 0; a = b ^ (b >>> 9); b = (c + (c << 3)) | 0;
+    c = (c << 21) | (c >>> 11); d = (d + 1) | 0; t = (t + d) | 0; c = (c + t) | 0;
+    return (t >>> 0) / 4294967296;
+  };
+}
+const MAXD = 40;
+let cap = { M: 0, D: 0 }, B = {};
+function ensure(M, D) {
+  if (M > cap.M || D > cap.D) {
+    cap = { M: Math.max(M, cap.M), D: Math.max(D, cap.D) };
+    B.deg = new Int32Array(cap.M); B.start = new Int32Array(cap.M + 1); B.pos = new Int32Array(cap.M);
+    B.ends = new Int32Array(cap.D); B.inc = new Int32Array(cap.D); B.alive = new Uint8Array(cap.D);
+    B.stack = new Int32Array(cap.M + cap.D);
+  }
+}
+function weights(w, b) {
+  let p = 1; w[0] = 0; w[1] = 0;
+  for (let j = 2; j <= MAXD; j++) { p *= 1 - b; w[j] = j * b * (1 - p); }
+}
+function simulate(p, seed) {
+  const { M, k, d, ac, tstar, mu, plain } = p, D = d * k;
+  ensure(M, D);
+  const rand = sfc32(0x9e3779b9, 0x243f6a88, 0xb7e15162, seed >>> 0);
+  for (let i = 0; i < 12; i++) rand();
+  const { deg, start, pos, ends, inc, alive, stack } = B;
+  deg.fill(0, 0, M); start.fill(0, 0, M + 1);
+  for (let e = 0; e < d; e++) {
+    for (let j = 0; j < k; j++) {
+      let v = (rand() * M) | 0;
+      if (plain) {
+        for (let i = 0; i < j; i++) if (ends[e * k + i] === v) { v = (rand() * M) | 0; i = -1; }
+      }
+      ends[e * k + j] = v; deg[v]++; start[v + 1]++;
+    }
+  }
+  for (let i = 0; i < M; i++) start[i + 1] += start[i];
+  for (let i = 0; i < M; i++) pos[i] = start[i];
+  for (let i = 0; i < D; i++) { const v = ends[i]; inc[pos[v]++] = (i / k) | 0; }
+  alive.fill(1, 0, d);
+  const hist = new Float64Array(MAXD + 1), wNow = new Float64Array(MAXD + 1), wNext = new Float64Array(MAXD + 1);
+  let Q = 0, sp = 0, S = D, AV = 0;
+  for (let v = 0; v < M; v++) { const dv = deg[v]; hist[dv > MAXD ? MAXD : dv]++; if (dv === 1) { Q++; stack[sp++] = v; } }
+  const aOf = t => Math.pow(Math.max((mu - k * t) / mu, 1e-12), (k - 1) / k);
+  const V = t => {
+    if (t >= tstar) return NaN;
+    weights(wNow, ac / aOf(t)); let s = 0;
+    for (let j = 2; j <= MAXD; j++) s += wNow[j] * hist[j];
+    return s;
+  };
+  const w = 4.5 * Math.pow(M, -0.25);
+  const nlo = Math.floor((tstar - w) * M), nhi = Math.ceil((tstar + w) * M);
+  const coarse = Math.max(1, Math.floor(d / 500)), fine = Math.max(1, Math.floor((nhi - nlo) / 400));
+  const T = [], QQ = [], VV = [], AA = [];
+  let n = 0;
+  const rec = () => { const t = n / M; T.push(t); QQ.push(Q); VV.push(V(t)); AA.push(t < tstar ? AV : NaN); };
+  rec();
+  let bNext = ac / aOf(0);
+  weights(wNext, bNext);
+  for (;;) {
+    let v = -1;
+    while (sp > 0) { const x = stack[--sp]; if (deg[x] === 1) { v = x; break; } }
+    if (v < 0) break;
+    // First-order drift correction of V, before t*; not an exact compensator.
+    const t1 = (n + 1) / M;
+    if (t1 < tstar && S > 1) {
+      for (let j = 0; j <= MAXD; j++) wNow[j] = wNext[j];
+      weights(wNext, ac / aOf(t1));
+      let dw = 0, hit = 0;
+      for (let j = 2; j <= MAXD; j++) { dw += (wNext[j] - wNow[j]) * hist[j]; hit += j * hist[j] * (wNext[j - 1] - wNext[j]); }
+      AV += dw + (k - 1) / (S - 1) * hit;
+    }
+    let e = -1;
+    for (let q = start[v]; q < start[v + 1]; q++) { if (alive[inc[q]]) { e = inc[q]; break; } }
+    alive[e] = 0;
+    for (let j = 0; j < k; j++) {
+      const u = ends[e * k + j], old = deg[u], nw = old - 1;
+      deg[u] = nw;
+      hist[old > MAXD ? MAXD : old]--; hist[nw > MAXD ? MAXD : nw]++;
+      if (old === 1) Q--;
+      if (nw === 1) { Q++; stack[sp++] = u; }
+    }
+    S -= k; n++;
+    if (n % coarse === 0 || (n >= nlo && n <= nhi && n % fine === 0)) rec();
+  }
+  if (T[T.length - 1] !== n / M) rec();
+  return { fail: n < d, T: Float64Array.from(T), Q: Float64Array.from(QQ), V: Float64Array.from(VV), A: Float64Array.from(AA) };
+}
+self.onmessage = e => {
+  const p = e.data;
+  for (let r = 0; r < p.runs; r++) {
+    const res = simulate(p, (p.seed * 1000003 + r * 7919 + 1) >>> 0);
+    self.postMessage({ type: "run", job: p.job, i: r, ...res }, [res.T.buffer, res.Q.buffer, res.V.buffer, res.A.buffer]);
+  }
+  self.postMessage({ type: "done", job: p.job });
+};
+</script>
+
+<script>
+(() => {
+  // Closed-form constants from analysis/peeling_constants.py: initial variance, tau_k^2, sigma_k^2, eta_k.
+  const CONST = {
+    3: [0.0163170407293, 0.0310173610819, 0.0473344018111, -0.352023542298],
+    4: [0.00572738316328, 0.0168771421692, 0.0226045253325, -0.0415407684004],
+    5: [0.00346267532689, 0.0111697455073, 0.0146324208342, 0.126662297009],
+    6: [0.00261046653577, 0.00810777473492, 0.0107182412707, 0.219499657847],
+    7: [0.00214330808532, 0.00623648634087, 0.00837979442619, 0.274617440429],
+  };
+  function critical(k) {
+    let lo = 0.001, hi = 10;
+    for (let i = 0; i < 100; i++) { const x = (lo + hi) / 2; if (Math.expm1(x) > (k - 1) * x) hi = x; else lo = x; }
+    const x = (lo + hi) / 2, q = -Math.expm1(-x), a = Math.pow(q, k - 1);
+    return { x, q, ac: a, alpha: x / a / k };
+  }
+  function Phi(z) {
+    const t = 1 / (1 + 0.2316419 * Math.abs(z));
+    const p = t * (0.319381530 + t * (-0.356563782 + t * (1.781477937 + t * (-1.821255978 + t * 1.330274429))));
+    const c = 1 - Math.exp(-z * z / 2) / Math.sqrt(2 * Math.PI) * p;
+    return z >= 0 ? c : 1 - c;
+  }
+  const $ = id => document.getElementById(id);
+  const state = { model: "plain", k: 3, logM: 5, r: 0, runs: 80, seed: 1 };
+  try { Object.assign(state, JSON.parse(localStorage.getItem("peeling-lens") || "{}")); } catch (_) {}
+  let P = null, results = [], job = 0, worker = null, dirty = false;
+  const workerURL = URL.createObjectURL(new Blob([$("worker-src").textContent], { type: "text/javascript" }));
+
+  function syncControls() {
+    for (const b of $("kSeg").querySelectorAll("button")) b.setAttribute("aria-pressed", String(+b.dataset.k === state.k));
+    for (const b of $("modelSeg").querySelectorAll("button")) b.setAttribute("aria-pressed", String(b.dataset.model === state.model));
+    $("logM").value = state.logM; $("r").value = state.r; $("runs").value = state.runs;
+    $("modelOut").textContent = state.model;
+    $("kOut").textContent = state.k;
+    $("mOut").textContent = Math.round(Math.pow(10, state.logM)).toLocaleString("en-US");
+    $("rOut").textContent = (state.r >= 0 ? "+" : "−") + Math.abs(state.r).toFixed(2);
+    $("runsOut").textContent = state.runs;
+  }
+  function params() {
+    const k = state.k, M = Math.round(Math.pow(10, state.logM)), c = critical(k);
+    const d = Math.floor(M * (c.alpha + state.r / Math.sqrt(M)));
+    const mu = k * d / M, tstar = mu / k * (1 - Math.pow(c.q, k));
+    const [init, tau2, sig2, eta] = CONST[k];
+    return { k, M, d, mu, tstar, ac: c.ac, xc: c.x, init, tau2, sig2, eta, beta: -k * c.ac * Math.exp(-c.x), mstar: mu - k * tstar };
+  }
+  const ell = (p, t) => { const m = p.mu - p.k * t; const a = Math.pow(Math.max(m / p.mu, 0), (p.k - 1) / p.k); return m - p.mu * a * (1 - Math.exp(-p.mu * a)); };
+
+  let debounce = 0;
+  function schedule() { syncControls(); clearTimeout(debounce); debounce = setTimeout(start, 220); try { localStorage.setItem("peeling-lens", JSON.stringify(state)); } catch (_) {} }
+  function start() {
+    if (worker) worker.terminate();
+    P = params(); results = []; job++;
+    worker = new Worker(workerURL);
+    worker.onmessage = e => {
+      const m = e.data; if (m.job !== job) return;
+      if (m.type === "run") { results.push(m); $("prog").style.width = (100 * results.length / state.runs) + "%"; $("status").textContent = `${results.length} / ${state.runs} runs done`; request(); }
+      else $("status").textContent = `${state.runs} runs · d = ${P.d.toLocaleString("en-US")} keys`;
+    };
+    worker.onerror = () => { $("status").textContent = "Simulation failed. Lower M or the number of runs and try again."; };
+    $("prog").style.width = "0%"; $("status").textContent = "Simulating…";
+    worker.postMessage({ job, runs: state.runs, seed: state.seed, M: P.M, k: P.k, d: P.d, ac: P.ac, tstar: P.tstar, mu: P.mu, plain: state.model === "plain" });
+    request();
+  }
+  function request() { if (!dirty) { dirty = true; requestAnimationFrame(() => { dirty = false; render(); }); } }
+
+  // ---------- plotting ----------
+  function niceTicks(lo, hi, n) {
+    const span = hi - lo; if (!(span > 0)) return [lo];
+    let step = Math.pow(10, Math.floor(Math.log10(span / n))); const err = span / n / step;
+    if (err >= 7.5) step *= 10; else if (err >= 3.5) step *= 5; else if (err >= 1.5) step *= 2;
+    const out = []; for (let v = Math.ceil(lo / step) * step; v <= hi + step * 1e-9; v += step) out.push(+v.toFixed(10)); return out;
+  }
+  const fmt = v => { const a = Math.abs(v); if (a === 0) return "0"; if (a >= 100) return v.toFixed(0); if (a >= 1) return +v.toFixed(2) + ""; return +v.toPrecision(2) + ""; };
+  const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  function setup(cv) {
+    const dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight;
+    if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+    const g = cv.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, w, h); return { g, w, h };
+  }
+  function plot(cv, o) {
+    const { g, w, h } = setup(cv);
+    const L = 52, R = 12, T = 10, Bm = 40, pw = w - L - R, ph = h - T - Bm;
+    const X = x => L + (x - o.x0) / (o.x1 - o.x0) * pw, Y = y => T + (1 - (y - o.y0) / (o.y1 - o.y0)) * ph;
+    const muted = css("--muted"), grid = css("--grid"), line = css("--line");
+    g.font = `11px ${css("--font-mono")}`; g.fillStyle = muted; g.lineWidth = 1;
+    for (const t of niceTicks(o.x0, o.x1, 6)) { g.strokeStyle = grid; g.beginPath(); g.moveTo(X(t), T); g.lineTo(X(t), T + ph); g.stroke(); g.textAlign = "center"; g.fillText(fmt(t), X(t), T + ph + 14); }
+    for (const t of niceTicks(o.y0, o.y1, 5)) { g.strokeStyle = grid; g.beginPath(); g.moveTo(L, Y(t)); g.lineTo(L + pw, Y(t)); g.stroke(); g.textAlign = "right"; g.fillText(fmt(t), L - 6, Y(t) + 4); }
+    g.strokeStyle = line; g.strokeRect(L + .5, T + .5, pw - 1, ph - 1);
+    g.font = `12px ${css("--font-body")}`; g.textAlign = "center"; g.fillText(o.xl, L + pw / 2, h - 6);
+    g.save(); g.translate(13, T + ph / 2); g.rotate(-Math.PI / 2); g.fillText(o.yl, 0, 0); g.restore();
+    g.save(); g.beginPath(); g.rect(L, T, pw, ph); g.clip();
+    for (const v of o.vlines || []) { g.strokeStyle = muted; g.setLineDash([2, 4]); g.beginPath(); g.moveTo(X(v), T); g.lineTo(X(v), T + ph); g.stroke(); g.setLineDash([]); }
+    for (const hl of o.hlines || []) { g.strokeStyle = css(hl.c); g.lineWidth = hl.w || 1.5; g.setLineDash(hl.dash ? [6, 5] : []); g.beginPath(); g.moveTo(L, Y(hl.y)); g.lineTo(L + pw, Y(hl.y)); g.stroke(); g.setLineDash([]); }
+    for (const s of o.series) {
+      g.strokeStyle = css(s.c); g.globalAlpha = s.a ?? 1; g.lineWidth = s.w || 1; g.setLineDash(s.dash ? [6, 5] : []);
+      g.beginPath(); let pen = false;
+      for (let i = 0; i < s.x.length; i++) {
+        const x = s.x[i], y = s.y[i];
+        if (!isFinite(x) || !isFinite(y)) { pen = false; continue; }
+        const px = X(x), py = Y(Math.max(Math.min(y, o.y1 + (o.y1 - o.y0)), o.y0 - (o.y1 - o.y0)));
+        if (pen) g.lineTo(px, py); else { g.moveTo(px, py); pen = true; }
+      }
+      g.stroke(); g.globalAlpha = 1; g.setLineDash([]);
+    }
+    if (o.note) { g.fillStyle = muted; g.font = `11px ${css("--font-mono")}`; g.textAlign = "left"; g.fillText(o.note, L + 8, T + 16); }
+    g.restore();
+  }
+
+  // ---------- render ----------
+  function render() {
+    if (!P) return;
+    const p = P, sq = Math.sqrt(p.M), q4 = Math.pow(p.M, 0.25), cs = p.xc * sq;
+    const nR = results.length, alpha = Math.max(0.18, Math.min(0.7, 14 / Math.max(nR, 1)));
+    const col = r => r.fail ? "--fail" : "--ok";
+    const order = [...results].sort((a, b) => a.fail - b.fail);
+
+    // A: whole run
+    const tEnd = p.d / p.M, tt = Array.from({ length: 400 }, (_, i) => i / 399 * tEnd);
+    const flA = tt.map(t => ell(p, t));
+    let q0max = flA[0]; for (const r of results) q0max = Math.max(q0max, r.Q[0] / p.M);
+    plot($("c1"), { x0: 0, x1: tEnd, y0: -0.01, y1: q0max * 1.06, xl: "t = peeled keys / M", yl: "Q / M",
+      vlines: [p.tstar],
+      series: [...order.map(r => ({ x: r.T, y: Array.from(r.Q, v => v / p.M), c: col(r), a: alpha })), { x: tt, y: flA, c: "--fluid", w: 2.2 }] });
+
+    // B: bottleneck zoom
+    const zx = Array.from({ length: 300 }, (_, i) => -4.5 + 9 * i / 299);
+    plot($("c2"), { x0: -4, x1: 4, y0: -0.6, y1: 10, xl: "(t − t*) · M^(1/4)", yl: "Q / √M",
+      hlines: [{ y: 0, c: "--muted", w: 1 }],
+      series: [...order.map(r => {
+        const x = [], y = [];
+        for (let i = 0; i < r.T.length; i++) { const z = (r.T[i] - p.tstar) * q4; if (z > -4.6 && z < 4.6) { x.push(z); y.push(r.Q[i] / sq); } }
+        return { x, y, c: col(r), a: Math.min(1, alpha * 1.3), w: 1.1 };
+      }), { x: zx, y: zx.map(z => p.M * ell(p, p.tstar + z / q4) / sq), c: "--fluid", w: 2.4 }] });
+
+    // C/D: approximately drift-corrected V on a grid before t*
+    const G = 140, tg = Array.from({ length: G }, (_, i) => i / (G - 1) * p.tstar * 0.995);
+    const mart = [], comp = [], score = [];
+    for (const r of results) {
+      const V0 = r.V[0], m = new Float64Array(G), c = new Float64Array(G), s = new Float64Array(G); let j = 0;
+      for (let i = 0; i < G; i++) {
+        const t = tg[i];
+        while (j + 1 < r.T.length && r.T[j + 1] < t) j++;
+        if (j + 1 >= r.T.length || !isFinite(r.V[j + 1])) { m[i] = c[i] = s[i] = NaN; continue; }
+        const f = (t - r.T[j]) / Math.max(r.T[j + 1] - r.T[j], 1e-15);
+        const v = r.V[j] + f * (r.V[j + 1] - r.V[j]), a = r.A[j] + f * (r.A[j + 1] - r.A[j]);
+        m[i] = (v - V0 - a) / cs; c[i] = a / cs; s[i] = (p.M * p.mstar - v) / cs;
+      }
+      mart.push(m); comp.push(c); score.push(s);
+    }
+    const aliveFrac = tg.map((_, i) => nR ? mart.filter(a => isFinite(a[i])).length / nR : 0);
+    const stat = (arr, fn) => tg.map((_, i) => { if (aliveFrac[i] < 0.99 || nR < 5) return NaN; return fn(arr.map(a => a[i]).filter(isFinite)); });
+    const mean = xs => xs.reduce((a, b) => a + b, 0) / xs.length;
+    const sd = xs => { const m = mean(xs); return Math.sqrt(xs.reduce((a, b) => a + (b - m) ** 2, 0) / Math.max(xs.length - 1, 1)); };
+    let amax = 0.1; for (const m of mart) for (const v of m) if (isFinite(v)) amax = Math.max(amax, Math.abs(v));
+    amax = Math.min(amax * 1.08, 3);
+    plot($("c3"), { x0: 0, x1: p.tstar, y0: -amax, y1: amax, xl: "t", yl: "(V − V₀ − Aᵛ) / (c*√M)",
+      hlines: [{ y: 0, c: "--muted", w: 1 }],
+      series: [...results.map((r, i) => ({ x: tg, y: mart[i], c: col(r), a: alpha })),
+        { x: tg, y: stat(mart, mean), c: "--fluid", w: 2.4 }, { x: tg, y: stat(comp, mean), c: "--fluid", w: 1.4, dash: true }] });
+    const tau = Math.sqrt(p.tau2), sig = Math.sqrt(p.sig2), mSd = stat(mart, sd), rSd = stat(score, sd);
+    let ymax = sig * 1.25; for (const v of rSd) if (isFinite(v)) ymax = Math.max(ymax, v * 1.1);
+    let last = -1; for (let i = 0; i < G; i++) if (isFinite(mSd[i])) last = i;
+    plot($("c4"), { x0: 0, x1: p.tstar, y0: 0, y1: ymax, xl: "t", yl: "standard deviation (units of c*√M)",
+      vlines: last >= 0 && last < G - 1 ? [tg[last]] : [],
+      note: nR >= 5 ? (last >= 0 && last < G - 1 ? `curves end at t = ${tg[last].toFixed(3)}: >1% of runs already failed` : `all ${nR} runs alive up to t*`) : "",
+      hlines: [{ y: tau, c: "--accent", dash: true, w: 1.5 }, { y: sig, c: "--fluid", dash: true, w: 1.5 }],
+      series: [{ x: tg, y: mSd, c: "--accent", w: 2.4 }, { x: tg, y: rSd, c: "--fluid", w: 2.4 }] });
+
+    // summary numbers
+    const nf = results.filter(r => r.fail).length, pf = nR ? nf / nR : NaN;
+    $("sFail").textContent = nR ? (100 * pf).toFixed(1) + "%" : "–";
+    $("sFailSe").textContent = nR ? `${nf} of ${nR} runs · ±${(100 * Math.sqrt(pf * (1 - pf) / nR)).toFixed(1)}%` : "";
+    $("sFailTh").textContent = (100 * Phi(-p.beta * state.r / sig)).toFixed(1) + "%";
+    if (nR) {
+      const q0 = mean(results.map(r => r.Q[0]));
+      $("sQ0").textContent = Math.round(q0).toLocaleString("en-US"); $("sQ0f").textContent = `${(100 * q0 / p.M).toFixed(1)}% of cells`;
+      const mins = results.filter(r => !r.fail).map(r => { let mn = Infinity; for (let i = 0; i < r.T.length; i++) if (Math.abs(r.T[i] - p.tstar) * q4 < 4) mn = Math.min(mn, r.Q[i]); return mn; }).filter(isFinite).sort((a, b) => a - b);
+      if (mins.length) { const md = mins[Math.floor(mins.length / 2)]; $("sQmin").textContent = Math.round(md).toLocaleString("en-US"); $("sQminf").textContent = `≈ ${(md / sq).toFixed(2)}·√M · ${(100 * md / p.M).toPrecision(2)}% of cells`; }
+      else { $("sQmin").textContent = "–"; $("sQminf").textContent = "no successful run in this batch"; }
+    }
+    $("sWin").textContent = "±" + (1 / q4).toPrecision(2);
+    $("sWinN").textContent = `≈ ${Math.round(p.M / q4).toLocaleString("en-US")} of ${p.d.toLocaleString("en-US")} steps`;
+  }
+
+  // ---------- wiring ----------
+  $("kSeg").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; state.k = +b.dataset.k; schedule(); });
+  $("modelSeg").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; state.model = b.dataset.model; schedule(); });
+  $("logM").addEventListener("input", e => { state.logM = +e.target.value; schedule(); });
+  $("r").addEventListener("input", e => { state.r = +e.target.value; schedule(); });
+  $("runs").addEventListener("input", e => { state.runs = +e.target.value; schedule(); });
+  $("reseed").addEventListener("click", () => { state.seed = (state.seed % 100000) + 1; schedule(); });
+  for (const b of document.querySelectorAll(".presets button")) b.addEventListener("click", () => { Object.assign(state, JSON.parse(b.dataset.p)); schedule(); });
+  new ResizeObserver(request).observe(document.querySelector(".charts"));
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", request);
+  new MutationObserver(request).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  syncControls(); start();
+})();
+</script>
+</body>
+</html>

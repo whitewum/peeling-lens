@@ -1,0 +1,2 @@
+runs=400 P(fail)=0.585 t*=0.5189 Q0/M=0.2106
+successful runs, min Q in |t-t*|<4 M^-1/4: 10/50/90% = [ 49.5 192.  416. ]
