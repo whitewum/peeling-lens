@@ -8,10 +8,10 @@ runs peeling on random k-uniform hypergraphs in the browser, so you can
 watch how a run near the threshold succeeds or gets stuck, and compare it with
 the closed-form limits.
 
-**Version 0.1** · [Paper (PDF)](paper/main.pdf) · [LaTeX source](paper/main.tex)
+**Version 0.1** · [**Try the lab online**](https://whitewum.github.io/peeling-lens/) · [Paper (PDF)](paper/main.pdf) · [LaTeX source](paper/main.tex)
 
-Open `index.html` in a browser. It needs no build step and no server, so it
-can also be served directly with GitHub Pages.
+The lab runs at <https://whitewum.github.io/peeling-lens/>. It is a single
+file with no build step, so you can also open `index.html` locally.
 
 ## What the lab shows
 
@@ -84,8 +84,7 @@ entire calibration study.
 The simulator accumulates a first-order uniform-partner drift approximation.
 It is not the exact finite-graph Doob compensator, particularly under Plain
 mapping constraints. The corrected process illustrates the martingale
-approximation used in the asymptotic analysis. Reference image labels mentioning
-a Doob martingale should be read with this qualification.
+approximation used in the asymptotic analysis.
 
 Panel D stops once fewer than 99% of runs remain active. This limits, but does
 not eliminate, survivor selection; it is not an unbiased estimator of the

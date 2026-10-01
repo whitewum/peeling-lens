@@ -1,10 +1,23 @@
 cff-version: 1.2.0
-message: "Please cite this working paper when referring to the theoretical results."
-title: "Peeling Lens: Failure-Conditioned Count Measurements at the Peeling Threshold"
+message: "If you use this software, please cite it as below. Please cite the working paper when referring to the theoretical results."
+type: software
+title: "Peeling Lens"
+abstract: "An interactive lab for peeling thresholds and failure-conditioned measurements."
 authors:
   - family-names: Wu
     given-names: Min
 version: 0.1.0
 date-released: 2026-10-01
-url: "https://github.com/whitewum/peeling-lens"
+license: MIT
+url: "https://whitewum.github.io/peeling-lens/"
 repository-code: "https://github.com/whitewum/peeling-lens"
+preferred-citation:
+  type: report
+  title: "Failure-Conditioned Count Measurements at the Peeling Threshold"
+  authors:
+    - family-names: Wu
+      given-names: Min
+  year: 2026
+  month: 10
+  notes: "Working paper, version 0.1"
+  url: "https://github.com/whitewum/peeling-lens/blob/main/paper/main.pdf"
