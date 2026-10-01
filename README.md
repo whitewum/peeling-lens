@@ -22,10 +22,23 @@ file with no build step, so you can also open `index.html` locally.
 | C | Approximately compensated V_s − V_0 − A^V_s of the weighted degree profile | Backward weights cancel the leading drift; the first-order drift correction A^V stays near zero. |
 | D | Standard deviation of the corrected fluctuation and of R | Initial randomness plus accumulated peeling noise approach τ_k and σ_k, with σ_k² = initial variance + τ_k². |
 
-Controls: mapping model (plain: k distinct cells per key; configuration:
+Part II (failure-conditioned measurement, Plain mappings only):
+
+| Panel | Object | What to look for |
+|---|---|---|
+| E | Standardized count energy X against the score R/σ_k, one dot per graph | The cloud tilts with slope η_k ρ²; failure ≈ {R ≤ 0} cuts off the bottom and shifts X. |
+| F | Histogram of X over all runs and over failed runs | All runs ≈ N(0, 1) for any signs; failed runs follow Φ₂(x, z; η_k ρ²)/Φ(z). |
+| G | E[X \| failure] against ρ for k = 3…7 | ρ² attenuation, and the sign reversal between k = 4 and k = 5. All ρ values reuse the same graphs. |
+| H | log Pr(X ≤ x \| failure) | The lower tail used for capacity control, against the unconditional Φ and the selection law. |
+
+Part I controls: mapping model (plain: k distinct cells per key; configuration:
 iid endpoints), k = 3…7, M = 10³…10⁶, the load offset r in
 d/M = α_k + r/√M, and the number of runs. All black curves come from
-analytic formulas; nothing is fitted to simulation output.
+analytic formulas; nothing is fitted to simulation output. Part II controls:
+k, sign imbalance ρ, window coordinate z₀ (limiting failure probability Φ(z₀)),
+M = 2⁸…2¹⁶, and the number of graphs. Its predictions are drawn at the
+finite-size coordinate z_sh = z₀ + C_k M^{-1/6}, a diagnostic whose transfer to
+Plain is not proved; the limit-coordinate values are shown alongside.
 
 ## Repository layout
 
@@ -93,9 +106,10 @@ finite-size guarantee.
 
 ## Status
 
-The interactive lab supports Plain and configuration mappings. A sign-imbalance
-and failure-conditioned measurement panel is planned. The English manuscript
-and its figure assets are included in this release.
+The interactive lab has two parts: peeling trajectories (Plain and
+configuration mappings) and the failure-conditioned measurement with sign
+imbalance (Plain mappings). The English manuscript and its figure assets are
+included in this release.
 
 ## License
 

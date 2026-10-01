@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Peeling Lens</title>
-<meta name="description" content="An interactive lab for peeling thresholds and failure-conditioned measurements: run degree-one peeling in the browser and watch the critical window and the Doob decomposition.">
+<meta name="description" content="An interactive lab for peeling thresholds and failure-conditioned measurements: run degree-one peeling in the browser, watch the critical window and the Doob decomposition, and see how failure selection shifts count measurements with sign imbalance.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap">
@@ -99,6 +99,11 @@ figcaption strong { color: var(--ink); font-weight: 600; }
 .notes ul { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
 code { font-family: var(--font-mono); font-size: 0.9em; }
 a { color: var(--accent); }
+.part { display: grid; gap: 4px; margin: 40px 0 18px; max-width: 80ch; }
+.part h2 { font-family: var(--font-display); font-weight: 600; font-size: 1.5rem; line-height: 1.25; margin: 0; }
+.part p { margin: 0; color: var(--muted); }
+.part .kicker { font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent); letter-spacing: .04em; }
+.part.first { margin-top: 0; }
 @media (prefers-reduced-motion: reduce) { .bar > i { transition: none; } }
 </style>
 </head>
@@ -111,6 +116,10 @@ a { color: var(--accent); }
     <p><a href="paper/main.pdf">Read the working paper (v0.1, PDF)</a> · <a href="paper/main.tex">LaTeX source</a> · <a href="https://github.com/whitewum/peeling-lens">GitHub</a></p>
   </header>
 
+  <section class="part first">
+    <span class="kicker">Part I</span>
+    <h2>Peeling trajectories and the critical window</h2>
+  </section>
   <div class="layout">
     <aside>
       <div class="ctl">
@@ -204,6 +213,107 @@ a { color: var(--accent); }
           <li>The drift correction uses a first-order uniform-partner transition. It is an approximation to the Doob compensator, not the exact finite-graph conditional drift, especially for Plain mappings. The 99% survival cutoff limits but does not remove survivor selection.</li>
           <li>Finite-size failure rates can differ from the limiting value. A threshold-center correction of order M<sup>−1/6</sup> in the window coordinate is known for the configuration setting; this page does not assert a finite-size error bound for Plain mappings.</li>
           <li>Out of scope: k = 2, rates of convergence, the rare-failure regime far below the threshold.</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <section class="part" id="part2">
+    <span class="kicker">Part II</span>
+    <h2>Failure-conditioned measurement and sign imbalance</h2>
+    <p>Before peeling, the sketch can be summarized by its centered count energy, standardized to X. For every fixed sign vector X has mean 0 and variance 1 over Plain mappings. Peeling failure depends only on the unsigned mapping, so the signs cannot change which runs fail. They do change how strongly X is correlated with the failure score R. In the limit this correlation is η<sub>k</sub>ρ², where ρ is the sign imbalance. Looking at X only after a failure therefore selects a shifted distribution.</p>
+  </section>
+  <div class="layout">
+    <aside>
+      <div class="ctl">
+        <div class="ctl-head"><span class="lbl" id="selKLbl">k (cells per key)</span><output id="selKOut">3</output></div>
+        <div class="seg" id="selKSeg" role="group" aria-labelledby="selKLbl">
+          <button type="button" data-k="3" aria-pressed="true">3</button>
+          <button type="button" data-k="4" aria-pressed="false">4</button>
+          <button type="button" data-k="5" aria-pressed="false">5</button>
+          <button type="button" data-k="6" aria-pressed="false">6</button>
+          <button type="button" data-k="7" aria-pressed="false">7</button>
+        </div>
+        <small>η<sub>k</sub> has the sign of x<sub>c</sub> − 2: negative for k = 3, 4, positive for k ≥ 5.</small>
+      </div>
+      <div class="ctl">
+        <div class="ctl-head"><label for="selRho">ρ (sign imbalance)</label><output id="selRhoOut">1.00</output></div>
+        <input type="range" id="selRho" min="0" max="1" step="0.05" value="1">
+        <small>ρ = (#plus − #minus)/d. The law depends on ρ², so −ρ gives the same picture. ρ = 1 is an all-positive sketch.</small>
+      </div>
+      <div class="ctl">
+        <div class="ctl-head"><label for="selZ">z₀ (window coordinate)</label><output id="selZOut">+0.00</output></div>
+        <input type="range" id="selZ" min="-2" max="2" step="0.1" value="0">
+        <small>d/M = α<sub>k</sub> + z₀ w<sub>k</sub>/√M with w<sub>k</sub> = σ<sub>k</sub>/|β<sub>k</sub>|. Limiting failure probability Φ(z₀).</small>
+      </div>
+      <div class="ctl">
+        <div class="ctl-head"><label for="selM">M (cells)</label><output id="selMOut">16,384</output></div>
+        <input type="range" id="selM" min="8" max="16" step="1" value="14">
+      </div>
+      <div class="ctl">
+        <div class="ctl-head"><label for="selRuns">Runs</label><output id="selRunsOut">4,000</output></div>
+        <input type="range" id="selRuns" min="1000" max="20000" step="1000" value="4000">
+        <small>Each run draws one mapping and evaluates X for several sign compositions on the same graph.</small>
+      </div>
+      <div class="ctl">
+        <button type="button" class="btn" id="selReseed">Draw new random graphs</button>
+        <div class="bar"><i id="selProg"></i></div>
+        <div class="status" id="selStatus" aria-live="polite">Waits until this section is visible</div>
+      </div>
+      <hr class="sep">
+      <div class="presets" id="selPresets">
+        <h3>Try this</h3>
+        <button type="button" data-p='{"k":3,"rho":1}'>k = 3, ρ = 1<span>Failed runs have larger X</span></button>
+        <button type="button" data-p='{"k":3,"rho":0}'>ρ = 0<span>Balanced signs: no selection</span></button>
+        <button type="button" data-p='{"k":6,"rho":1}'>k = 6, ρ = 1<span>The shift reverses direction</span></button>
+        <button type="button" data-p='{"z":-1.5,"runs":20000}'>z₀ = −1.5<span>Rare failure: stronger shift, fewer samples</span></button>
+        <button type="button" data-p='{"logM":10}'>M = 1024<span>Small sketches: finite-size error is visible</span></button>
+      </div>
+    </aside>
+
+    <main>
+      <div class="stats">
+        <div class="stat"><b>Failure rate</b><span id="tFail">–</span><em id="tFailTh"></em></div>
+        <div class="stat"><b>corr(X, R), all runs</b><span id="tCorr">–</span><em id="tCorrTh"></em></div>
+        <div class="stat"><b>E[X | failure]</b><span id="tMean">–</span><em id="tMeanTh"></em></div>
+        <div class="stat"><b>5% quantile of X | failure</b><span id="tQ">–</span><em id="tQTh"></em></div>
+        <div class="stat"><b>Failure agrees with {R ≤ 0}</b><span id="tAgree">–</span><em>finite-size mismatch → 0</em></div>
+      </div>
+
+      <div class="charts">
+        <figure>
+          <h2><span class="tag">E</span>Measurement against score</h2>
+          <div class="legend"><span><i style="background:var(--ok)"></i>succeeded</span><span><i style="background:var(--fail)"></i>failed</span><span><i class="dash" style="border-color:var(--fluid)"></i>limit E[R/σ<sub>k</sub> | X]</span></div>
+          <canvas id="e1" role="img" aria-label="Scatter of the measurement X against the standardized score"></canvas>
+          <figcaption>Each dot is one graph. Height is the precritical score R/σ<sub>k</sub>, read just before t*; failure ≈ {R ≤ 0}, the region below the gray line. The cloud tilts with slope η<sub>k</sub>ρ². With a tilt, cutting off the bottom also moves the X-coordinates of what remains. At ρ = 0 the cloud is round and the cut does not move X.</figcaption>
+        </figure>
+        <figure>
+          <h2><span class="tag">F</span>Distribution of X, all runs vs failed runs</h2>
+          <div class="legend"><span><i style="background:var(--muted)"></i>all runs</span><span><i style="background:var(--fail)"></i>failed runs</span><span><i class="dash" style="border-color:var(--fluid)"></i>N(0, 1)</span><span><i style="background:var(--fluid)"></i>selection law</span></div>
+          <canvas id="e2" role="img" aria-label="Histograms of X for all runs and for failed runs"></canvas>
+          <figcaption>Over all runs X is close to N(0, 1) whatever the signs. Over failed runs it follows the Gaussian-selection law Φ<sub>2</sub>(x, z; ηρ²)/Φ(z), drawn at the finite-size coordinate z<sub>sh</sub> = z₀ + C<sub>k</sub>M<sup>−1/6</sup>.</figcaption>
+        </figure>
+        <figure>
+          <h2><span class="tag">G</span>Conditional mean shift against ρ</h2>
+          <div class="legend"><span><i style="background:var(--fluid)"></i>−η<sub>k</sub>ρ²A(z<sub>sh</sub>), current k</span><span><i style="background:var(--muted)"></i>other k</span><span><i style="background:var(--fail)"></i>simulated ± 2 s.e.</span></div>
+          <canvas id="e3" role="img" aria-label="Conditional mean of X given failure against sign imbalance"></canvas>
+          <figcaption>A(z) = φ(z)/Φ(z). The shift grows like ρ²: halving the imbalance cuts it by four. The k = 3, 4 curves rise and the k ≥ 5 curves fall, the sign reversal between k = 4 and k = 5. Every red point comes from the same graphs as the others; only the signs differ.</figcaption>
+        </figure>
+        <figure>
+          <h2><span class="tag">H</span>Lower tail of X given failure</h2>
+          <div class="legend"><span><i style="background:var(--fail)"></i>empirical</span><span><i class="dash" style="border-color:var(--fluid)"></i>Φ(x), unconditional</span><span><i style="background:var(--fluid)"></i>selection law</span></div>
+          <canvas id="e4" role="img" aria-label="Log lower-tail probability of X given failure"></canvas>
+          <figcaption>Capacity control reads a low quantile of X. On a log scale, a threshold set from the unconditional Φ has the wrong tail risk once failure has been observed. For k = 3 failures push X up, so the unconditional rule is conservative; for k ≥ 5 they push X down and the unconditional rule under-covers. The selection law tracks the shift. Part of the remaining gap at small M comes from the χ² skew of X, which this panel does not correct.</figcaption>
+        </figure>
+      </div>
+
+      <section class="notes">
+        <h2>Notes on Part II</h2>
+        <ul>
+          <li>Only the Plain model is simulated here, as in the main theorem. Signs are deterministic: the first ⌊d(1 + ρ)/2⌉ keys get +1. Keys are exchangeable, so this is equivalent to any fixed sign vector with that composition.</li>
+          <li>Measurement: T = Σ<sub>v</sub>(C<sub>v</sub> − kdρ<sub>M</sub>/M)², d̂ = T/(k(1 − k/M)), X = (d̂ − d)/s<sub>M</sub> with s<sub>M</sub>² = 2d(d − 1)/(M − 1). It is taken from the initial sketch, before any peeling.</li>
+          <li>The score R is the backward-weighted functional of Part I, evaluated one step before t* or where peeling stops. Its agreement with actual failure improves with M, but it is not exact at finite size.</li>
+          <li>Predictions use the analytic constants with c = η<sub>k</sub>ρ<sub>M</sub>². The shifted coordinate z<sub>sh</sub> is a finite-size diagnostic from the configuration setting; its transfer to Plain is not proved. The stat cards give the limit-coordinate value z₀ for comparison.</li>
         </ul>
       </section>
     </main>
@@ -306,6 +416,98 @@ self.onmessage = e => {
   for (let r = 0; r < p.runs; r++) {
     const res = simulate(p, (p.seed * 1000003 + r * 7919 + 1) >>> 0);
     self.postMessage({ type: "run", job: p.job, i: r, ...res }, [res.T.buffer, res.Q.buffer, res.V.buffer, res.A.buffer]);
+  }
+  self.postMessage({ type: "done", job: p.job });
+};
+</script>
+
+<script id="sel-worker-src" type="text/plain">
+function sfc32(a, b, c, d) {
+  return function () {
+    a >>>= 0; b >>>= 0; c >>>= 0; d >>>= 0;
+    let t = (a + b) | 0; a = b ^ (b >>> 9); b = (c + (c << 3)) | 0;
+    c = (c << 21) | (c >>> 11); d = (d + 1) | 0; t = (t + d) | 0; c = (c + t) | 0;
+    return (t >>> 0) / 4294967296;
+  };
+}
+const MAXD = 40;
+let cap = { M: 0, D: 0 }, B = {};
+function ensure(M, D) {
+  if (M > cap.M || D > cap.D) {
+    cap = { M: Math.max(M, cap.M), D: Math.max(D, cap.D) };
+    B.deg = new Int32Array(cap.M); B.start = new Int32Array(cap.M + 1); B.pos = new Int32Array(cap.M);
+    B.ends = new Int32Array(cap.D); B.inc = new Int32Array(cap.D); B.alive = new Uint8Array(cap.D);
+    B.stack = new Int32Array(cap.M + cap.D); B.C = new Float64Array(cap.M);
+  }
+}
+// One Plain mapping: measurement X for every sign composition in p.rhos, precritical score, and the failure flag.
+function measure(p, seed, X, at) {
+  const { M, k, d, ac, mu, tstar, xc, rhos } = p, D = d * k;
+  ensure(M, D);
+  const rand = sfc32(0x9e3779b9, 0x243f6a88, 0xb7e15162, seed >>> 0);
+  for (let i = 0; i < 12; i++) rand();
+  const { deg, start, pos, ends, inc, alive, stack, C } = B;
+  deg.fill(0, 0, M); start.fill(0, 0, M + 1);
+  for (let e = 0; e < d; e++) {
+    for (let j = 0; j < k; j++) {
+      let v = (rand() * M) | 0;
+      for (let i = 0; i < j; i++) if (ends[e * k + i] === v) { v = (rand() * M) | 0; i = -1; }
+      ends[e * k + j] = v; deg[v]++; start[v + 1]++;
+    }
+  }
+  // Signs: the first nPlus keys get +1. Keys are exchangeable, so this is a deterministic sign vector independent of the mapping.
+  const sM = Math.sqrt(2 * d * (d - 1) / (M - 1)), norm = k * (1 - k / M);
+  for (let r = 0; r < rhos.length; r++) {
+    const nPlus = Math.round(d * (1 + rhos[r]) / 2), rhoM = (2 * nPlus - d) / d, cen = k * d * rhoM / M;
+    C.fill(0, 0, M);
+    for (let e = 0; e < d; e++) { const s = e < nPlus ? 1 : -1; for (let j = 0; j < k; j++) C[ends[e * k + j]] += s; }
+    let T = 0; for (let v = 0; v < M; v++) { const y = C[v] - cen; T += y * y; }
+    X[at * rhos.length + r] = (T / norm - d) / sM;
+  }
+  for (let i = 0; i < M; i++) start[i + 1] += start[i];
+  for (let i = 0; i < M; i++) pos[i] = start[i];
+  for (let i = 0; i < D; i++) { const v = ends[i]; inc[pos[v]++] = (i / k) | 0; }
+  alive.fill(1, 0, d);
+  const hist = new Float64Array(MAXD + 1);
+  let sp = 0;
+  for (let v = 0; v < M; v++) { const dv = deg[v]; hist[dv > MAXD ? MAXD : dv]++; if (dv === 1) stack[sp++] = v; }
+  // Score R = (M m(t*) - V_t) / (x_c sqrt M), read off just before t* (or where peeling stops, if earlier).
+  const nEval = Math.max(0, Math.floor(tstar * M) - 1);
+  let n = 0, score = NaN;
+  const readScore = () => {
+    const a = Math.pow(Math.max((mu - k * n / M) / mu, 1e-12), (k - 1) / k), b = Math.min(ac / a, 1);
+    let pw = 1, V = 0;
+    for (let j = 2; j <= MAXD; j++) { pw *= 1 - b; V += j * b * (1 - pw) * hist[j]; }
+    score = (M * (mu - k * tstar) - V) / (xc * Math.sqrt(M));
+  };
+  for (;;) {
+    if (n === nEval) readScore();
+    let v = -1;
+    while (sp > 0) { const x = stack[--sp]; if (deg[x] === 1) { v = x; break; } }
+    if (v < 0) break;
+    let e = -1;
+    for (let q = start[v]; q < start[v + 1]; q++) { if (alive[inc[q]]) { e = inc[q]; break; } }
+    alive[e] = 0;
+    for (let j = 0; j < k; j++) {
+      const u = ends[e * k + j], old = deg[u], nw = old - 1;
+      deg[u] = nw;
+      hist[old > MAXD ? MAXD : old]--; hist[nw > MAXD ? MAXD : nw]++;
+      if (nw === 1) stack[sp++] = u;
+    }
+    n++;
+  }
+  if (n < nEval) readScore();
+  return { fail: n < d, score };
+}
+self.onmessage = e => {
+  const p = e.data, R = p.rhos.length, BATCH = 100;
+  for (let i0 = 0; i0 < p.runs; i0 += BATCH) {
+    const nb = Math.min(BATCH, p.runs - i0), X = new Float64Array(nb * R), Y = new Float64Array(nb), F = new Uint8Array(nb);
+    for (let i = 0; i < nb; i++) {
+      const res = measure(p, (p.seed * 1000003 + (i0 + i) * 7919 + 17) >>> 0, X, i);
+      Y[i] = res.score; F[i] = res.fail ? 1 : 0;
+    }
+    self.postMessage({ type: "batch", job: p.job, X, Y, F }, [X.buffer, Y.buffer, F.buffer]);
   }
   self.postMessage({ type: "done", job: p.job });
 };
@@ -415,6 +617,13 @@ self.onmessage = e => {
       }
       g.stroke(); g.globalAlpha = 1; g.setLineDash([]);
     }
+    for (const pt of o.points || []) {
+      g.fillStyle = css(pt.c); g.globalAlpha = pt.a ?? 1; const r = pt.r || 1.2;
+      for (let i = 0; i < pt.x.length; i++) { const x = pt.x[i], y = pt.y[i]; if (isFinite(x) && isFinite(y)) g.fillRect(X(x) - r, Y(y) - r, 2 * r, 2 * r); }
+      g.globalAlpha = 1;
+    }
+    for (const b of o.bars || []) { g.strokeStyle = css(b.c); g.lineWidth = 1.5; g.beginPath(); g.moveTo(X(b.x), Y(b.lo)); g.lineTo(X(b.x), Y(b.hi)); g.stroke(); }
+    for (const lb of o.labels || []) { g.fillStyle = css(lb.c || "--muted"); g.font = `11px ${css("--font-mono")}`; g.textAlign = lb.align || "left"; g.fillText(lb.text, X(lb.x), Y(lb.y)); }
     if (o.note) { g.fillStyle = muted; g.font = `11px ${css("--font-mono")}`; g.textAlign = "left"; g.fillText(o.note, L + 8, T + 16); }
     g.restore();
   }
@@ -495,6 +704,174 @@ self.onmessage = e => {
     $("sWinN").textContent = `≈ ${Math.round(p.M / q4).toLocaleString("en-US")} of ${p.d.toLocaleString("en-US")} steps`;
   }
 
+  // ---------- Part II: failure-conditioned measurement ----------
+  const phi = z => Math.exp(-z * z / 2) / Math.sqrt(2 * Math.PI);
+  const Aof = z => phi(z) / Phi(z);
+  function selConsts(k, M, z0) {
+    const c = critical(k), [, , sig2, eta] = CONST[k], sig = Math.sqrt(sig2), beta = -k * c.ac * Math.exp(-c.x), w = sig / Math.abs(beta);
+    const Gt = (k - 2) / (k - 1), Ft = ((k - 1) * c.x - (k - 2)) / (k * Math.pow(c.q, k));
+    const Ck = 0.9961930199 * Math.pow(Gt, 2 / 3) * Math.pow(Ft, -1 / 3) * Math.pow(c.alpha, 4 / 3) / (w * c.x * c.x * Math.exp(-c.x));
+    const d = Math.round(M * (c.alpha + z0 * w / Math.sqrt(M))), za = (d / M - c.alpha) * Math.sqrt(M) / w;
+    return { c, sig, eta, w, Ck, d, z0: za, zsh: za + Ck * Math.pow(M, -1 / 6) };
+  }
+  // Selection law Phi_2(x, z; c)/Phi(z): density phi(x) Phi((z - c x)/sqrt(1 - c^2)) / Phi(z), CDF by cumulative trapezoid.
+  function selLaw(z, c) {
+    const N = 3000, x0 = -9, x1 = 9, h = (x1 - x0) / N, xs = new Float64Array(N + 1), f = new Float64Array(N + 1), F = new Float64Array(N + 1), sc = Math.sqrt(1 - c * c);
+    for (let i = 0; i <= N; i++) { xs[i] = x0 + i * h; f[i] = phi(xs[i]) * Phi((z - c * xs[i]) / sc); }
+    for (let i = 1; i <= N; i++) F[i] = F[i - 1] + h * (f[i] + f[i - 1]) / 2;
+    const tot = F[N];
+    const at = (arr, x) => { const u = (x - x0) / h, i = Math.max(0, Math.min(N - 1, Math.floor(u))), t = u - i; return arr[i] + t * (arr[i + 1] - arr[i]); };
+    return {
+      pdf: x => at(f, x) / tot,
+      cdf: x => at(F, x) / tot,
+      q: u => { let lo = x0, hi = x1; for (let i = 0; i < 60; i++) { const m = (lo + hi) / 2; if (at(F, m) / tot < u) lo = m; else hi = m; } return (lo + hi) / 2; },
+    };
+  }
+  const RHO_GRID = [0, 0.25, 0.5, 0.75, 1];
+  const sel = { k: 3, logM: 14, z: 0, rho: 1, runs: 4000, seed: 1 };
+  try { Object.assign(sel, JSON.parse(localStorage.getItem("peeling-lens-sel") || "{}")); } catch (_) {}
+  let SP = null, sres = null, sjob = 0, sworker = null, sdirty = false, sVisible = false, sDebounce = 0;
+  const selURL = URL.createObjectURL(new Blob([$("sel-worker-src").textContent], { type: "text/javascript" }));
+  const fmtSigned = v => (v >= 0 ? "+" : "−") + Math.abs(v).toFixed(3);
+
+  function selSync() {
+    for (const b of $("selKSeg").querySelectorAll("button")) b.setAttribute("aria-pressed", String(+b.dataset.k === sel.k));
+    $("selRho").value = sel.rho; $("selZ").value = sel.z; $("selM").value = sel.logM; $("selRuns").value = sel.runs;
+    $("selKOut").textContent = sel.k; $("selRhoOut").textContent = sel.rho.toFixed(2);
+    $("selZOut").textContent = (sel.z >= 0 ? "+" : "−") + Math.abs(sel.z).toFixed(2);
+    $("selMOut").textContent = (2 ** sel.logM).toLocaleString("en-US"); $("selRunsOut").textContent = sel.runs.toLocaleString("en-US");
+  }
+  function selSchedule() {
+    selSync(); clearTimeout(sDebounce);
+    try { localStorage.setItem("peeling-lens-sel", JSON.stringify(sel)); } catch (_) {}
+    if (sVisible) sDebounce = setTimeout(selStart, 260);
+  }
+  function selStart() {
+    if (sworker) sworker.terminate();
+    const k = sel.k, M = 2 ** sel.logM, K = selConsts(k, M, sel.z), mu = k * K.d / M;
+    const rhos = RHO_GRID.includes(sel.rho) ? RHO_GRID.slice() : [...RHO_GRID, sel.rho];
+    SP = { k, M, K, mu, rhos, cur: rhos.indexOf(sel.rho), runs: sel.runs };
+    sres = { X: [], Y: [], F: [], n: 0 }; sjob++;
+    sworker = new Worker(selURL);
+    sworker.onmessage = e => {
+      const m = e.data; if (m.job !== sjob) return;
+      if (m.type === "batch") {
+        sres.X.push(m.X); sres.Y.push(m.Y); sres.F.push(m.F); sres.n += m.Y.length;
+        $("selProg").style.width = (100 * sres.n / SP.runs) + "%"; $("selStatus").textContent = `${sres.n.toLocaleString("en-US")} / ${SP.runs.toLocaleString("en-US")} graphs`;
+        selRequest();
+      } else $("selStatus").textContent = `${SP.runs.toLocaleString("en-US")} graphs · d = ${K.d.toLocaleString("en-US")} keys`;
+    };
+    sworker.onerror = () => { $("selStatus").textContent = "Simulation failed. Lower M or the number of runs and try again."; };
+    $("selProg").style.width = "0%"; $("selStatus").textContent = "Simulating…";
+    sworker.postMessage({ job: sjob, runs: sel.runs, seed: sel.seed, M, k, d: K.d, ac: K.c.ac, mu, tstar: mu / k * (1 - Math.pow(K.c.q, k)), xc: K.c.x, rhos });
+    selRequest();
+  }
+  function selRequest() { if (!sdirty) { sdirty = true; requestAnimationFrame(() => { sdirty = false; selRender(); }); } }
+
+  function selRender() {
+    if (!SP) return;
+    const { k, M, K, rhos, cur } = SP, R = rhos.length, n = sres.n;
+    const rhoM = r => { const np = Math.round(K.d * (1 + r) / 2); return (2 * np - K.d) / K.d; };
+    const cOf = r => K.eta * rhoM(r) ** 2;
+    // Flatten batches.
+    const X = rhos.map(() => new Float64Array(n)), Y = new Float64Array(n), F = new Uint8Array(n);
+    let o = 0;
+    for (let b = 0; b < sres.Y.length; b++) {
+      const nb = sres.Y[b].length;
+      for (let i = 0; i < nb; i++) { Y[o + i] = sres.Y[b][i] / K.sig; F[o + i] = sres.F[b][i]; for (let r = 0; r < R; r++) X[r][o + i] = sres.X[b][i * R + r]; }
+      o += nb;
+    }
+    const nf = F.reduce((a, b) => a + b, 0), x = X[cur], c = cOf(sel.rho), law = selLaw(K.zsh, c);
+    const mean = a => a.reduce((s, v) => s + v, 0) / a.length;
+    const sdv = a => { const m = mean(a); return Math.sqrt(a.reduce((s, v) => s + (v - m) ** 2, 0) / Math.max(a.length - 1, 1)); };
+    const failed = r => X[r].filter((_, i) => F[i]);
+
+    // E: scatter
+    const ok = { x: [], y: [] }, bad = { x: [], y: [] };
+    for (let i = 0; i < n; i++) { const t = F[i] ? bad : ok; t.x.push(x[i]); t.y.push(Y[i]); }
+    const pa = Math.max(0.12, Math.min(0.8, 600 / Math.max(n, 1)));
+    plot($("e1"), { x0: -4, x1: 4, y0: -4, y1: 4, xl: "X (standardized count energy)", yl: "R / σₖ",
+      hlines: [{ y: 0, c: "--muted", w: 1.2 }],
+      points: [{ ...ok, c: "--ok", a: pa }, { ...bad, c: "--fail", a: pa }],
+      series: [{ x: [-4, 4], y: [-K.z0 - 4 * c, -K.z0 + 4 * c], c: "--fluid", w: 1.8, dash: true }],
+      note: n ? `c = ηₖρ² = ${fmtSigned(c)}` : "" });
+
+    // F: histograms and densities
+    const bins = 40, lo = -4, hi = 4, bw = (hi - lo) / bins;
+    const hist = (arr) => { const h = new Float64Array(bins); for (const v of arr) { const j = Math.floor((v - lo) / bw); if (j >= 0 && j < bins) h[j]++; }
+      const xs = [], ys = []; for (let j = 0; j < bins; j++) { const y = arr.length ? h[j] / (arr.length * bw) : NaN; xs.push(lo + j * bw, lo + (j + 1) * bw); ys.push(y, y); } return { x: xs, y: ys }; };
+    const xf = failed(cur), gx = Array.from({ length: 241 }, (_, i) => lo + (hi - lo) * i / 240);
+    plot($("e2"), { x0: lo, x1: hi, y0: 0, y1: 0.55, xl: "X", yl: "density",
+      series: [{ ...hist(x), c: "--muted", w: 1.4 }, { ...hist(xf), c: "--fail", w: 1.8 },
+        { x: gx, y: gx.map(phi), c: "--fluid", w: 1.6, dash: true }, { x: gx, y: gx.map(law.pdf), c: "--fluid", w: 2.2 }],
+      note: n ? `${nf.toLocaleString("en-US")} failed of ${n.toLocaleString("en-US")}` : "" });
+
+    // G: conditional mean against rho, all k
+    const rr = Array.from({ length: 101 }, (_, i) => i / 100), curves = [], labels = [];
+    let gmin = -0.05, gmax = 0.05;
+    for (const kk of [3, 4, 5, 6, 7]) {
+      const Kk = selConsts(kk, M, sel.z), A = Aof(Kk.zsh), ys = rr.map(r => -Kk.eta * r * r * A);
+      gmin = Math.min(gmin, ys[100]); gmax = Math.max(gmax, ys[100]);
+      curves.push({ x: rr, y: ys, c: kk === k ? "--fluid" : "--muted", w: kk === k ? 2.4 : 1, a: kk === k ? 1 : 0.7 });
+      labels.push({ x: 1.0, y: ys[100], text: ` k=${kk}`, c: kk === k ? "--ink" : "--muted" });
+    }
+    const pts = { x: [], y: [] }, bars = [];
+    if (nf >= 5) for (let r = 0; r < R; r++) {
+      const xf2 = failed(r), m = mean(xf2), se = sdv(xf2) / Math.sqrt(xf2.length);
+      pts.x.push(rhos[r]); pts.y.push(m); bars.push({ x: rhos[r], lo: m - 2 * se, hi: m + 2 * se, c: "--fail" });
+      gmin = Math.min(gmin, m - 2 * se); gmax = Math.max(gmax, m + 2 * se);
+    }
+    const gpad = 0.1 * (gmax - gmin), gap = 0.07 * (gmax - gmin + 2 * gpad);
+    labels.sort((a, b) => a.y - b.y);
+    for (let i = 1; i < labels.length; i++) labels[i].y = Math.max(labels[i].y, labels[i - 1].y + gap);
+    for (const lb of labels) { lb.x = 1.015; lb.y -= gap * 0.3; }
+    plot($("e3"), { x0: 0, x1: 1.12, y0: gmin - gpad, y1: gmax + gpad, xl: "ρ", yl: "E[X | failure]",
+      hlines: [{ y: 0, c: "--muted", w: 1 }], vlines: [sel.rho],
+      series: curves, labels, bars, points: [{ ...pts, c: "--fail", r: 3 }] });
+
+    // H: lower tail on a log scale
+    const sorted = Float64Array.from(xf).sort(), tx = [], ty = [];
+    for (let i = 0; i < sorted.length; i++) { tx.push(sorted[i], sorted[i]); ty.push(Math.log10(i / sorted.length), Math.log10((i + 1) / sorted.length)); }
+    const ymin = Math.max(-3.5, Math.floor(Math.log10(1 / Math.max(nf, 10)) * 2) / 2), hx = Array.from({ length: 200 }, (_, i) => -4 + 4.5 * i / 199);
+    plot($("e4"), { x0: -4, x1: 0.5, y0: ymin, y1: 0, xl: "x", yl: "log₁₀ Pr(X ≤ x | failure)",
+      hlines: [{ y: Math.log10(0.05), c: "--muted", w: 1 }],
+      series: [{ x: tx, y: ty, c: "--fail", w: 1.8 }, { x: hx, y: hx.map(v => Math.log10(Phi(v))), c: "--fluid", w: 1.6, dash: true },
+        { x: hx, y: hx.map(v => Math.log10(Math.max(law.cdf(v), 1e-12))), c: "--fluid", w: 2.2 }],
+      labels: [{ x: 0.45, y: Math.log10(0.05) + 0.08, text: "5%", align: "right" }] });
+
+    // stats
+    if (!n) return;
+    const pf = nf / n;
+    $("tFail").textContent = (100 * pf).toFixed(1) + "%";
+    $("tFailTh").textContent = `±${(100 * Math.sqrt(pf * (1 - pf) / n)).toFixed(1)} · Φ(z_sh) ${(100 * Phi(K.zsh)).toFixed(1)}% · limit Φ(z₀) ${(100 * Phi(K.z0)).toFixed(1)}%`;
+    const mx = mean(x), my = mean(Y); let sxy = 0, sxx = 0, syy = 0;
+    for (let i = 0; i < n; i++) { sxy += (x[i] - mx) * (Y[i] - my); sxx += (x[i] - mx) ** 2; syy += (Y[i] - my) ** 2; }
+    $("tCorr").textContent = fmtSigned(sxy / Math.sqrt(sxx * syy));
+    $("tCorrTh").textContent = `limit ηₖρ² = ${fmtSigned(c)} · ±${(1 / Math.sqrt(n)).toFixed(3)}`;
+    if (nf >= 5) {
+      const m = mean(xf), se = sdv(xf) / Math.sqrt(nf);
+      $("tMean").textContent = `${fmtSigned(m)} ± ${se.toFixed(3)}`;
+      $("tMeanTh").textContent = `at z_sh ${fmtSigned(-c * Aof(K.zsh))} · at z₀ ${fmtSigned(-c * Aof(K.z0))}`;
+      const qe = sorted[Math.max(0, Math.ceil(0.05 * nf) - 1)];
+      $("tQ").textContent = fmtSigned(qe);
+      $("tQTh").textContent = `selection law ${fmtSigned(law.q(0.05))} · unconditional −1.645`;
+    } else { $("tMean").textContent = "–"; $("tMeanTh").textContent = "too few failures"; $("tQ").textContent = "–"; $("tQTh").textContent = ""; }
+    let agree = 0; for (let i = 0; i < n; i++) if (!!F[i] === (Y[i] <= 0)) agree++;
+    $("tAgree").textContent = (100 * agree / n).toFixed(1) + "%";
+  }
+
+  $("selKSeg").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; sel.k = +b.dataset.k; selSchedule(); });
+  $("selRho").addEventListener("input", e => { sel.rho = +e.target.value; selSchedule(); });
+  $("selZ").addEventListener("input", e => { sel.z = +e.target.value; selSchedule(); });
+  $("selM").addEventListener("input", e => { sel.logM = +e.target.value; selSchedule(); });
+  $("selRuns").addEventListener("input", e => { sel.runs = +e.target.value; selSchedule(); });
+  $("selReseed").addEventListener("click", () => { sel.seed = (sel.seed % 100000) + 1; selSchedule(); });
+  for (const b of document.querySelectorAll("#selPresets button")) b.addEventListener("click", () => { Object.assign(sel, JSON.parse(b.dataset.p)); selSchedule(); });
+  // Start Part II only once it scrolls into view, so the first paint stays fast.
+  new IntersectionObserver((es, ob) => { if (es.some(e => e.isIntersecting)) { sVisible = true; ob.disconnect(); selStart(); } }, { rootMargin: "200px" }).observe($("part2"));
+  new ResizeObserver(selRequest).observe(document.querySelectorAll(".charts")[1]);
+  selSync();
+
   // ---------- wiring ----------
   $("kSeg").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; state.k = +b.dataset.k; schedule(); });
   $("modelSeg").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; state.model = b.dataset.model; schedule(); });
@@ -502,10 +879,11 @@ self.onmessage = e => {
   $("r").addEventListener("input", e => { state.r = +e.target.value; schedule(); });
   $("runs").addEventListener("input", e => { state.runs = +e.target.value; schedule(); });
   $("reseed").addEventListener("click", () => { state.seed = (state.seed % 100000) + 1; schedule(); });
-  for (const b of document.querySelectorAll(".presets button")) b.addEventListener("click", () => { Object.assign(state, JSON.parse(b.dataset.p)); schedule(); });
+  for (const b of document.querySelectorAll(".presets:not(#selPresets) button")) b.addEventListener("click", () => { Object.assign(state, JSON.parse(b.dataset.p)); schedule(); });
   new ResizeObserver(request).observe(document.querySelector(".charts"));
-  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", request);
+  window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { request(); selRequest(); });
   new MutationObserver(request).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  new MutationObserver(selRequest).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
   syncControls(); start();
 })();
 </script>
