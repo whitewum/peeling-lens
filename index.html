@@ -303,7 +303,7 @@ a { color: var(--accent); }
           <h2><span class="tag">H</span>Lower tail of X given failure</h2>
           <div class="legend"><span><i style="background:var(--fail)"></i>empirical</span><span><i class="dash" style="border-color:var(--fluid)"></i>Φ(x), unconditional</span><span><i style="background:var(--fluid)"></i>selection law</span></div>
           <canvas id="e4" role="img" aria-label="Log lower-tail probability of X given failure"></canvas>
-          <figcaption>Capacity control reads a low quantile of X. On a log scale, a threshold set from the unconditional Φ has the wrong tail risk once failure has been observed. For k = 3 failures push X up, so the unconditional rule is conservative; for k ≥ 5 they push X down and the unconditional rule under-covers. The selection law tracks the shift. Part of the remaining gap at small M comes from the χ² skew of X, which this panel does not correct.</figcaption>
+          <figcaption>Capacity control reads a low quantile of X. On a log scale, a threshold set from the unconditional Φ has the wrong tail risk once failure has been observed. In the Gaussian limit with nonzero imbalance, failures push X up for k = 3, 4, making the unconditional rule conservative, and down for k ≥ 5, where it under-covers. At ρ = 0 there is no limiting shift. These are asymptotic directions; at finite M other errors, such as skewness of X, can partly offset or add to them.</figcaption>
         </figure>
       </div>
 
@@ -751,7 +751,7 @@ self.onmessage = e => {
     const k = sel.k, M = 2 ** sel.logM, K = selConsts(k, M, sel.z), mu = k * K.d / M;
     const rhos = RHO_GRID.includes(sel.rho) ? RHO_GRID.slice() : [...RHO_GRID, sel.rho];
     SP = { k, M, K, mu, rhos, cur: rhos.indexOf(sel.rho), runs: sel.runs };
-    sres = { X: [], Y: [], F: [], n: 0 }; sjob++;
+    sres = { X: [], Y: [], F: [], n: 0 }; sjob++; selClear();
     sworker = new Worker(selURL);
     sworker.onmessage = e => {
       const m = e.data; if (m.job !== sjob) return;
@@ -761,10 +761,14 @@ self.onmessage = e => {
         selRequest();
       } else $("selStatus").textContent = `${SP.runs.toLocaleString("en-US")} graphs · d = ${K.d.toLocaleString("en-US")} keys`;
     };
-    sworker.onerror = () => { $("selStatus").textContent = "Simulation failed. Lower M or the number of runs and try again."; };
+    sworker.onerror = () => { selClear(); $("selStatus").textContent = "Simulation failed. Lower M or the number of runs and try again."; };
     $("selProg").style.width = "0%"; $("selStatus").textContent = "Simulating…";
     sworker.postMessage({ job: sjob, runs: sel.runs, seed: sel.seed, M, k, d: K.d, ac: K.c.ac, mu, tstar: mu / k * (1 - Math.pow(K.c.q, k)), xc: K.c.x, rhos });
     selRequest();
+  }
+  function selClear() {
+    for (const id of ["tFail", "tCorr", "tMean", "tQ", "tAgree"]) $(id).textContent = "–";
+    for (const id of ["tFailTh", "tCorrTh", "tMeanTh", "tQTh"]) $(id).textContent = "";
   }
   function selRequest() { if (!sdirty) { sdirty = true; requestAnimationFrame(() => { sdirty = false; selRender(); }); } }
 
