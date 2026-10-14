@@ -1,0 +1,52 @@
+\subsection{Two failure mechanisms outside the window}\label{sec:loadaxis}
+Below the critical value, the fluid trajectory of peeling leaves a positive gap at the bottleneck, so that forming a
+macroscopic core requires a large fluctuation, whose probability decays rapidly as the load decreases. At the same time
+there is another failure mechanism almost independent of the load position: two elements choose exactly the same
+$k$-subset. The two edges block each other, each endpoint has degree at least two, and peeling can never remove them,
+so they constitute a core consisting of exactly two edges. Its probability is about $\lambda = \binom{d}{2}/\binom{M}{k}$,
+which is small in the sparse low-load region, but the probability of a macroscopic failure decays even faster and is
+eventually overtaken by it. At a fixed subcritical load, failure is almost always caused by two repeated edges
+(Proposition~\ref{prop:lowload} of Appendix~\ref{app:lowload}).
+
+The effect of a repeated edge on the measurement can be computed directly. If the two repeated edges have the same
+sign, their counts on the $k$ shared cells add up, the energy exceeds that of two non-overlapping edges by about $2k$,
+and the estimate is shifted by about $+2$; if they have opposite signs, the counts cancel and the estimate is shifted by
+about $-2$. Conditioned on the presence of a repeated edge, the probability that the two edges have the same sign is
+$(1+\gamma)/2$, where $\gamma$ is the sign factor of Section~\ref{sec:sign}. On average the estimate is shifted by
+$2\gamma$. This shift is constant on the original scale, while the standard deviation $s$ grows with the system size, so
+the standardized measurement at the repeated-edge layer tends again to $N(0,1)$.
+
+Between the critical window and a fixed subcritical load lies the moderate deviation region ($r \to -\infty$ and
+$|r| \le C\sqrt{\log M}$), where the two mechanisms coexist. Proposition~\ref{prop:mixture}
+(Appendix~\ref{app:mixture}) proves that failures caused by a macroscopic core still obey the selection law, and the law
+of the measurement conditioned on failure is a weighted mixture of the macroscopic layer and the repeated-edge layer,
+with the two weights proportional to $\Phi(z_r)$ and $\lambda$, respectively. As the load moves down from the critical
+window, $\Phi(z_r)$ decays like a normal tail while $\lambda$ stays almost unchanged, so the weight passes smoothly from
+the macroscopic layer to the repeated-edge layer.
+
+Replacing the null distribution in the candidate test by this mixture law gives an upper bound covering the entire load
+axis. For a candidate $n$ write $z_n = z(n)$, $c_n = \eta_k b^2/n^2$,
+$\lambda_n = \binom{n}{2}/\binom{M}{k}$, and $w_n = \Phi(z_n)/(\Phi(z_n) + \lambda_n)$, and set
+\begin{equation*}
+H_n(x) = w_n\frac{\Phi_2(x,z_n;c_n)}{\Phi(z_n)} + (1-w_n)\Phi(x),\qquad
+T_n = n + s(n)\,H_n^{-1}(u).
+\end{equation*}
+Here $H_n$ is the mixture CDF of the macroscopic layer (weight $w_n$, selection law) and the repeated-edge layer
+(weight $1-w_n$, standard normal). Replacing $t(n,b)$ of Section~\ref{sec:upper-construct} by $T_n$ and leaving the
+rest of the construction unchanged gives an upper bound, still denoted by $U$.
+
+\begin{proposition}[Load-axis coverage]\label{prop:axis}
+Fix $k \ge 3$ and $u \in (0,1)$. If $d/\sqrt{M} \to \infty$, then, whatever the limit of $d/M$ is, whichever side of
+the critical point the load lies on, and whether or not the sign composition converges, we have
+\begin{equation*}
+\sup_x\bigl|\Pr(X \le x \mid F) - H_d(x)\bigr| \to 0,\qquad
+\liminf_M \Pr(d \le U \mid F) \ge 1-u.
+\end{equation*}
+The condition $d/\sqrt{M} \to \infty$ cannot be dropped. Take balanced signs and an even $d \to \infty$ with
+$d = o(\sqrt{M})$; then for $u \in (0,1/2)$ we have $\Pr(U < d \mid F) \to 1/2$. For fixed $d = 4$ with two edges of
+each sign, this probability tends to $2/3$.
+\end{proposition}
+The counterexample comes from the $\pm 2$ shift of repeated edges. The order of magnitude of $s$ is $d/\sqrt{M}$, so
+when $d = o(\sqrt{M})$ the shift $2/s$ does not vanish on the standardized scale; opposite-sign repeated edges push the
+estimate too low, and the true value is then rejected. The proof and the construction of the counterexample are given in
+Appendix~\ref{app:axis}.

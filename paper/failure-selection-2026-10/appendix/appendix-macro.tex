@@ -1,0 +1,716 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[margin=25mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,xcolor}
+\usepackage[unicode,colorlinks=true,linkcolor=blue!45!black,urlcolor=blue!45!black,citecolor=blue!45!black]{hyperref}
+\usepackage{enumitem}
+\usepackage{xurl}
+\setlist{nosep}
+\setlength{\emergencystretch}{2em}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+\numberwithin{equation}{section}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Var}{\operatorname{Var}}
+\newcommand{\Cov}{\operatorname{Cov}}
+\newcommand{\Pois}{\operatorname{Pois}}
+\newcommand{\given}{\,\middle|\,}
+\title{Supplementary appendix: key lemmas for the macroscopic conditional law\\\large Self-contained proofs corresponding to Propositions 8 and 10 of the main text}
+\author{Min Wu}
+\begin{document}
+\maketitle
+
+\setcounter{section}{5}
+\renewcommand{\thesection}{\Alph{section}}
+\section{Key lemmas for the macroscopic conditional law}\label{app:macro}
+
+\subsection{Scope, notation, and existing inputs}
+
+Throughout we fix $k\ge3$, work in the Plain model, and place the load in the moderate deviation regime:
+\begin{equation}
+\frac dM=\alpha_c+\frac{r_M}{\sqrt M},\qquad r_M\to-\infty,\qquad |r_M|\le C\sqrt{\log M}.\label{F:range}
+\end{equation}
+Write $t_0=-g_kr_M\to\infty$, where $g_k=ka_ce^{-x_c}/\sigma_k$; $p_M=\Phi(-t_0)$;
+$\lambda_M=\binom d2/\binom Mk$. The macroscopic event is
+$A=\{\text{the number of edges of the actual 2-core}>\varepsilon_0M\}$. The sign factor is
+$\gamma_M=(d\rho_M^2-1)/(d-1)$; the all-positive-sign measurement is denoted by $X_+$, and the
+measurement under an arbitrary fixed sign composition is denoted by $X_s$. $\ell(t)=\phi(t)/\Phi(-t)$
+denotes the left-tail Mills ratio, namely $A(-t)$ of the main text.
+
+This appendix proves four groups of conclusions, related to the main text as follows.
+\begin{enumerate}[label=(\arabic*)]
+\item The macroscopic conditional CDF of the all-positive-sign measurement:
+$\sup_x|\Pr(X_+\le x\mid A)-\Phi_2(x,-t_0;\eta_k)/\Phi(-t_0)|\to0$ (Proposition~\ref{F:prop:cdf}).
+\item The conditional moments of the all-positive-sign measurement and the conditional mean of an arbitrary
+sign composition (Proposition~\ref{F:prop:moments}).
+\item The macroscopic conditional CDF and conditional variance of an arbitrary sign composition, namely the
+first two formulas of Proposition 8 of the main text (Proposition~\ref{F:prop:sign}).
+\item The control of the three weighted error terms, namely the weighted-mean formula of Proposition 10 of
+the main text (Proposition~\ref{F:prop:wm}).
+\end{enumerate}
+
+We directly use the scalar inputs already established in Appendix C (the proof of Proposition 7 of the main
+text). For ease of reference, they are collected here.
+
+\begin{enumerate}[label=(C\arabic*)]
+\item There is a good event $G_M$ whose complement has super-polynomially small probability. On $G_M$, up to
+the stopping time, all histogram errors are at most $C\vartheta_M$, where
+$\vartheta_M=\sqrt M(\log M)^6$.
+\item In the configuration model, the initial Doob increments and the dynamic increments assemble into a score
+martingale $S$; its increments are at most $C/\sqrt M$, the bracket has a deterministic upper bound, and,
+except for a super-polynomially small exceptional probability, it lies within $1\pm v_M$, where
+$v_M=C\{M^{-1/8}+(\log M)^8/\sqrt M\}$.
+\item There is a bandwidth sandwich between the macroscopic event and the score event:
+$A\,\triangle\,\{S\le-b_M\}\subseteq\mathcal B_M\cup\{|S+b_M|\le C\delta_M\}$,
+where $\mathcal B_M$ is super-polynomially small, the deterministic bandwidth $\delta_M\to0$ satisfies
+$b_M\delta_M\to0$, and $b_M=t_0+O((1+r_M^2)/\sqrt M)$.
+\item The relative asymptotics of the macroscopic probability: $\Pr(A)=p_M(1+o(1))$; the same holds with $l$
+fixed special edges, and it can be transferred to the Plain model via relative Bonferroni.
+\end{enumerate}
+
+``Super-polynomially small'' means $o(M^{-b})$ for every fixed $b>0$. By \eqref{F:range}, $p_M$ is no smaller
+than a fixed negative power divided by a polylogarithm, so a super-polynomially small quantity divided by $p_M$
+remains super-polynomially small. This is used repeatedly below.
+
+\subsection{Choice of the macroscopic cutoff}
+
+Proposition 7 of the main text holds for any $0<\varepsilon_0<\alpha_cq_c^k$. The two-regime reduction also
+requires the small-core counts to cover all core sizes below the macroscopic layer, so this appendix fixes a
+sufficiently small cutoff.
+
+\begin{lemma}[Choice of the cutoff]\label{F:lem:cutoff}
+Take $\varepsilon_*>0$ such that the small-core summation of Eq.~(64) of Appendix B holds for $r\in\{0,2\}$ on
+$3\le e\le\varepsilon_*M$, and such that $\varepsilon_*<\alpha_cq_c^k/2$. Fix $0<\varepsilon_0\le\varepsilon_*$.
+Let $D$ be the event that a repeated edge pair exists, and let $R=F\setminus(A\cup D)$. Then under
+\eqref{F:range}
+\begin{equation}
+\Pr(R)=O(M^{-b_k})=o(\lambda_M),\qquad \Pr(A\cap D)=o(\lambda_M).\label{F:cutoff}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+On $R$, the actual core has between $3$ and $\varepsilon_0M$ edges. The first-moment summation of Appendix B
+requires only $d\le AM$, independently of the distance from the threshold, so $\Pr(R)=O(M^{-b_k})$; moreover
+$b_k-(k-2)\ge1$, so this is $o(\lambda_M)$.
+
+For the intersection, first consider a fixed window. Suppose $d/M=\alpha_c+r/\sqrt M+o(M^{-1/2})$ with $r$
+fixed, plant a pair of identical uniform $k$-subsets, and let the remaining edges be independent. The finite
+planting lemma of Section 5.5 allows the special edges to be mutually correlated, so the precritical score
+still has the same Gaussian limit; the two repeated edges are themselves legitimate $k$-subsets, the
+probability of having no bad edge among the remaining regular edges has a positive limit, and the
+inclusion--exclusion transfer proceeds as usual. The planted repeated edge makes final failure inevitable, so
+here only the macroscopic event is transferred: when the score lies below a fixed negative gap, the process
+stops with $(\alpha_cq_c^k+o(1))M$ edges remaining, which belongs to $A$; when the score lies above a fixed
+positive gap, the concentration before stopping and the local freezing rule out early stopping until fewer
+than $\varepsilon_0M/2$ edges remain, which does not belong to $A$. Removing the safety gap gives
+$Q_r(A)\to\Phi(g_kr)$, where $Q_r$ is the distribution after planting.
+
+Return to \eqref{F:range}. For any fixed $r_0<0$, eventually $d\le\lfloor\alpha_cM+r_0\sqrt M\rfloor$.
+Couple by adding edges using the same sequence of regular edges; the macroscopic event is monotone in the
+addition of edges, so $\limsup_MQ_M(A)\le\Phi(g_kr_0)$. Letting $r_0\to-\infty$ gives $Q_M(A)\to0$. The
+density of the random-label planting distribution relative to the original distribution is $N/\lambda_M$,
+where $N$ is the number of repeated edge pairs, so
+\[
+\Pr(A\cap D)\le\E[N\mathbf1_A]=\lambda_MQ_M(A)=o(\lambda_M).\qedhere
+\]
+\end{proof}
+
+The probability asymptotics of Proposition 7 of the main text hold for any $\varepsilon_0<\alpha_cq_c^k$, so
+the macroscopic probability itself is independent of the choice of the cutoff. Proposition 8, Proposition 10,
+and the conclusions of this appendix conditioned on $A$ all refer to the cutoff chosen in
+Lemma~\ref{F:lem:cutoff}. When incorporated into the main text, the hypothesis of Proposition 8 is
+correspondingly changed to ``take $\varepsilon_0$ sufficiently small''.
+
+\subsection{All-positive signs: the two-dimensional initial Doob decomposition}
+
+We first work in the configuration model. Let $n_e=kd$ be the total number of endpoints, $\mu=n_e/M$, the
+endpoints $V_1,\ldots,V_{n_e}$ independent uniform, and $D_v$ the occupancy count. Define
+\begin{equation}
+K=\sum_v(D_v)_2,\qquad Y_K=\frac{K-\E K}{\sqrt2\mu\sqrt M},\qquad H=\sum_vh_c(D_v),\label{F:KH}
+\end{equation}
+where $(j)_2=j(j-1)$, $h_c(j)=j(1-a_c)^{j-1}$, and $\E K=n_e(n_e-1)/M$. The quantity $Y_K$ is the
+standardization of the occupancy energy, and it is converted back to $X_+$ in \eqref{F:affine}.
+
+After revealing the first $l$ endpoints, denote the occupancy count by $D_v^{(l)}$, and set $m=n_e-l-1$. For
+a function $f$ define $\nu^f_m(j)=\E[\Delta f(j+\mathrm{Bin}(m,1/M))]$, where $\Delta f(j)=f(j+1)-f(j)$.
+When the next endpoint $V$ lands, the Doob increment of $\sum_vf(D_v)$ is
+\begin{equation}
+\Delta_f=\nu^f_m(D_V^{(l)})-\frac1M\sum_v\nu^f_m(D_v^{(l)}).\label{F:doob}
+\end{equation}
+Taking $f(j)=(j)_2$ gives $\nu^f_m(j)=2j+2m/M$, so the Doob increment of the energy is exactly
+$2(D_V^{(l)}-l/M)$. The total number of endpoints is fixed sample by sample, and here no Poisson family
+replaces the true initial state.
+
+\begin{lemma}[Mean of the bracket]\label{F:lem:bracket}
+Denote the matrix bracket of the initial vector $(Y_K,(H-\E H)/(\mu_c\sigma_k\sqrt M))$ by
+$(V_{EE},V_{EH},V_{HH})$. Then
+\begin{equation}
+\E V_{EE}=(1-1/n_e)(1-1/M),\qquad \E V_{EH}=\eta_k+O\bigl((1+|r_M|)/\sqrt M\bigr),\label{F:bracketmean}
+\end{equation}
+and $\E V_{HH}$ is the same as the initial bracket of Appendix C.
+\end{lemma}
+
+\begin{proof}
+Expanding by the collision indicators, $\Var K=2n_e(n_e-1)(M-1)/M^2$. For any $h$, with
+$B\sim\mathrm{Bin}(n_e-2,1/M)$, there is the finite identity
+\begin{equation}
+\Cov(K,H)=\frac{n_e(n_e-1)(M-1)}{M^2}\E\Delta^2h(B).\label{F:covKH}
+\end{equation}
+The proof is as follows. Write $K=\sum_{i\ne j}\mathbf1_{\{V_i=V_j\}}$. Conditioned on $V_1=V_2$, the mean of
+$H$ is $\E h(B+2)+(M-1)\E h(B)$; the unconditional mean is
+$M\E h(B)+2\E\Delta h(B)+M^{-1}\E\Delta^2h(B)$. The difference is $(1-M^{-1})\E\Delta^2h(B)$, and multiplying
+by $n_e(n_e-1)/M$ gives the result.
+
+For $h=h_c$, the Poisson limit gives $\E_{\Pois(\mu)}\Delta^2h_c(D)=a_ce^{-\mu a_c}(\mu a_c-2)$. The function
+$\Delta^2h_c$ is bounded, the total-variation error between the binomial and the Poisson is $O(M^{-1})$, the
+parameter $\mu$ lies in a compact interval, and the dependence is smooth. By the Doob isometry, $\E V_{EE}$
+and $\E V_{EH}$ equal the corresponding variance and covariance divided by the normalizing constants;
+substituting $\mu=\mu_c+O(|r_M|/\sqrt M)$ gives \eqref{F:bracketmean}. The limit of the cross term is exactly
+$\eta_k$; it comes from the true occupancy model, with no a priori independence between the dynamic noise and
+the energy.
+\end{proof}
+
+The maximum occupancy count may reach order $\log M$, so the energy increment is unbounded. To obtain
+concentration, take $L=\lceil\log M\rceil$ and define the truncated energy $e_L$ by $e_L(0)=0$ and
+$\Delta e_L(j)=2\min(j,L)$. For $j\le L+1$ we have $e_L(j)=(j)_2$, and $|\Delta e_L|\le2L$,
+$|\Delta^2e_L|\le2$. The true Doob martingale is reconstructed with $e_L$ rather than by simply dropping the
+large increments of the original martingale.
+
+\begin{lemma}[Super-polynomial concentration of the truncated bracket]\label{F:lem:conc}
+For $(f,g)\in\{(e_L,e_L),(e_L,h_c),(h_c,h_c)\}$,
+\begin{equation}
+\Pr\Bigl(|V^{(L)}_{fg}-\E V^{(L)}_{fg}|>CL^2(\log M)^2/\sqrt M\Bigr)\le2e^{-c(\log M)^4},\label{F:conc}
+\end{equation}
+and the difference between $\E V^{(L)}_{fg}$ and the mean of the untruncated bracket, multiplied by any fixed
+power of $M$, still tends to zero.
+\end{lemma}
+
+\begin{proof}
+Changing one input endpoint changes only two occupancy coordinates at each later $l$, each by $1$. For $e_L$,
+$\nu^{e_L}_m$ is bounded by $O(L)$, and the per-coordinate change is $O(1)$; for $h_c$, both are $O(1)$. Hence
+each $q_l^{fg}=M^{-1}\sum_v\nu^f_m\nu^g_m-\bar\nu^f_m\bar\nu^g_m$ changes by at most $CL^2/M$; after
+normalizing and summing over $O(M)$ steps, the sensitivity of the entire bracket to each input coordinate is
+at most $CL^2/M$. McDiarmid's inequality gives \eqref{F:conc}.
+
+The probability that the maximum occupancy count exceeds $L$ is at most $M(eC/L)^L$, which is smaller than any
+fixed negative power of $M$. On its complement, $K$ equals the truncated energy, while the absolute values of
+the two over the whole sample are at most $O(M^2)$. Hence the differences of the center, the variance, and the
+covariance with $H$, multiplied by any fixed power of $M$, still tend to zero. Here only the replacement of the
+mean is needed; the truncated bracket is not required to equal the original bracket pathwise.
+\end{proof}
+
+\subsection{Concatenation and the deterministic trace upper bound}
+
+After the initial state, the labeled stubs are assigned independently and uniformly to the edges, and the
+dynamic filtration follows the construction of Appendix C, without revealing the complete grouping in advance.
+The initial increments of the two-dimensional vector are
+$(\Delta e_L/(\sqrt2\mu\sqrt M),\Delta h_c/(\mu_c\sigma_k\sqrt M))$, and the dynamic increments are
+$(0,\text{score martingale increment})$. In the dynamic phase the first coordinate is zero, so it contributes
+no new $EE$ or $EH$ bracket; this is an identity on the filtration and does not require an independence
+assumption.
+
+By Lemma~\ref{F:lem:bracket}, Lemma~\ref{F:lem:conc}, and input (C2), except for a super-polynomially small
+exceptional set, the total matrix bracket $\mathcal V$ satisfies
+\begin{equation}
+\|\mathcal V-\Sigma\|\le v_M,\qquad \Sigma=\begin{pmatrix}1&\eta_k\\\eta_k&1\end{pmatrix}.\label{F:Sigma}
+\end{equation}
+$\Sigma$ is positive definite: the initial energy variance is $1$, and the score has strictly positive dynamic
+variance $\tau_k^2$, so $|\eta_k|<1$.
+
+After truncation the increment bound is $\beta_M=CL/\sqrt M$, but over the whole sample the trace bracket is
+only known to be $O(L^2)$. To perform the exponential tilt, stop the entire vector at the first time the trace
+bracket exceeds a fixed constant $C_0>\operatorname{tr}\Sigma+1$. The bracket increment is a positive
+semidefinite matrix, so the trace is monotone; the stopping changes the terminal value only when the total
+trace exceeds $C_0$, an event of super-polynomially small probability. After stopping,
+$\operatorname{tr}\mathcal V\le C_0+C\beta_M^2$ holds deterministically. Below, $(Y^*,S^*)$ denotes this
+stopped vector. On the good set it coincides with the original score and the original energy, up to a
+super-polynomially small deterministic center term. The subsequent exponential tilt acts only on $S^*$.
+
+\subsection{The two-dimensional rectangle error under a single-coordinate tilt}
+
+This section gives the concrete form of the ``explicit polynomial rate'' of Appendix E of the main text.
+
+\begin{lemma}[Single-coordinate tilt lemma]\label{F:lem:tilt}
+Let $\zeta_j=(u_j,v_j)$ be two-dimensional martingale differences with $|\zeta_j|\le\beta$, suppose the trace
+of the total matrix bracket $\mathcal V$ has a deterministic upper bound, and suppose
+$\Pr(\|\mathcal V-\Sigma\|>v)\le q$, where $\beta,v$ are polynomially small in $M$ and $q$ is
+super-polynomially small. Write $(U,S)=\sum_j\zeta_j$, let $1\le t\le C\sqrt{\log M}$, and set the tilted
+measure $dP_t/dP=e^{-tS}/\E e^{-tS}$. Then the distance $\epsilon_M$ between the lower-rectangle CDF of
+$(U+\eta_kt,S+t)$ under $P_t$ and that of $N(0,\Sigma)$ satisfies
+\begin{equation}
+\epsilon_M\le C\Bigl\{(\beta+v+t\beta+q_Q)^{1/64}+tv+t^2\beta+t^2v+t^3\beta+q_Q\Bigr\},\label{F:rate}
+\end{equation}
+where $q_Q$ is super-polynomially small. Substituting $\beta=O(\log M/\sqrt M)$ and \eqref{F:Sigma}, the
+right-hand side is a fixed negative power times a polylogarithm, so $t\epsilon_M\to0$.
+\end{lemma}
+
+\begin{proof}
+\emph{Step 1: product tilt.} Define the measure $Q$ with density
+$\prod_je^{-tv_j}/\E(e^{-tv_j}\mid\mathcal F_{j-1})$. The deterministic trace upper bound gives
+$\E(dQ/dP)^2\le e^{Ct^2}$, so the bad set is still super-polynomially small under $Q$; the total-variation
+distance between the true tilt $P_t$ and $Q$ is $O(t^2v+t^3\beta)$ plus a super-polynomially small quantity.
+
+\emph{Step 2: drift and bracket.} Write $\mathcal B_j=\E(\zeta_j\zeta_j^\top\mid\mathcal F_{j-1})$ and
+$e_2=(0,1)^\top$. A stepwise Taylor expansion gives
+\begin{equation}
+\E_Q(\zeta_j\mid\mathcal F_{j-1})=-t\mathcal B_je_2+\varrho_j,\qquad|\varrho_j|\le Ct^2\beta\operatorname{tr}\mathcal B_j,\label{F:drift}
+\end{equation}
+and the centered conditional covariance differs from $\mathcal B_j$ in operator norm by at most
+$Ct\beta\operatorname{tr}\mathcal B_j$. Let $T$ be the centered vector martingale under $Q$; then on the good
+set
+\[
+\|\langle T\rangle-\Sigma\|\le v+Ct\beta,\qquad|(U+\eta_kt,S+t)-T|\le C(tv+t^2\beta).
+\]
+The drift $-\eta_kt$ of the first coordinate comes from the cross entries of $\mathcal B_j$ in
+\eqref{F:drift}; knowing only that the scalar variance is close to $1$ does not yield this drift, so the $EH$
+bracket must be controlled simultaneously.
+
+\emph{Step 3: quantitative two-dimensional rectangle CLT.} For a centered two-dimensional martingale $T$,
+suppose the increment bound is $b$, the trace has a deterministic upper bound, and the matrix bracket is within
+$w$ of $\Sigma$ with probability at least $1-q'$. Set $\delta=b+w+q'$. For each unit direction $\theta$,
+standardize $\theta\cdot T$ by $(\theta^\top\Sigma\theta)^{1/2}$ and stop when the directional bracket first
+crosses $1+Cw$; the stopping changes only samples of probability at most $q'$. A one-step Taylor expansion of
+the compensated characteristic function gives, direction by direction, for $r=|u|\le\delta^{-1/16}$,
+\[
+|\varphi_T(u)-e^{-u^\top\Sigma u/2}|\le C\{br^3+b^2r^4+(w+b^2+q')r^2+q'\}\le C\delta(1+r^4),
+\]
+with the constant uniform in the direction. Here only the characteristic function of the original $T$ is
+estimated direction by direction; no common stopping vector is constructed.
+
+Add an independent $N(0,h^2I_2)$ to both sides, with $h=\delta^{1/32}$. Fourier inversion gives a supremum
+bound on the difference of the smoothed densities: the integral over the low-frequency ball
+$|u|\le\delta^{-1/16}$ is at most $C\delta^{5/8}$, and the high-frequency part is controlled by
+$e^{-h^2|u|^2/2}$ and is super-polynomially smaller than $\delta$. The second moments of both sides are
+uniformly bounded; restricting the lower rectangle to $[-R,R]^2$ with $R=\delta^{-1/32}$, the probability
+outside the region is at most $C/R^2$, and the integral of the density error inside the region is at most
+$CR^2\delta^{5/8}$, so the smoothed rectangle error is at most $C\delta^{1/16}$. Finally remove the smoothing:
+take the coordinate tolerance $a=h\sqrt{C\log(1/\delta)}$; the probability that the noise exceeds the bound is
+smaller than $\delta^2$; the marginal density of the smoothing Gaussian is uniformly bounded, and the
+probability of the strip along the rectangle boundary is $O(a)$. Sandwiching the original rectangle between
+the $\pm a$ translates of the smoothed rectangle gives
+\begin{equation}
+d_{\rm rect}(T,N(0,\Sigma))\le C\delta^{1/64}.\label{F:rect}
+\end{equation}
+This conclusion also covers unbounded endpoints, namely the marginal distributions.
+
+Applying \eqref{F:rect} to the $T$ of Step 2 (with $b=2\beta$ and $w=v+Ct\beta$), controlling the shift
+$C(tv+t^2\beta)$ by the anti-concentration of the Gaussian marginals, and adding the total-variation error of
+Step 1 gives \eqref{F:rate}.
+\end{proof}
+
+\begin{remark}
+The rate in \eqref{F:rate} is very weak; it serves only to guarantee $t\epsilon_M\to0$, and is not used to
+predict the error at finite $M$.
+\end{remark}
+
+\subsection{The macroscopic conditional CDF of the all-positive-sign measurement}
+
+\begin{proposition}[Macroscopic conditional law for all-positive signs]\label{F:prop:cdf}
+Under \eqref{F:range}, with the cutoff of Lemma~\ref{F:lem:cutoff}, the Plain model satisfies
+\begin{equation}
+\sup_x\left|\Pr(X_+\le x\mid A)-\frac{\Phi_2(x,-t_0;\eta_k)}{\Phi(-t_0)}\right|\to0.\label{F:cdf}
+\end{equation}
+Equivalently, $X_++\eta_kt_0$ conditioned on $A$ tends to $N(0,1-\eta_k^2)$.
+\end{proposition}
+
+\begin{proof}
+\emph{Inverse tilt.} The stopped $S^*$ satisfies the scalar Laplace approximation
+$\log\E e^{-tS^*}=t^2/2+o(1)$; take $t=b_M$. For any $y$, set
+$\mathcal K_M(y)=\E_t[e^{t(S^*+t)}\mathbf1_{\{S^*+t\le0,\ Y^*+\eta_kt\le y\}}]$. Integration by parts in the
+Lebesgue--Stieltjes sense writes $\mathcal K_M$ as an integral of the tilted joint CDF, so
+Lemma~\ref{F:lem:tilt} gives $\sup_y|\mathcal K_M(y)-\mathcal K_G(y)|\le2\epsilon_M$, where $\mathcal K_G$
+corresponds to the target Gaussian. We have
+$\mathcal K_G(\infty)=e^{t^2/2}\Phi(-t)\sim(\sqrt{2\pi}t)^{-1}$. The exact inverse-tilt formula is
+\[
+\Pr(Y^*\le x,\ S^*\le-t)=\E e^{-tS^*}\,e^{-t^2}\,\mathcal K_M(x+\eta_kt),
+\]
+Controlling the numerator and denominator simultaneously by the difference between $\mathcal K_M$ and
+$\mathcal K_G$, the error of the conditional CDF is at most
+$O(\epsilon_M/\mathcal K_G(\infty))=O(t\epsilon_M)=o(1)$:
+\[
+\sup_x\left|\Pr(Y^*\le x\mid S^*\le-t)-\frac{\Phi_2(x,-t;\eta_k)}{\Phi(-t)}\right|\to0.
+\]
+
+\emph{Transfer to the macroscopic event.} By input (C3) and the truncation and stopping bad sets of this
+appendix, $\Pr(A\triangle\{S^*\le-t\})=o(\Phi(-t))$. This probability bound controls simultaneously the joint
+sub-probability error of all $\{Y_K\le x\}$, without an energy-weighted bound, so the conditional CDF can be
+transferred. On the good set $Y_K$ and $Y^*$ differ only by a super-polynomially small amount; the density of
+the selection Gaussian is uniformly bounded, and, given the score, the conditional density of the energy does
+not exceed $[2\pi(1-\eta_k^2)]^{-1/2}$, and this remains true after mixing. Replace $t$ by $t_0$: the two
+Gaussian-tail conditioning events are nested, and the total-variation distance of the conditional distributions
+is at most the relative difference of the tail probabilities $O(t_0|t-t_0|)=o(1)$. This yields the conclusion
+for $Y_K$ in the configuration model.
+
+\emph{Fixed planting.} Fix $l$ special edges, construct the initial two-dimensional martingale with $k(d-l)$
+regular endpoints, and then append the special-edge filtration of Appendix C. Replacing $\mu$ by $k(d-l)/M$
+changes only the $O_l(M^{-1})$ error in \eqref{F:bracketmean}. When the maximum regular degree does not exceed
+$L$, the $kl$ special incidences change $K$ by at most $C_l(L+1)$ and $H$ by $C_l$; after normalization this
+is $O_l(L/\sqrt M)$, and putting it into the perturbation of the energy coordinate and the bandwidth of the
+macroscopic event, multiplied by $t$, still tends to zero. Write
+$G_M(x)=\Phi_2(x,-t_0;\eta_k)/\Phi(-t_0)$; then for each fixed $l$,
+\begin{equation}
+\sup_x\left|\Pr\nolimits_l(Y_K\le x,\ A)/p_M-G_M(x)\right|\to0.\label{F:plant}
+\end{equation}
+This formula already contains the relative precision of the probability denominator, which an ordinary
+finite-planting CLT cannot replace.
+
+\emph{Plain transfer.} Let $N^{\rm bad}_M$ be the number of bad edges, with $dp_M^{\rm bad}\to\Lambda_k$.
+Specifying $l$ bad edges is exactly the allowed special-edge model, so for each fixed $l$,
+\[
+\sup_x\left|\E[\mathbf1_{\{Y_K\le x,\ A\}}(N^{\rm bad}_M)_l]/p_M-\Lambda_k^lG_M(x)\right|\to0.
+\]
+Apply finite-order Bonferroni upper and lower bounds to the nonnegative indicators. Fix the truncation order
+and let $M\to\infty$; the finite-term error is uniform in $x$. The difference between the two bounding sums and
+$e^{-\Lambda_k}$, multiplied by $G_M(x)\le1$, then vanishes as the truncation order increases. This gives
+$\sup_x|\Pr(Y_K\le x,A,N^{\rm bad}_M=0)/p_M-e^{-\Lambda_k}G_M(x)|\to0$, and dividing by
+$\Pr(A,N^{\rm bad}_M=0)/p_M\to e^{-\Lambda_k}$ yields the conditional CDF of the Plain model.
+
+\emph{Conversion back to $X_+$.} In the Plain model exactly
+\begin{equation}
+X_+=\frac{\sqrt2\mu\sqrt M}{k(1-k/M)s_M}Y_K+\frac{(k-1)\mu}{k(1-k/M)s_M},\label{F:affine}
+\end{equation}
+that is, $X_+=(1+O(M^{-1}))Y_K+O(M^{-1/2})$. The quantity $Y_K+\eta_kt_0$ is tight under $A$, so the
+transformation error is $o_P(1)$, and using the density upper bound above gives \eqref{F:cdf}. The energy of
+the all-negative-sign case equals that of the all-positive-sign case.
+\end{proof}
+
+\subsection{Conditional moments and uniform integrability}
+
+Convergence in distribution does not yield convergence of moments after shifting the center. This section
+controls the tails directly under the macroscopic conditioning.
+
+\begin{proposition}[Macroscopic conditional moments]\label{F:prop:moments}
+Under the hypotheses of Proposition~\ref{F:prop:cdf}, the moments of every fixed positive integer order and the
+absolute moments of $W^+_M=X_++\eta_kt_0$ under $A$ converge to the corresponding moments of
+$N(0,1-\eta_k^2)$. In particular,
+\begin{equation}
+\E[X_+\mid A]=-\eta_k\ell(t_0)+o(1),\qquad\Var(X_+\mid A)=1-\eta_k^2+o(1).\label{F:moments}
+\end{equation}
+For any fixed sign composition independent of the mapping,
+$\E[X_s\mid A]=\gamma_M\bigl[-\eta_k\ell(t_0)+o(1)\bigr]$, where the $o(1)$ is the same all-positive-sign
+remainder, hence uniform in the composition, and no convergence of $\rho_M$ is required.
+\end{proposition}
+
+\begin{proof}
+\emph{Quantitative CDF input.} We first work in the configuration model. The polynomial rectangle error of
+Lemma~\ref{F:lem:tilt}, the factor $t$ of the inverse tilt, the relative bandwidth error
+$O(t(\delta_M+\epsilon_M))$, and the super-polynomially small bad set divided by $p_M$, together give
+\begin{equation}
+d_K\bigl(\mathcal L(Y_K\mid A),\ \mathcal G_t\bigr)\le e_M=O(M^{-c}(\log M)^b),\label{F:dK}
+\end{equation}
+where $\mathcal G_t$ is the distribution of the first coordinate of a standard two-dimensional Gaussian with
+correlation $\eta_k$, conditioned on the second coordinate being $\le-t$, with $c>0$ and $b<\infty$ fixed. The
+Bonferroni bounds have not been used here; when transferring to the Plain model later, only qualitative CDF
+convergence is needed.
+
+\emph{Tilted tail bound over the whole sample.} Continue with the product tilt $Q$ of \eqref{F:drift}. Under
+$Q$, $T_1=\sum_j(u_j-\E_Q[u_j\mid\mathcal F_{j-1}])$ is a centered martingale. By \eqref{F:drift}, over the
+whole sample,
+\[
+\Bigl|\sum_j\E_Q[u_j\mid\mathcal F_{j-1}]\Bigr|\le t\sum_j|(\mathcal B_j)_{12}|+Ct^2\beta\sum_j\operatorname{tr}\mathcal B_j\le C_1t,
+\]
+Here only $|(\mathcal B_j)_{12}|\le\operatorname{tr}\mathcal B_j/2$, the deterministic trace upper bound, and
+$t\beta\to0$ are used; the cross bracket on the bad set is not required to be close to $\eta_k$. The increments
+of $T_1$ are at most $2\beta$ and the sum of the predictable variances is at most $C_2$, so the
+Bernstein--Freedman inequality gives $Q(|T_1|>x)\le2\exp\{-x^2/[2(C_2+2\beta x/3)]\}$. Set $W^*=Y^*+\eta_kt$;
+then $|W^*-T_1|\le C_3t$, so for $x\ge2C_3t$,
+\begin{equation}
+Q(|W^*|>x)\le2\exp\{-cx^2/(1+\beta x)\}.\label{F:Qtail}
+\end{equation}
+
+\emph{Unbounded moments without total variation.} The density of the true tilt relative to $Q$ is exactly
+$\prod_jm_j(-t)/\E e^{-tS^*}$, where $m_j(-t)=\E(e^{-tv_j}\mid\mathcal F_{j-1})$. The deterministic trace
+upper bound and $t\beta\to0$ give $\prod_jm_j\le e^{Ct^2}$; combined with $\E e^{-tS^*}\sim e^{t^2/2}$, this
+yields the deterministic bound $dP_t/dQ\le e^{C_4t^2}\le M^{D_0}$ over the whole sample, with $D_0$ fixed.
+This crude bound is used together with martingale tail bounds whose order can be raised arbitrarily;
+multiplying a small total-variation distance by a growing energy maximum does not yield a vanishing error.
+
+\emph{Truncated tails.} Fix a positive integer $q$. The actual energy satisfies $|Y_K|\le CM^{3/2}$, and the
+stopped martingale has at most $O(M)$ steps, each of size $O(\log M/\sqrt M)$, so $|W^*|\le CM^2$ is a
+deterministic crude bound. Take $R_M=A_q\sqrt{\log M}$ with $A_q$ large enough that $R_M\ge2C_3t$ and that
+\eqref{F:Qtail} gives $Q(|W^*|>R_M)\le2M^{-H_q}$ with $H_q>D_0+2q+2$. Outside $\mathcal B_M$, the event $A$
+implies $S^*\le-t+C\delta_M$; for any nonnegative $f(W^*)$, the inverse tilt gives
+\[
+\E[f(W^*);A\setminus\mathcal B_M]\le\E e^{-tS^*}e^{-t^2}e^{Ct\delta_M}\E_tf(W^*)\le Cp_M\,t\,M^{D_0}\E_Qf(W^*),
+\]
+where the last step uses $\E e^{-tS^*}e^{-t^2}/p_M=O(t)$. Taking
+$f=|W^*|^q\mathbf1_{\{|W^*|>R_M\}}$ gives
+$\E[|W^*|^q\mathbf1_{\{|W^*|>R_M\}};A\setminus\mathcal B_M]/p_M\le CtM^{D_0+2q-H_q}=o(1)$. The contribution of
+the bad set is at most $CM^{2q}\Pr(\mathcal B_M)/p_M=o(1)$. Hence
+\begin{equation}
+\E[|W_K|^q\mathbf1_{\{|W_K|>R_M\}}\mid A]\to0,\qquad W_K=Y_K+\eta_kt.\label{F:tailcut}
+\end{equation}
+Since $R_M\to\infty$, \eqref{F:tailcut} by itself is not yet uniform integrability.
+
+\emph{Between a fixed threshold and $R_M$.} Let $Z_0,G$ be independent standard normals; the shifted-center
+variable of the selection Gaussian can be written as
+$W^G_t=\eta_k(Z_0+t)+\sqrt{1-\eta_k^2}\,G$, conditioned on $Z_0\le-t$. For $t\ge1$ and $x\ge0$,
+\[
+\Pr(-(Z_0+t)>x\mid Z_0\le-t)=\frac{\Phi(-(t+x))}{\Phi(-t)}\le e^{-tx-x^2/2},
+\]
+which follows by shifting the integration variable of the numerator by $x$. Hence the moments of every order of
+the overshoot tend to zero, and the moments of every order of $W^G_t$ tend to the corresponding moments of
+$N(0,1-\eta_k^2)$. For the $q$-th moment use $\mathrm{clip}(w,-R_M,R_M)^q$, and for the absolute moment use
+$\min(|w|,R_M)^q$; their total variation is at most $2R_M^q$, and Stieltjes integration by parts with
+\eqref{F:dK} gives that the difference of the truncated expectations is at most $2R_M^qe_M=o(1)$. Then
+\eqref{F:tailcut} and the uniform tail control of the Gaussian remove the truncation, giving the convergence of
+all moments in the configuration model. Taking the conclusion of order $q+1$ gives the uniform integrability
+\begin{equation}
+\sup_{M\text{ sufficiently large}}\E[|W_K|^q\mathbf1_{\{|W_K|>R\}}\mid A]\le C_q/R.\label{F:UI}
+\end{equation}
+
+\emph{Plain transfer.} The scalar relative Bonferroni already gives
+$\Pr_{\rm conf}(A,N^{\rm bad}_M=0)/\Pr_{\rm conf}(A)\to e^{-\Lambda_k}>0$. For any nonnegative $f$,
+\[
+\E_{\rm Plain}[f(Y_K)\mid A]=\frac{\E_{\rm conf}[f(Y_K)\mathbf1_{\{N^{\rm bad}_M=0\}}\mid A]}{\Pr_{\rm conf}(N^{\rm bad}_M=0\mid A)}\le C\,\E_{\rm conf}[f(Y_K)\mid A],
+\]
+so \eqref{F:UI} carries over directly to the Plain model. This inequality transfers only the tail control; the
+limiting distribution comes from the Plain CDF transfer of Proposition~\ref{F:prop:cdf}. Combining the two
+gives all moment limits in the Plain model. Finally, convert back to $X_+$ by \eqref{F:affine}:
+$X_++\eta_kt_0=(1+O(M^{-1}))(Y_K+\eta_kt)+O(M^{-1/2})+\eta_k(t_0-t)+O(t/M)$, and the last several terms tend
+to zero.
+
+\emph{Mean and variance.} The first- and second-moment conclusions give $\E[X_+\mid A]=-\eta_kt_0+o(1)$ and
+$\Var(X_+\mid A)=1-\eta_k^2+o(1)$. The Mills ratio satisfies $\ell(t)-t=O(1/t)$, so the mean can also be
+written in the form of \eqref{F:moments}. This is only a rewriting; the remainder is still $o(1)$, and it does
+not identify the coefficient of order $1/t_0$.
+
+\emph{Mean of an arbitrary composition.} The event $A$ depends only on the unsigned mapping and is invariant
+under permutation of the element labels, so the exact projection of Eq.~(7) of the main text gives
+$\E[X_s\mid A]=\gamma_M\E[X_+\mid A]$. This step does not require a sign CLT under a rare event.
+\end{proof}
+
+\subsection{Arbitrary sign composition: conditional CDF, variance, and endpoints}
+
+\begin{proposition}[Macroscopic conditional law for an arbitrary composition]\label{F:prop:sign}
+Under the hypotheses of Proposition~\ref{F:prop:cdf}, with an arbitrary fixed sign composition, $\rho_M$ need
+not converge. Set $G_{M,s}(x)=\Phi_2(x,-t_0;\eta_k\rho_M^2)/\Phi(-t_0)$; then
+\begin{equation}
+\sup_x|\Pr(X_s\le x\mid A)-G_{M,s}(x)|\to0,\qquad\Var(X_s\mid A)=1-\eta_k^2\rho_M^4+o(1).\label{F:sign}
+\end{equation}
+\end{proposition}
+
+The idea of the proof is to avoid redoing a signed tilt for each sign composition. First generate the unsigned
+Plain hypergraph, then assign the given numbers of positive and negative signs uniformly; this has the same
+joint law as the original model for $(X_s,A)$, and $A$ selects only the graph. Hence only two things are
+needed: the required graph properties still hold with probability tending to one under $A$; and on these fixed
+good graphs, the sign CLT holds uniformly. The graph properties used in Theorem 2 of the main text hold only to
+precision $o_P(1)$, so they cannot be divided directly by the rare $\Pr(A)$. Below, the exceptional probability
+is strengthened to be super-polynomially small.
+
+We use the overlap-graph notation of Section 5.6: $m_{ij}=|S_i\cap S_j|$, $\Omega=\sum_{i<j}m_{ij}$,
+$\Omega_2=\sum_{i<j}m_{ij}^2$, $\ell_i=\sum_{j\ne i}m_{ij}$, $\Omega_\ell=\sum_i\ell_i^2$, and
+$\bar\ell=2\Omega/d$.
+
+\begin{lemma}[Super-polynomial concentration of the overlap-graph statistics]\label{F:lem:graph}
+There is a deterministic set of graphs $\mathcal H_M$ such that $\Pr(\mathcal G_M\notin\mathcal H_M)$ is
+super-polynomially small, and all graphs in $\mathcal H_M$ satisfy uniformly
+\begin{equation}
+\frac\Omega M=\frac{\mu_c^2}2+o(1),\quad\frac{\Omega_2}M=\frac{\mu_c^2}2+o(1),\quad\frac1M\sum_i(\ell_i-\bar\ell)^2=\mu_c^2+o(1),\quad\max_i\ell_i\le kL.\label{F:goodgraph}
+\end{equation}
+All the $o(1)$ terms can be taken as $O((\log M)^4/\sqrt M+|r_M|/\sqrt M)$. In particular,
+$\Pr(\mathcal G_M\notin\mathcal H_M\mid A)\to0$, and this exceptional probability, multiplied by any fixed
+power of $M$ and divided by $\Pr(A)$, still tends to zero.
+\end{lemma}
+
+\begin{proof}
+Let $L=\lceil\log M\rceil$ and $\mathcal D_L=\{\max_vD_v\le L\}$. Since $D_v\sim\mathrm{Bin}(d,k/M)$, we have
+$\Pr(\mathcal D_L^c)\le M(eC/L)^L$, which is super-polynomially small.
+
+\emph{Lipschitz bounds.} For two graphs in $\mathcal D_L$, successively replace the edges with different labels
+by the edges of the other graph. The incidence set of every intermediate graph is contained in the union of
+the two endpoint graphs, so the vertex degrees do not exceed $2L$. Replacing one edge in such an intermediate
+graph affects only the $O(L)$ edge labels overlapping the old or the new edge, and each $m_{ij}\le k$, so the
+changes of $\Omega$ and $\Omega_2$ are both $O(L)$. For the replaced edge $\ell_i=O(L)$, so the squared change
+is $O(L^2)$; for the remaining $O(L)$ affected labels, $\ell_j$ changes by $O(1)$, so each square changes by
+$O(L)$. Hence the total change of $\Omega_\ell$ is $O(L^2)$. Thus the three statistics are $CL^2$-Lipschitz on
+$\mathcal D_L$ with respect to the Hamming distance on the edge labels. Here the global Lipschitz property is
+proved along a path on the union of two good graphs, without assuming that the one-step path stays inside
+$\mathcal D_L$.
+
+\emph{Extension and concentration.} For each statistic $f$ take the McShane extension
+$\widetilde f(\mathcal G)=\inf_{\mathcal G'\in\mathcal D_L}\{f(\mathcal G')+CL^2d_H(\mathcal G,\mathcal G')\}$
+and clip it to the deterministic nonnegative polynomial range of $f$. The extension equals $f$ on the good set
+and remains $CL^2$-Lipschitz; the bad-set probability is super-polynomially small, and both $f$ and the clipped
+extension are at most $O(M^3)$, so $|\E f-\E\widetilde f|$ is super-polynomially small. Applying McDiarmid's
+inequality to the independent edges,
+\[
+\Pr\bigl(|f-\E f|>C\sqrt M(\log M)^4\bigr)\le\Pr(\mathcal D_L^c)+2e^{-c(\log M)^4},\qquad f=\Omega,\Omega_2,\Omega_\ell.
+\]
+
+\emph{Deterministic means.} For the overlap $H$ of two independent uniform $k$-subsets, write
+$h_1=\E H=k^2/M$ and $h_2=\E H^2=k^2/M+k^2(k-1)^2/[M(M-1)]$. Exactly,
+\[
+\E\Omega=\tbinom d2h_1,\qquad\E\Omega_2=\tbinom d2h_2,\qquad\E\Omega_\ell=d\{(d-1)h_2+(d-1)(d-2)h_1^2\}.
+\]
+The last formula holds because, given $S_i$, the $m_{ij}$ are independent and their conditional first and
+second moments do not depend on $S_i$. Taking the good set as the intersection of $\mathcal D_L$ with the three
+deviation-threshold events gives \eqref{F:goodgraph}; the third relation is computed via
+$\Omega_\ell-4\Omega^2/d$, in which the deterministic constants of the two terms cancel. By input (C4),
+$\Pr(A)\sim p_M$ is no smaller than a fixed negative power divided by a polylogarithm, so the conditional
+exceptional probability tends to zero.
+\end{proof}
+
+\begin{lemma}[Uniform sign CLT on the good graphs]\label{F:lem:unifsign}
+Take the exact decomposition $X_s=\gamma_MX_++V_M$ with $\E_s[V_M\mid\mathcal G_M]=0$. If $\rho_M\to\rho$ and
+$|\rho|<1$, then for each fixed $u$,
+\begin{equation}
+\sup_{\mathcal G\in\mathcal H_M}\Bigl|\E_s[e^{iuV_M}\mid\mathcal G]-e^{-(1-\rho^4)u^2/2}\Bigr|\to0.\label{F:unifsign}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The sign argument of Section 5.6 and Appendix A is an argument over a fixed sequence of graphs; it uses only
+\eqref{F:goodgraph}, $\Omega=O(M)$, $\Omega_\ell=O(M)$, and the condition that the positive-to-negative ratio
+stays at a fixed distance from the endpoints. Specifically, the within-group variance bound of the batch flip
+uses only $\Omega_\ell=O(M)$, and the variance of the flipped subset and the expectations of the internal
+edges use only $\Omega_\ell$ and $\Omega$; the number of local terms in the main term is $O(M)$, the maximum
+degree of the dependency graph and the magnitude of the terms are both $O(\log M)$, and the normalized
+connected cumulants of fixed order $r\ge3$ are $O_r(M^{1-r/2}\,\mathrm{polylog}\,M)$; the variance of the main
+term is determined by \eqref{F:goodgraph}. Hence for any sequence $\mathcal G_M\in\mathcal H_M$,
+$\mathcal L_s(V_M\mid\mathcal G_M)\Rightarrow N(0,1-\rho^4)$. If \eqref{F:unifsign} failed, one could extract
+along a subsequence a deterministic graph violating it; that sequence of graphs would still satisfy all the
+deterministic bounds, contradicting the conclusion above.
+\end{proof}
+
+\begin{lemma}[Per-graph conditional variance and the endpoints]\label{F:lem:endpoint}
+Uniformly over all feasible compositions, on $\mathcal H_M$,
+\begin{equation}
+\Var_s(V_M\mid\mathcal G)=1-\rho_M^4+o(1).\label{F:pergraphvar}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+One cannot first compute the unconditional $\E V_M^2$ and then divide by the rare $\Pr(A)$, so use instead the
+exact per-graph variance. Let $a_4$ be the mean of the product of the signs of four distinct labels. The
+finite identity gives
+\[
+\Var_s\Bigl(\sum_{i<j}m_{ij}s_is_j\Bigm|\mathcal G\Bigr)=\Omega_2(1-2\gamma_M+a_4)+\Omega_\ell(\gamma_M-a_4)+\Omega^2(a_4-\gamma_M^2).
+\]
+Set $v=1-\rho_M^2$ and expand this finite rational expression uniformly over all feasible compositions; this
+gives
+\[
+v^2\Omega_2+\rho_M^2v(\Omega_\ell-4\Omega^2/d)+O(\Omega_2/d+\Omega_\ell/d+\Omega^2/d^2).
+\]
+On $\mathcal H_M$ we have $\Omega,\Omega_2,\Omega_\ell=O(M)$, so the remainder is $O(1)$; multiplying by the
+normalization factor $4/[k^2(1-k/M)^2s_M^2]\sim2/(\mu_c^2M)$ gives \eqref{F:pergraphvar}. This also yields the
+crude upper bound $C(v+M^{-1})$. When $|\rho_M|\to1$, \eqref{F:pergraphvar} and the per-graph Chebyshev
+inequality give $V_M\to0$, uniformly over the good graphs; this covers any rate of approach to the endpoints.
+\end{proof}
+
+\begin{proof}[Proof of Proposition~\ref{F:prop:sign}]
+Let $U_M=X_++\eta_kt_0$. Proposition~\ref{F:prop:cdf} gives $U_M\mid A\Rightarrow N(0,1-\eta_k^2)$. For any
+subsequence with $\rho_M\to\rho$ and $|\rho|<1$, first condition on the graph: on the good graphs the inner
+error tends to zero uniformly by \eqref{F:unifsign}, on the bad graphs the characteristic function is bounded
+by one in absolute value, and by Lemma~\ref{F:lem:graph} the probability of the bad graphs under $A$ tends to
+zero. Hence
+\[
+\E[e^{iaU_M+ibV_M}\mid A]-\E[e^{iaU_M}\mid A]\,e^{-(1-\rho^4)b^2/2}\to0,
+\]
+that is, $U_M$ and $V_M$ are asymptotically independent under $A$. When $|\rho|=1$, use instead the convergence
+in conditional probability of Lemma~\ref{F:lem:endpoint}.
+
+Keeping the actual shifted center:
+\[
+X_s+\eta_k\rho_M^2t_0=\gamma_MU_M+V_M+\eta_k(\rho_M^2-\gamma_M)t_0,
+\]
+The last term is $O(t_0/d)\to0$. Here $\rho_M^2t_0$ is not replaced by $\rho^2t_0$ in the absence of a rate.
+Hence $\mathcal L(X_s+\eta_k\rho_M^2t_0\mid A)\Rightarrow N(0,1-\eta_k^2\rho^4)$. The selection baseline
+$G_{M,s}$ has the same limit under the same shifted center: it can be written as
+$c(Z+t_0)+\sqrt{1-c^2}\,G$ conditioned on $Z\le-t_0$, where $c=\eta_k\rho_M^2$, and the Gaussian overshoot
+tends to zero. The two distributions tend to the same continuous distribution, so their CDF distance tends to
+zero. When $\rho_M$ does not converge, take a subsequence on which the CDF distance has a positive lower bound,
+and by the compactness of $[-1,1]$ extract a further subsequence on which $\rho_M$ converges, contradicting the
+conclusion above. This proves the first formula of \eqref{F:sign}.
+
+The variance follows from the law of total variance:
+\[
+\Var(X_s\mid A)=\gamma_M^2\Var(X_+\mid A)+\E[\Var_s(V_M\mid\mathcal G_M)\mid A].
+\]
+On the good graphs use \eqref{F:pergraphvar}; on the bad graphs use the deterministic polynomial upper bound on
+the energy and the super-polynomial precision of Lemma~\ref{F:lem:graph}. Substituting
+$\Var(X_+\mid A)\to1-\eta_k^2$ from Proposition~\ref{F:prop:moments} and noting
+$\gamma_M^2-\rho_M^4=O(1/d)$ gives the second formula of \eqref{F:sign}. The conditional mean still uses the
+exact projection and cannot be replaced by the CDF convergence.
+\end{proof}
+
+\begin{remark}[Balancing rate]
+In the fixed critical window, $\rho_M\to0$ suffices to recover the standard normal. In the moderate deviation
+regime, the center $-\eta_k\rho_M^2t_0$ of the macroscopic layer grows with $t_0$: if $\rho_M^2t_0\to0$ (which
+the exactly balanced composition satisfies), then $X_s\mid A\Rightarrow N(0,1)$; if $\rho_M^2t_0\to
+b\in(0,\infty)$, the limit is $N(-\eta_kb,1)$. This refers to the macroscopic layer. When the weight of the
+repeated-edge layer in $F$ tends to one, the failure conditional law still recovers normality.
+\end{remark}
+
+\subsection{Mixing of the two regimes and the weighted mean}
+
+Lemma~\ref{F:lem:cutoff} gives the exact sizes of the parts in the set decomposition $F=A\cup D\cup R$. The
+planting transfer of Appendix B gives $\sup_x|\Pr(X_s\le x\mid D)-\Phi(x)|\to0$, which requires only that
+$d/M$ tends to a finite positive number, and holds equally for $\alpha_M\to\alpha_c$. Hence
+\[
+\Pr(X_s\le x,F)=\Pr(A)\Pr(X_s\le x\mid A)+\lambda_M\Phi(x)+o(\lambda_M),
+\]
+with the error uniform in $x$. Substituting input (C4) and Proposition~\ref{F:prop:sign} gives the mixture
+formula of Proposition 8 of the main text. The argument of Section E.2 of Appendix E of the main text is
+exactly this step; here only the cutoff condition is added.
+
+The $o(1)$ error of the mixture CDF cannot be multiplied directly by the growing macroscopic center, so the
+conditional mean must be controlled separately on the unnormalized first moment.
+
+\begin{proposition}[Weighted mean]\label{F:prop:wm}
+Under \eqref{F:range}, take the all-same-sign measurement $Y=s_MX_+$, let $N$ be the number of repeated edge
+pairs, and set $D=\{N\ge1\}$. Then
+\begin{equation}
+\E[Y;F]=2\lambda_M-s_M\eta_k\phi(t_0)+o\bigl(\lambda_M+s_M\phi(t_0)\bigr).\label{F:wm}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+The exact density of the random-label planting gives $\E[YN]=2\lambda_M$. Set $R=F\setminus(A\cup D)$; per
+graph there is the identity
+\begin{equation}
+Y\mathbf1_F-Y\mathbf1_A-YN=Y\mathbf1_R-YN\mathbf1_A-Y(N-1)\mathbf1_{D\setminus A}.\label{F:wm-id}
+\end{equation}
+Below, the absolute first moments of the three terms on the right are estimated one by one.
+
+\emph{Third-kind failure.} The moment estimate of the covering event in Section B.5 of Appendix B uses only
+$d\le AM$, so it holds uniformly on the current moving load: $\E[|Y|;R]\le C\sqrt M\,M^{-b_k}=o(\lambda_M)$,
+since $b_k-(k-2)\ge1$. Here the core on $R$ has at most $\varepsilon_0M$ edges, and no fixed subcritical gap
+is needed.
+
+\emph{Multiplicity of the repeated pairs.} The joint condition of any two specified repeated pairs involves at
+most four special labels, and the inner, cross, and outer energy decomposition still gives
+$\E|Y|\le C\sqrt M$; also $\E[N(N-1)]\le\lambda_M^2$, so
+$\E[|Y|(N-1);D]\le C\sqrt M\lambda_M^2=o(\lambda_M)$.
+
+\emph{Intersection of the macroscopic layer and the repeated layer.} Let $Q$ be the repeated-planting
+distribution of the random-label pairs, whose density is exactly $N/\lambda_M$. Then
+\[
+\E[|Y|N;A]=\lambda_M\E_Q[|Y|;A]\le\lambda_M\sqrt{\E_QY^2}\sqrt{Q(A)}\le C\lambda_M\sqrt{Mp_M}.
+\]
+The bound $\E_QY^2=O(M)$ comes from the energy decomposition after repeated planting in Appendix B and the
+unconditional variance of the outer part. The estimate $Q(A)\sim p_M$ comes from the fixed-planting version of
+input (C4): treat two identical legitimate $k$-subsets as finite special edges, then apply the relative
+Bonferroni transfer to the remaining regular edges. Set $b=s_Mt_0/\lambda_M$; from
+$\sqrt{p}/(1+bp)\le1/(2\sqrt b)$,
+\[
+\frac{\lambda_M\sqrt{Mp_M}}{\lambda_M+s_Mp_Mt_0}\le\frac12\sqrt{\frac{M\lambda_M}{s_Mt_0}}=O\Bigl(M^{(5/2-k)/2}/\sqrt{t_0}\Bigr)=o(1).
+\]
+As $t_0\to\infty$, $p_M\ell(t_0)=\phi(t_0)\approx p_Mt_0$, so the intersection term is
+$o(\lambda_M+s_M\phi(t_0))$, with no need for a refined weighted local response.
+
+\emph{Macroscopic main term.} By input (C4) and Proposition~\ref{F:prop:moments},
+$\E[Y;A]=s_M\Pr(A)[-\eta_k\ell(t_0)+o(1)]=-s_M\eta_k\phi(t_0)+o(s_M\phi(t_0))$. The probability needs only
+relative $o(1)$ precision, since the target remainder is $o(\lambda_M+s_M\phi(t_0))$.
+
+Substituting the three estimates and the main term into \eqref{F:wm-id} gives \eqref{F:wm}.
+\end{proof}
+
+Combining $\Pr(F)=(p_M+\lambda_M)(1+o(1))$ with $c_F\binom d2=\E[Y\mid F]/2$, \eqref{F:wm} yields the
+expansion of $c_F\binom d2$ in Appendix E of the main text, and hence the sign-reversal-layer conclusion of
+Proposition 10. For any fixed composition, $\E[\widehat d_M-d;F]$ equals exactly the all-same-sign expectation
+multiplied by $\gamma_M$, so both the main term and the remainder project by this factor.
+
+\end{document}

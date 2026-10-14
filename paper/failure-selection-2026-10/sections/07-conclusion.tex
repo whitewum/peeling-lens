@@ -1,0 +1,18 @@
+\section{Discussion and conclusion}
+The count measurement, read only after decoding failure, carries a selection effect. Under sign imbalance this effect persists after standardization.
+Its strength is governed by the closed-form constant $\eta_k\rho^2$, and its direction reverses between $k=4$ and $k=5$; improving the unconditional
+reference distribution does not remove it. For the actual protocol, when $k\ge5$, the one-sided imbalance places the bias on the side of insufficient capacity;
+the balanced imbalance is unaffected by selection. The observable sign totals suffice to construct an upper confidence bound after failure,
+and both implementation rules, the envelope rule and the mixture rule, pass the end-to-end checks.
+
+Along the load axis, the failure mechanism passes gradually from the macroscopic core of the critical window to edge repetition at a fixed subcritical load, and the failure-conditioned distribution is an explicit two-layer mixture.
+When $k\ge5$, the mechanism that dominates the failure probability separates from the mechanism that dominates the conditional mean: the layer where the mean changes sign lies at
+$t^2\approx(2k-3)\log M$, deeper than the equal-probability layer. In finite size, the threshold center is given by
+the Dembo--Montanari shift, and the shape of the unconditional measurement is given by the chi-square
+$(M-1)$; neither of the two involves a fitted parameter.
+
+This paper's theory covers fixed $k\ge3$, the ideal Plain mapping, and deterministic signs independent of the mapping. The failure-conditioned measurement
+distribution is now characterized along the whole load axis (Proposition~\ref{prop:axis}, requiring $d/\sqrt M\to\infty$). The following questions are left for future work:
+the error rate at finite size; in the moving subcritical region with $|r_M|/\sqrt{\log M}\to\infty$,
+the relative probability and the fine conditional law of the macroscopic layer itself, a region beyond the scope of Proposition~\ref{prop:mda}, where the failure-conditioned law
+is dominated by the repeated-edge layer; the complete classification of the sparse end $d=O(\sqrt M)$; $k$ growing with the size; and non-ideal checksums and other mapping families.

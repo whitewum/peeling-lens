@@ -1,0 +1,67 @@
+\section{Proof of the upper confidence bound}\label{app:upper}
+This appendix proves Theorem~\ref{thm:upper} and states and proves the lemma it uses,
+Lemma~\ref{lem:loadaxis}. We first sketch the ideas behind (ii) and (iii), and then give, in
+order, the finiteness of the search range, the proofs of (i) and (ii), Lemma~\ref{lem:loadaxis},
+and (iii).
+
+(ii) follows from the compactness of $[-R,R]\times[-1,1]$ and a subsequence argument; on this range
+$\Pr(F)$ has a uniform positive lower bound. (iii) proceeds in two steps. First, an edge-addition
+coupling and the monotonicity of the 2-core give $\Pr(F)\to1$. Then the exact identity
+$\mathrm{KS}(\text{failure},\text{all})=(1-p_F)\,\mathrm{KS}(\text{failure},\text{success})$
+from \cite{prior}, together with the lemma below, shows that the conditional law tends to the
+standard normal.
+
+\begin{lemma}[Unconditional CLT on the load axis]\label{lem:loadaxis}
+Fix $k\ge3$, use the Plain mapping, and assume $0<\liminf d_M/M\le\limsup d_M/M<\infty$, with the
+signs a deterministic sequence independent of the mapping. Then $X\Rightarrow N(0,1)$.
+\end{lemma}
+The proof reuses three existing tools: the occupancy CLT from the de-Poissonization in
+Appendix~\ref{sec:main-proof} (which only requires $\mu_M$ to lie in a positive compact interval);
+the mixed factorial moments in the conditioning on having no bad edges; and Theorem~\ref{thm:sign}.
+The complete proof appears below in the paragraph on Lemma~\ref{lem:loadaxis}. For
+$D\sim\Pois(\mu)$, the identity $\Gamma(e,e)=2\mu^2$ holds for every $\mu$. The endpoint case
+$|\rho|=1$ is handled by the exact second moment $\E V^2=1-\gamma^2\to0$.
+
+\paragraph{Search range.} Let
+$L=\min\{\Phi^{-1}(u),\min_{0\le c\le\max(\eta_k,0)}q_{\rm sel}(u;0,c)\}$. The selection law can be
+written as $X=cY+\sqrt{1-c^2}Z$, where $Y$ is a standard normal truncated at $Y\le z$, and $Z$ is
+independent of it. When $c\le0$, $X$ is stochastically larger than $N(0,1)$; when $c>0$, $X$ is
+stochastically increasing in $z$. Hence when $z_M(n)\ge0$ we have $q_{\rm sel}\ge L$; together with
+$s(n)\le n\sqrt{2/(M-1)}$, this gives $t_M(n,b)\ge n(1-|L|\sqrt{2/(M-1)})$. When $M>1+2L^2$, the
+acceptance set lies in a finite interval. For $u=0.01$, $L=-2.416$ for $k=5$ and $L=-2.467$ for
+$k=6$; for $k=3,4$, $L=\Phi^{-1}(0.01)$.
+
+\paragraph{Theorem~\ref{thm:upper}(i).} Write
+$G_{z,c}(x)=\Phi_2(x,z;c)/\Phi(z)$ and $q_M=q_{\rm sel}(u;z_M(d),\eta_k\rho_M^2)$. Since
+$z_M(d)\to z_r$ and $\eta_k\rho_M^2\to\eta_k\rho^2$, and $G$ is jointly continuous and strictly
+increasing in $x$, we have $q_M\to q_*$. The inequality $\widehat d<t_M(d,b)$ is equivalent to
+$X<q_M$; by the uniform convergence in Theorem~\ref{thm:main} and the continuity of $G$,
+$\Pr(X<q_M\mid F)\to u$. Since $\{d\le U\}\supseteq\{\widehat d\ge t_M(d,b)\}$, taking the limit
+gives (i). For (ii), suppose the convergence is not uniform, and take a subsequence whose deviation
+stays at least $\epsilon$; by compactness take a further subsequence with $r_M\to r_*$ and
+$\rho_M\to\rho_*$; completing it to a full sequence satisfying the window assumption contradicts (i).
+
+\paragraph{Lemma~\ref{lem:loadaxis}.} By a subsequence argument it suffices to treat the case
+$d/M\to\alpha\in(0,\infty)$ and $\rho_M\to\rho$; write $\mu=k\alpha$. The de-Poissonization of
+$e_M(j)=(j-\mu_M)^2$ in Appendix~\ref{sec:main-proof} uses only two facts: $\mu_M$ lies in a
+positive compact interval, and the Poisson moments are uniformly bounded. Hence in the configuration
+model $G_M(e_M)\Rightarrow N(0,\Gamma(e,e))$. For $D\sim\Pois(\mu)$, $\Var(e(D))=\mu+2\mu^2$ and
+$\Cov(e(D),D)=\mu$, so $\Gamma(e,e)=2\mu^2$, and thus $X_{\rm one}\Rightarrow N(0,1)$. The transfer
+to the Plain model reuses the mixed factorial moments: $l$ special edges change the energy by
+$O_p(l\log M+l^2)$, $d\,p_M\to\alpha\binom k2$ is bounded, and the tail of the inclusion-exclusion
+series is uniformly controlled. The three-term self-averaging of the overlap graph holds when
+$d/M\to\alpha$, so Theorem~\ref{thm:sign} gives: when $|\rho|<1$,
+$\mathcal L(V\mid\mathcal G)\Rightarrow N(0,1-\rho^4)$. Therefore
+\begin{equation*}
+\E e^{iuX}=\E\bigl[e^{iu\gamma X_{\rm one}}\E(e^{iuV}\mid\mathcal G)\bigr]\to e^{-u^2\rho^4/2}e^{-u^2(1-\rho^4)/2}=e^{-u^2/2}.
+\end{equation*}
+When $|\rho|=1$, $\E V^2=1-\gamma^2\to0$.
+
+\paragraph{Theorem~\ref{thm:upper}(iii).} Adding independent edges one by one couples the mappings
+for different $d$ so that they increase with $d$. The property that the 2-core is nonempty is
+monotone under edge addition, so $\Pr(F)$ is nondecreasing in $d$. For any $R$, $d_M$ eventually
+exceeds the load corresponding to the window coordinate $R$, hence $\liminf\Pr(F)\ge\Phi(z_R)$;
+letting $R\to\infty$ gives $\Pr(F)\to1$. This identity gives
+$\mathrm{KS}(\text{failure},\text{all})\le1-p_F\to0$, which together with Lemma~\ref{lem:loadaxis}
+gives $X\mid F\Rightarrow N(0,1)$. When $z_M(d)\to+\infty$, $q_{\rm sel}\to\Phi^{-1}(u)$, and the
+remaining argument is the same as the second half of (i).

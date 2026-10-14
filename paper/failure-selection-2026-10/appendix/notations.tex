@@ -1,0 +1,110 @@
+\section{Notation}\label{app:notation}
+This appendix collects the notation used throughout the paper, grouped in the order of first
+appearance. Unless an explicit comparison across different scales is required, the dependence
+of each quantity on $M$ is omitted. The finite-size sign imbalance is denoted by $\rho$ and its
+limit by $\rho_\infty$; for the remaining parameters ($r$ and the like), the absence of a
+subscript denotes the finite quantity, and the subscript $\infty$ is added when the limit is
+meant. The subscripts $c$ and $k$ denote constants that depend only on $k$. The symbols
+$\Rightarrow$ and $\xrightarrow p$ denote convergence in distribution and convergence in
+probability, respectively. Unless stated otherwise, $k\ge3$ is fixed and $M\to\infty$.
+
+\newcommand{\notationtable}[2]{%
+\par\smallskip\noindent\textbf{#1}\par\nopagebreak\smallskip
+{\small\noindent\begin{tabular}{@{}p{.22\linewidth}p{.74\linewidth}@{}}
+\toprule
+Notation & Meaning\\
+\midrule
+#2
+\bottomrule
+\end{tabular}}\par\medskip}
+
+\notationtable{Model and peeling}{
+$M$ & number of cells, i.e. the number of vertices of the mapping hypergraph\\
+$d$ & number of input elements, i.e. the estimation target\\
+$k$ & number of cells to which each element is mapped\\
+$S_i$ & the $k$-subset chosen by element $i$\\
+$F$ & the event that ideal peeling fails, equivalently that the residual 2-core is nonempty\\
+$\alpha$ & limit of the load $d/M$, Theorem~\ref{thm:sign}\\
+$r$ & window coordinate, $d/M=\alpha_c+r/\sqrt M$; within the critical window $r$ is fixed\\
+$n$ & candidate count, used in the test in place of the unknown $d$\\
+}
+
+\notationtable{Signs and measurement}{
+$s_i$ & sign of element $i$, taking values in $\pm1$\\
+$d_+$, $d_-$ & numbers of positive and negative elements\\
+$b$ & total sign $d_+-d_-=d\rho$, observable by the protocol\\
+$\rho$, $\rho_\infty$ & the sign imbalance $b/d$ and its limit\\
+$C_v$ & count of cell $v$, $\sum_{i:v\in S_i}s_i$\\
+$T$ & the count energy before peeling, Eq.~\eqref{eq:T}\\
+$\widehat d$ & estimate of $d$ obtained from the energy\\
+$s$ & standard deviation $\sqrt{2d(d-1)/(M-1)}$; $s(n)$ is the same expression evaluated at a candidate $n$\\
+$X$ & standardized measurement $(\widehat d-d)/s$\\
+$X_{\rm one}$ & the standardized measurement when all signs are equal\\
+$\gamma$ & sign factor $(d\rho^2-1)/(d-1)$, with $\gamma\to\rho_\infty^2$\\
+$V$ & sign residual $X-\gamma X_{\rm one}$\\
+$c_F$ & increment in the expected overlap of two elements under failure selection relative to the unconditional case, Eq.~\eqref{eq:projection}\\
+$q_u$ & the $u$ lower quantile of $\widehat d/d$ under failure\\
+}
+
+\notationtable{Critical constants}{
+$x_c$ & the unique positive root of the equation $e^{x}-1=(k-1)x$\\
+$q_c$, $a_c$ & $1-e^{-x_c}$ and $q_c^{k-1}$\\
+$\mu_c$, $\alpha_c$ & critical mean degree $x_c/a_c$ and critical load $\mu_c/k$\\
+$\beta_k$ & slope of the score with respect to the window coordinate, $-ka_ce^{-x_c}$\\
+$\sigma_k^2$ & limit variance of the score, equal to the initial part $\sigma_0^2$ plus the dynamic part $\tau_k^2$\\
+$\tau_k^2$ & variance of the dynamic part of the score, Eq.~\eqref{eq:tau}\\
+$\eta_k$ & limit correlation coefficient of the measurement and the score when all signs are equal, Eq.~\eqref{eq:eta}\\
+$w_k$ & window width $\sigma_k/|\beta_k|$\\
+$C_k$ & coefficient of the finite-size threshold shift, Section~\ref{sec:rules}\\
+}
+
+\notationtable{Joint limit and conditional law}{
+$R$ & precritical score, depending only on the unsigned mapping, Eq.~\eqref{eq:score}\\
+$z_r$ & standardized window coordinate $-\beta_kr/\sigma_k$\\
+$c$ & correlation coefficient of the joint limit, $\eta_k\rho_\infty^2$\\
+$\Phi$, $\phi$ & standard normal distribution function and density\\
+$\Phi_2(\cdot,\cdot;c)$ & standard bivariate normal distribution function with correlation $c$\\
+$A(z)$ & $\phi(z)/\Phi(z)$\\
+$f_{\rm sel}$, $q_{\rm sel}$ & density and quantile of the selection law\\
+$\mathcal G$ & unsigned Plain hypergraph with element labels\\
+$\mathcal S$ & event that depends only on the unsigned mapping and is invariant under permutation of the element labels\\
+}
+
+\notationtable{Upper confidence bound and implementation rule}{
+$u$ & nominal lower-tail level\\
+$\mathcal N(b)$ & candidate set $\{n\ge\max(|b|,2):n\equiv b\pmod 2\}$\\
+$z(n)$ & standardized window coordinate corresponding to a candidate $n$\\
+$t(n,b)$ & acceptance threshold for a candidate $n$\\
+$\mathcal C$ & acceptance set; $U=\sup\mathcal C$ is the upper confidence bound\\
+$\kappa(u)$ & chi-square shape correction\\
+}
+
+\notationtable{Load axis}{
+$P_2$ & event that the actual core is exactly two repeated edges\\
+$\lambda$, $\lambda_n$ & expected number of repeated edges $\binom d2/\binom Mk$, and its value at a candidate $n$\\
+$\delta_k$, $b_k$ & exponents of the error terms in Proposition~\ref{prop:lowload} and Proposition~\ref{prop:mixture}\\
+$\mathcal A$ & macroscopic failure event in which the number of edges of the actual 2-core exceeds $\varepsilon_0M$\\
+$H_n$, $T_n$, $w_n$ & mixture distribution, acceptance threshold, and macroscopic-layer weight of Proposition~\ref{prop:axis}\\
+}
+
+\notationtable{Experimental coordinates}{
+$z_0$ & theorem coordinate $(d/M-\alpha_c)\sqrt M/w_k$\\
+$z_{\rm sh}$ & shifted coordinate $z_0+C_kM^{-1/6}$\\
+$z_{\rm emp}$ & empirical coordinate recovered from the measured failure rate\\
+$\widehat p_F$ & measured failure rate\\
+$\sigma$ & product of the signs of the two edges of a repeated edge\\
+}
+
+\notationtable{Notation in the proofs}{
+$D_v$ & initial degree of cell $v$\\
+$\mu$ & finite-size mean degree $kd/M$\\
+$G(f)$ & centered empirical functional of the initial degree\\
+$e$, $h_c$ & influence functions of the initial parts of the measurement and the score\\
+$\Gamma(f,g)$ & limit covariance at a fixed total number of endpoints, Eq.~\eqref{eq:bridge}\\
+$W$ & dynamic innovation of the score\\
+$\Lambda_k$ & limit mean of the number of bad edges in the configuration model\\
+$H_{ij}$, $m_{ij}$ & overlap $|S_i\cap S_j|$ of the mappings of two elements\\
+$\Omega$, $\Omega_2$, $\ell_i$, $\Omega_\ell$ & total overlap, sum of squares, weighted degree, and sum of squared weighted degrees of the overlap graph\\
+$\theta$ & number of steps until the number of degree-one vertices first becomes zero\\
+$\vartheta$ & error scale $\sqrt M(\log M)^6$ in the uniform concentration before stopping\\
+}

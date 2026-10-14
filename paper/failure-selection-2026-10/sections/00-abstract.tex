@@ -1,0 +1,34 @@
+\begin{abstract}
+When IBLT is used for set reconciliation, the capacity must be chosen while the number of differing elements $d$ is
+unknown. A self-sizing protocol proceeds as follows: a first round attempts peeling decoding with a small sketch, and
+after failure estimates $d$ from the energy of the count array, then sets the second-round capacity to a lower
+quantile of the estimate. This quantile must be computed conditionally on failure, because the measurement and the
+success of peeling are determined by the same random mapping, so the distribution of the measurement on failing
+samples can deviate from the unconditional distribution. We study this deviation in the ideal peeling model: the
+number of hash functions $k\ge3$ is fixed, each element independently and uniformly selects $k$ cells, the elements
+carry $\pm1$ signs, and the sign composition is fixed and independent of the mapping.
+
+Within the critical window where the failure probability is nondegenerate, we prove that the standardized energy and a
+statistic that depends only on the unsigned mapping and governs the success of peeling (the precritical score) have a
+joint Gaussian limit, with correlation coefficient
+$\eta_k\rho^2$, where $\rho$ is the sign imbalance and $\eta_k$ has a closed form. Consequently, the
+measurement conditional on failure follows the distribution of a bivariate normal truncated on a half-plane, which we
+call the Gaussian-selection
+law. The coefficient $\eta_k$ changes sign between $k=4$ and $k=5$, and the direction of the shift in the
+conditional mean and the lower
+quantile after failure reverses accordingly: when $k\ge5$ and the imbalance leans toward one side, keeping the
+unconditional threshold
+makes the risk of insufficient second-round capacity higher than the nominal level.
+
+The key tool for separating the role of the signs from that of the mapping is a quenched CLT for a signed
+quadratic form on a random overlap graph, with the sign composition fixed. As a corollary, when the signs are
+asymptotically balanced, conditioning on any unsigned mapping event of probability bounded away from zero and
+invariant under element-label permutation does not change the standard normal limit.
+
+After failure the protocol can observe the total sign. Inverting the selection law with it yields an upper confidence
+bound for the unknown $d$; this bound is asymptotically conservative within the critical window. As long as
+$d/\sqrt M\to\infty$, it extends to the entire load axis. In the numerical experiments, all theoretical predictions
+are given by analytic constants, with no parameters fitted. The experiments show that the unconditional threshold
+carries a selection error that does not vanish with scale, while the selection-law threshold with a finite-size
+correction matches the accuracy of the per-configuration empirical quantile.
+\end{abstract}

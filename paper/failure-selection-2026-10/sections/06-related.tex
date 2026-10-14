@@ -1,0 +1,41 @@
+\section{Related work}\label{sec:related}
+\paragraph{Random hypergraph core and finite-size scaling.} The threshold and the thinning solution of the random hypergraph 2-core
+go back to Molloy\cite{molloy}, Darling--Norris\cite{dn}, and Janson--Łuczak\cite{jl07}. Dembo--Montanari
+proved the failure probability of the configuration model inside the critical window together with a correction of order $n^{-1/6}$
+\cite{dm}; their Remark 2.6 also gives the limiting law of the core size conditional on the core being present. Amraoui
+et al.\ proposed the finite-length scaling and the threshold shift in iterative decoding\cite{amru}, and Nozaki--Kasai--Sakaniwa gave
+an analytic solution of the covariance evolution\cite{nks}. These works study the failure itself or the core itself.
+This paper studies a different object: the joint law between an external measurement, determined already before peeling,
+and the failure score. The constant $\eta_k$
+is precisely the cross-correlation between the measurement and the score; like the window width $\sigma_k$, it is determined by the full degree profile.
+The numerical value of $\sigma_k$ agrees with the width parameter of AMRU, related by
+$\sigma_k=ka_ce^{-x_c}\alpha_{\rm AMRU}$; the NKS result reproduces the dynamic part of $\sigma_k$ in the Poisson case.
+
+\paragraph{Conditioning and rare cores.} Scott--Sorkin characterized the conditional structure of specific rare cores
+below the threshold\cite{ss}. Janson--Łuczak proved the normality of the random graph $k$-core by conditioning on the defect\cite{jl}.
+This paper carries over the same conditioning strategy when moving from the configuration model to the Plain model; unlike those works,
+we also need to prove that the joint Gaussian law of the measurement
+and the score remains unchanged after conditioning.
+
+\paragraph{Two failure mechanisms.} The iterative decoding literature writes the block error rate as the sum of a waterfall
+term and an error floor term (AMRU 2006, Eq.~(17)(18)\cite{amru06}). Pittel--Sorkin
+also gave bounds that juxtapose the two mechanisms for the satisfiability probability of $k$-XORSAT\cite{ps}. Goodrich--Mitzenmacher
+observed that, at a fixed subcritical load, the failure bottleneck of IBLT is two edges mapping to the same set of cells, giving a
+failure rate of $O(t^{-k+2})$\cite{gm}. These results all stay at the level of probabilities.
+Proposition~\ref{prop:lowload} goes further to give the relative constant and the conditional law of the measurement; Proposition~\ref{prop:mixture}
+combines the two mechanisms into an explicit mixture of conditional CDFs and handles the crossover region where macroscopic failure has
+already become rare.
+
+\paragraph{Quadratic forms and selection distributions.} For the CLT of quadratic forms with random signs, there are results of de
+Jong\cite{dejong}, Bloznelis--Götze\cite{bg}, and
+Bresler--Nagaraj\cite{bn}, which respectively require independent inputs, a nondegenerate linear part, or a deterministic regular
+underlying graph. For the general framework of conditional CLTs, see Dedecker--Merlevède\cite{dmer}. Theorem~\ref{thm:sign} treats
+the case where the overlap graph is random, sparse, and nonregular, while the sign composition is fixed. The distribution
+$\Phi_2(x,z;c)/\Phi(z)$ is Azzalini's extended skew-normal distribution\cite{azz85,aa06}. This paper's contribution is to prove that it
+appears as the limit of the measurement conditional on failure, and to give the closed form of the parameter $\eta_k\rho^2$.
+
+\paragraph{Failure analysis of IBLT.} The IBLT literature gives the failure probability and list guarantees at finite
+length\cite{gm,yw,mizrahi}, but does not discuss the count measurement read after failure. Reference~\cite{prior} proposed the
+self-sizing protocol and proved two things: the exact sign projection of the conditional mean, and the chi-square inheritance at fixed
+$M$. This paper advances these conclusions to the critical window, where the failure probability is nondegenerate, and to the whole load
+axis.

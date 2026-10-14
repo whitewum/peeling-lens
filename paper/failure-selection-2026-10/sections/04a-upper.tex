@@ -1,0 +1,67 @@
+\section{Upper confidence bound after failure}\label{sec:upper}
+The selection law of Section~\ref{sec:window} gives the limiting distribution of the measurement under
+failure, but its parameters ($z_r$ and $c$) both depend on the unknown $d$. After failure the protocol can
+observe only three quantities: the failure event $F$, the estimate $\widehat d$, and the total sign
+$b = d_+ - d_-$. The strategy of this section is to substitute each candidate value of $d$ into the
+conditional law, perform a hypothesis test, and invert it, obtaining an upper confidence bound for $d$.
+This construction requires only a null distribution for each candidate, so it can accommodate conditional
+laws from different regimes: the selection law inside the critical window, and a mixture of the two
+failure mechanisms in the low-load regime.
+
+\subsection{Candidate tests and construction of the bound}\label{sec:upper-construct}
+The Plain mapping is exchangeable in the element labels, so given $(d, b)$ the joint law of
+$(\widehat d, F)$ depends only on these two numbers. This means that for each candidate value $n$, the
+statement that the true difference count is $n$ and the total sign is $b$ constitutes a complete simple
+hypothesis. A candidate $n$ also determines the window coordinate and the correlation coefficient: the
+former is given by the distance of $n/M$ from $\alpha_c$, and the latter equals $\eta_k b^2/n^2$, i.e.\ the
+value of $\eta_k\rho^2$ at $\rho = b/n$. Thus $b$ together with a candidate $n$ suffices to determine the
+entire conditional law, and the candidates can be tested one by one.
+
+The candidate set is
+$\mathcal N(b) = \{n : n \ge \max(|b|, 2),\ n \equiv b \pmod 2\}$. For
+$n \in \mathcal N(b)$ let
+\begin{gather*}
+s(n)^2 = \frac{2n(n-1)}{M-1},\qquad
+z(n) = \frac{ka_ce^{-x_c}}{\sigma_k}\Bigl(\frac nM -
+\alpha_c\Bigr)\sqrt M,\\
+t(n,b) = n + s(n)\,q_{\rm sel}\bigl(u;\,z(n),\,\eta_k b^2/n^2\bigr),
+\end{gather*}
+where $q_{\rm sel}$ is the selection law quantile defined in Section~\ref{sec:mean}.
+$t(n,b)$ is the acceptance threshold for candidate $n$: if the true difference count is indeed $n$, then
+under failure the probability that $\widehat d$ lies below $t(n,b)$ is asymptotically $u$. If the observed
+$\widehat d$ lies below the threshold, the candidate is rejected.
+
+The acceptance set is $\mathcal C = \{n \in \mathcal N(b) : \widehat d \ge t(n,b)\}$, and the upper
+confidence bound is
+\begin{equation*}
+U = \sup\,\mathcal C;
+\end{equation*}
+if $\mathcal C$ is empty, set $U = +\infty$ and the protocol falls back to a fallback scheme (full
+transmission or doubling). Two properties of this construction are worth noting. First, the coverage
+probability depends only on whether the true candidate $d$ is wrongly rejected: if $d \in \mathcal C$ then
+$U \ge d$, and if $\mathcal C$ is empty then $U = +\infty$, so in both cases the bound covers the true
+value. Hence neither monotonicity of the threshold in $n$ nor multiple-testing correction is needed; the
+thresholds of the other candidates affect only how wide the bound is, not the coverage probability.
+Second, for $M$ sufficiently large the acceptance set lies in a finite interval (Appendix~\ref{app:upper}),
+so $U$ can be computed with finitely many comparisons.
+
+\subsection{Coverage inside the critical window}\label{sec:upper-cover}
+\begin{theorem}[Asymptotically conservative coverage]\label{thm:upper}
+Fix $u \in (0,1)$.
+\begin{enumerate}[label=(\roman*)]
+\item Under the conditions of Theorem~\ref{thm:main}, $\Pr(\widehat d < t(d,b) \mid F) \to u$,
+so $\liminf_M \Pr(d \le U \mid F) \ge 1-u$.
+\item For every $R < \infty$, the convergence in (i) is uniform in $|r| \le R$ and over all admissible $b$.
+\item If $d/M$ is bounded and $r \to +\infty$, then
+$\liminf_M \Pr(d \le U \mid F) \ge 1-u$.
+\end{enumerate}
+\end{theorem}
+Under a completely one-sided sign, $d = |b|$ is the smallest candidate and the coverage is always one, so
+the theorem is stated uniformly as ``$\ge 1-u$''. The proof is in Appendix~\ref{app:upper}.
+
+Item (iii) handles the side where the load is above the critical window. There failure becomes increasingly
+certain, and the selection effect weakens accordingly: the center of the score moves to a deeply negative
+value, truncation barely changes the marginal distribution, and the conditional law tends to the
+unconditional normal. At the same time, as $z(n) \to +\infty$ the selection law quantile tends to the
+normal quantile, and the two coincide automatically. When the load is below the critical window, the source
+of failure changes, and a new conditional law is required.

@@ -1,0 +1,61 @@
+
+\subsection{Sign change of $\eta_k$ and protocol risk}\label{sec:flip}
+By \eqref{eq:eta}, all factors of $\eta_k$ other than $x_c-2$ are positive, so the sign of $\eta_k$
+equals the sign of $x_c-2$. The function $e^x-1-(k-1)x$ is negative on $(0,x_c)$ and positive on
+$(x_c,\infty)$, so it suffices to look at its sign at $x=2$. $e^2-1\approx6.39$, while $(k-1)\cdot2$
+equals $6$ for $k=4$ and $8$ for $k=5$. The former gives a positive value, hence $x_c<2$; the latter
+gives a negative value, hence $x_c>2$. Since $x_c$ increases with $k$, we have $\eta_k<0$ for
+$k=3,4$, while every fixed $k\ge5$ has $\eta_k>0$.
+Table~\ref{tab:constants} lists the numerical values.
+
+\begin{table}[!htbp]
+\centering
+\caption{Analytic constants and the direction of the conditional mean under one-sided failure.}
+\begin{tabular}{rrrl}
+\toprule
+$k$ & $\sigma_k^2$ & $\eta_k$ & direction of the mean ($\rho\ne0$)\\
+\midrule
+3 & 0.047334402 & $-0.352023542$ & positive\\
+4 & 0.022604525 & $-0.041540768$ & positive\\
+5 & 0.014632421 & $+0.126662297$ & negative\\
+6 & 0.010718241 & $+0.219499658$ & negative\\
+\bottomrule
+\end{tabular}
+\label{tab:constants}
+\end{table}
+
+This sign can be translated back to the original scale. Under a one-sided sign, $\rho=1$, and
+\eqref{eq:projection} gives $\E[\widehat d\mid F]-d=d(d-1)c_F$, hence $\E[X\mid F]=d(d-1)c_F/s$.
+Using $s^2=2d(d-1)/(M-1)$ and $d/M\to\alpha_c$, we obtain
+\begin{equation*}
+M^{3/2}c_F\longrightarrow
+-\frac{\sqrt2\eta_k}{\alpha_c}A(z_r).
+\end{equation*}
+The sign change is a property of $c_F$ itself inside the critical window, independent of the sign
+composition; the sign composition only determines the proportion in which this shift is transmitted
+to the estimate. Returning to the interpretation of $c_F$ in Section~\ref{sec:sign}: for $k=3,4$ the
+mapping overlap selected by failure is larger than average and the estimate is biased upward; for
+$k\ge5$ the overlap is smaller and the estimate is biased downward. For $k=3,4,5,6$, $x_c$ is about
+$1.26$, $1.90$, $2.34$, $2.66$. The value of $x_c$ for $k=4$ is close to $2$, so $|\eta_4|$ is only
+$0.04$; the selection effect is weakest at $k=4$, and markedly stronger at $k=3$ and for $k\ge5$.
+Figure~\ref{fig:selection} gives the simulation comparison for $k=3$--$6$. The mean has another sign
+change: for fixed $k\ge5$, as the load decreases gradually the conditional mean changes sign once
+more, see Appendix~\ref{app:wm}.
+
+The sign change directly determines on which side the protocol risk falls. Under the rule that takes
+$\widehat d/q_u$ as the capacity of the second round, $\widehat d<q_u d$ is equivalent to the
+capacity set from the estimate being smaller than the true number of differences, and the lower-tail
+probability under failure is the probability of this event. Under a one-sided sign, if $c>0$
+($k\ge5$) the true quantile after failure is lower than the quantile of the unconditional normal;
+using the latter as the lower-tail threshold makes the lower-tail probability higher than the nominal
+value and the capacity too small; if $c<0$ ($k=3,4$) the bias falls on the conservative side. Whether
+the second round ultimately succeeds also depends on the capacity conversion factor and the failure
+probability of the second-round decoding itself; the end-to-end experiment of Section~\ref{sec:e2e}
+checks the coverage of the upper bound after failure, i.e.\ the probability that $U<d$.
+
+The analysis above gives the full conditional distribution when $z_r$ and $c=\eta_k\rho_\infty^2$ are
+known. In practice there is a further difficulty: both $z_r$ and $c$ are computed from the true $d$,
+and $d$ is precisely the quantity the protocol is meant to estimate. The centering term of the energy
+uses only the total sign $b=k^{-1}\sum_vC_v=d\rho$, which the protocol can compute directly.
+Section~\ref{sec:upper} uses the observable $(\widehat d,b)$ to perform candidate testing and
+inversion, removing the dependence on the true $d$.

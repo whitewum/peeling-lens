@@ -1,0 +1,619 @@
+\section{Proof of the main theorem}\label{sec:main-proof}
+This appendix proves Theorem~\ref{thm:main}, Theorem~\ref{thm:sign}, and Corollary~\ref{cor:balanced}.
+Section~\ref{sec:proof-sketch} first gives the proof sketch; the subsequent subsections give the complete
+chain of proof, and the expansion of the key estimates is collected in Appendix~\ref{app:technical}.
+
+The proof proceeds in five steps. The first step analyzes the initial degree distribution and obtains the
+joint Gaussian limit of the energy and the influence function (Section~\ref{sec:mp-init}). The second step
+tracks the full degree trajectory along the peeling process, constructs the precritical score, and decomposes
+it into an initial-state part and the dynamic innovation (Sections~\ref{sec:mp-traj} and \ref{sec:mp-stop}).
+The third step proves that the sign of the score determines the actual success or failure
+(Section~\ref{sec:mp-global}). The fourth step transfers the result from the configuration model to the
+Plain model (Section~\ref{sec:mp-plain}). The fifth step handles general sign composition
+(Section~\ref{sec:signproof}). The two subsections after the proof sketch first give the critical constants
+and then fill in the details of a few short arguments in the main text.
+
+\subsection{Proof sketch}\label{sec:proof-sketch}
+The proof of Theorem~\ref{thm:main} first establishes the joint limit of $(X_{\rm one},R_M)$ in the
+all-equal-sign case, and then handles general sign composition via Theorem~\ref{thm:sign}. The
+all-equal-sign case proceeds in four steps; the complete argument appears in the subsequent subsections, and
+the key estimates appear in Appendix~\ref{app:technical}.
+
+\paragraph{Initial state.} We first work in the configuration model: the $k$ endpoints of each edge are
+drawn independently and uniformly, with repetition allowed. The measurement depends only on the initial
+degrees, so it can be written as a functional $G_M(e_M)$ of the degrees, where $e_M(j)=(j-\mu_M)^2$. The
+initial-state part of the score is another functional $G_M(h_c)$, with influence function
+$h_c(j)=j(1-a_c)^{j-1}$ depending on the complete profile of the initial degrees. The total number of
+endpoints is fixed, so the joint Gaussian limit of the two must subtract the correction term in
+\eqref{eq:bridge}.
+
+\paragraph{Peeling trajectory and the score.} Along the peeling process, the degree histogram follows the
+fluid equation; at the critical parameters the degree-one density has a non-degenerate quadratic minimum,
+which is the bottleneck of the peeling. The score $R_M$ reads the histogram at the entry time before the
+bottleneck and extrapolates to the bottleneck with backward weights (\eqref{eq:score}). A Doob decomposition
+of the backward functional writes $R_M$ as three terms: the deterministic term $\beta_kr$ from the window
+location, the initial-state part $G_M(h_c)/\mu_c$, and the dynamic innovation $W$ (\eqref{eq:decomp}). The
+increments of the innovation are $O(M^{-1/2})$, and its quadratic variation tends to the constant
+$\tau_k^2$; stable convergence (\eqref{eq:stable}) shows that it is independent of the initial-state limit.
+Hence the correlation between the measurement and the score comes entirely from the initial state, equal to
+$\Gamma(e,h_c)/(\sqrt2\mu_c^2\sigma_k)$. Substituting $\Gamma(e,h_c)=\mu_ce^{-x_c}x_c(x_c-2)$ gives
+\eqref{eq:eta}, and the sign of $\eta_k$ is exactly the sign of $x_c-2$. The influence function is
+determined by the complete degree profile; tracking only the two lowest-order statistics of the initial
+state gives the wrong value $\eta_3\approx-0.398$.
+
+\paragraph{The sign of the score determines success.} Within the short window near the bottleneck the local
+noise freezes, and the number of degree-one vertices is approximately $x_c\sqrt M R_M$ plus the fluid
+difference (\eqref{eq:freeze}). When $R_M$ is clearly negative, the number of degree-one vertices drops to
+zero before the central time, so peeling fails; when $R_M$ is clearly positive, the process crosses the
+bottleneck, after which the positive gap of the fluid and a first-moment bound on the small core rule out
+failure. The Gaussian limit has no atoms, which gives \eqref{eq:transfer}.
+
+\paragraph{Transfer to the Plain model.} The Plain model is the configuration model conditioned on the
+event of having no bad edges, whose probability tends to $e^{-\Lambda_k}>0$. Planting finitely many bad
+edges does not change the limit of $(X_{\rm one},R_M)$; expanding with mixed factorial moments and
+inclusion-exclusion keeps the joint Gaussian law unchanged after conditioning.
+
+\paragraph{General sign composition.} For statistics invariant under permutation of the element labels, one
+can first generate the unsigned graph $\mathcal G$ and then distribute a given sign composition uniformly
+over it. Theorem~\ref{thm:sign} decomposes the measurement into $\gamma X_{\rm one}$ and a term $V$
+asymptotically independent of the graph. The correlation of the former with the score is $\eta_k$, and
+multiplying by $\gamma\to\rho^2$ gives the correlation coefficient $\eta_k\rho^2$. The proof of
+Theorem~\ref{thm:sign} itself is in Section~\ref{sec:signproof}: first approximate with iid signs, then flip
+a whole batch from the surplus sign class to correct the total sign count exactly, and finally obtain the
+normal limit from the self-averaging of the overlap graph and cumulant estimates on the dependency graph.
+
+\subsection{Critical constants}\label{app:constants}
+Fix $k\ge3$, and let $x_c$ be the unique positive root of the equation $e^{x}-1=(k-1)x$\cite{molloy,dn,jl07}. Let
+\begin{equation*}
+q_c=1-e^{-x_c},\quad a_c=q_c^{k-1},\quad
+\mu_c=x_c/a_c,\quad\alpha_c=\mu_c/k.
+\end{equation*}
+$\mu_c$ is the critical average degree and $\alpha_c$ the critical load. In Theorem~\ref{thm:main} the slope
+of the score against the window coordinate and the limiting variance of the score are
+\begin{equation*}
+\beta_k=-ka_ce^{-x_c},\qquad
+\sigma_k^2=e^{-x_c}q_c\left(1-\frac{k a_c}{k-1}\right).
+\end{equation*}
+$\sigma_k^2$ is composed of the initial-state part $\sigma_0^2$ and the dynamic part $\tau_k^2$; see
+\eqref{eq:tau} and the simplification that follows it. For $k=3,4,5,6$ the values of $\tau_k^2$ are
+$0.031017361$, $0.016877142$, $0.011169746$, $0.008107775$; the numerical values of $\sigma_k^2$ and
+$\eta_k$ appear in Table~\ref{tab:constants}.
+
+\paragraph{Finite-size shift constants.}\label{app:ck}
+The shift constants of Section~\ref{sec:rules} are obtained by converting the critical threshold shift of
+Dembo--Montanari\cite{dm} to the scale of this paper. Write $w_k=\sigma_k/|\beta_k|$,
+$\widetilde G=(k-2)/(k-1)$, $\widetilde F=[(k-1)x_c-(k-2)]/(kq_c^k)$. Then
+\begin{equation*}
+C_k=\frac{1}{w_k}\cdot\frac{0.996193\,\widetilde G^{2/3}\widetilde F^{-1/3}\alpha_c^{4/3}}{x_c^2e^{-x_c}},
+\end{equation*}
+where the constant $0.996193$ is the numerical value of the Airy integral in DM's eq. (2.16).
+
+\subsection{Exact normalization and local uniformity}\label{app:normalization}
+The normalization in \eqref{eq:measurement} of Section~\ref{sec:model} is exact, for the following reason.
+Let $H_{ij}=|S_i\cap S_j|$. Then
+\begin{equation*}
+T=kd(1-k/M)+2\sum_{i<j}s_i s_j(H_{ij}-k^2/M).
+\end{equation*}
+The hypergeometric distribution gives
+\begin{equation*}
+\E H_{ij}=k^2/M,\qquad
+\Var H_{ij}=\frac{k^2(M-k)^2}{M^2(M-1)}.
+\end{equation*}
+Different unordered pairs of elements have uncorrelated overlaps. Even when two pairs share an element, once
+the mapping of that element is given, the conditional mean of each pair is still the constant $k^2/M$.
+Summing these quantities gives the normalization in \eqref{eq:measurement}.
+
+\paragraph{Local uniformity.} The window assumption \eqref{eq:window} allows an $o(M^{-1/2})$ slack, and the
+way $\rho_M\to\rho$ is unrestricted, so any sequence with $r_M\to r$ satisfies the conditions of the theorem.
+A subsequence argument gives: the joint limit in Theorem~\ref{thm:main} and the limit of the conditional CDF
+hold uniformly over $(r,\rho)$ on any compact subset of $\mathbb R\times[-1,1]$. This removes the need to
+prove a separate uniform CLT.
+
+\paragraph{Convergence of conditional moments.} Convergence in distribution alone does not imply convergence
+of moments: a small part of the probability mass can escape to infinity, vanish in the limit, yet still bias
+the mean. Section~\ref{sec:mean} therefore needs $X^2$ to be uniformly integrable under failure. This has two
+layers. The first is unconditional. Since $X\Rightarrow N(0,1)$ and $\E X^2=1$ holds exactly for every $M$,
+the second moment equals the second moment of the limit, so $X^2$ is uniformly integrable. The second is
+conditional. For any $K>0$,
+\begin{equation*}
+\E\bigl[X^2;\,X^2>K\bigm|F\bigr]\le\frac{\E\bigl[X^2;\,X^2>K\bigr]}{\Pr(F)}.
+\end{equation*}
+The numerator tends to zero uniformly in $M$ as $K\to\infty$, and the denominator tends to $\Phi(z_r)>0$, so
+$X^2$ is also uniformly integrable under failure. The critical window requires the limiting failure
+probability to be positive, and it matters here: if the denominator tended to zero, conditioning could blow up
+the tail without control. Combined with local uniformity, the limits of the first two conditional moments
+hold uniformly over $(r,\rho)$ on compact sets.
+
+\subsection{Initial joint Gaussian limit}\label{sec:mp-init}
+First relax the model: the $k$ endpoints of each edge are drawn independently and uniformly, with repetition
+allowed. This is the configuration model. Write $D_v$ for the initial degree of vertex $v$ and
+$\mu_M=kd/M$. For $e_M(j)=(j-\mu_M)^2$ and $h_c(j)=j(1-a_c)^{j-1}$ (with $h_c(0)=0$), define
+\begin{equation*}
+G_M(f)=\frac1{\sqrt M}\left[\sum_v f(D_v)-M\E f(\Pois(\mu_M))\right].
+\end{equation*}
+Conditioned on the total number of endpoints being fixed, the occupancy CLT gives the joint Gaussian limit of
+$(G_M(e_M),G_M(h_c))$ with covariance
+\begin{equation}
+\Gamma(f,g)=\Cov(f(D),g(D))-
+\frac{\Cov(f(D),D)\Cov(g(D),D)}{\mu_c},\quad D\sim\Pois(\mu_c).\label{eq:bridge}
+\end{equation}
+The second term is the correction coming from the constraint that the total number of endpoints is fixed.
+
+The concrete approach is de-Poissonization. On the same independent endpoint sequence, replace the fixed
+length $L=kd$ by an independent random length $N\sim\Pois(L)$. Write $S_f(l)=\sum_v f(D_v(l))$. Then
+\begin{equation*}
+S_f(N)-S_f(L)=a_f(N-L)+o_p(\sqrt M),\qquad
+a_f=\frac{\Cov(f(D),D)}{\mu_c}.
+\end{equation*}
+For $e_M$, each newly added endpoint changes the sum on average by $2(l/M-\mu_M)+1$; for $h_c$, both the
+first and second discrete differences are bounded. Over the range $|l-L|\le\sqrt M\log M$ the accumulated
+drift error is $O_p(\log^2M)$ and the added martingale fluctuation is $o_p(\sqrt M)$. The ordinary Poisson
+vector CLT plus this correction gives \eqref{eq:bridge}. The one-sided measurement satisfies
+\begin{equation*}
+X_{\rm one}=\frac{G_M(e_M)}{\sqrt2\mu_c}+o_p(1).
+\end{equation*}
+The measurement in the configuration model differs from the center used here, but this difference vanishes on
+the $\sqrt M$ scale.
+
+\subsection{Degree trajectory and the precritical score}\label{sec:mp-traj}
+Let $t$ be the number of deleted edges divided by $M$, and write
+\begin{equation*}
+m_M(t)=\mu_M-kt,\quad a_M(t)=\left(\frac{m_M(t)}{\mu_M}\right)^{(k-1)/k},\quad
+q_M(t)=a_M(t)^{1/(k-1)}.
+\end{equation*}
+Write $U_j$ for the number of vertices of current degree $j$ and $Q=U_1$ for the number of degree-one
+vertices. While peeling has not stopped, the coordinates of degree $j\ge2$ satisfy the following fluid
+equation; starting from the Poisson initial state, its solution is
+\begin{equation*}
+\dot u_j=\frac{k-1}{m_M(t)}[(j+1)u_{j+1}-ju_j],\qquad
+u_j(t)=e^{-\mu_Ma_M(t)}\frac{[\mu_Ma_M(t)]^j}{j!},\quad j\ge2.
+\end{equation*}
+The corresponding degree-one density is
+\begin{equation*}
+\ell_M(t)=m_M(t)-\mu_Ma_M(t)[1-e^{-\mu_Ma_M(t)}].
+\end{equation*}
+At the critical parameters, the interior zero of $\ell_M$ is a non-degenerate quadratic minimum. This is the
+bottleneck of the peeling.
+
+Now define the backward weights of the heavy stubs at the final point:
+\begin{equation*}
+f_j(b)=jb[1-(1-b)^{j-1}],\quad f_0=f_1=0.
+\end{equation*}
+When the thinning parameter $a_c$ of the final point is fixed, this weight satisfies the backward equation.
+The projection of the initial fluctuation onto it is $-\sum_j f_j(a_c)G_j=a_c\sum_jh_c(j)G_j$, where we used
+the total constraint $\sum_jjG_j=0$. We adopt the convention that failure corresponds to a low score; under
+this convention the direction of the initial-state influence is the \emph{positive} $h_c/\mu_c$.
+
+Take
+\begin{equation*}
+t_{*,M}=\frac{\mu_M}{k}(1-q_c^k),\quad
+\varepsilon_M=M^{-1/8},\quad t_-=t_{*,M}-\varepsilon_M,\quad
+n_-=\lfloor Mt_-\rfloor.
+\end{equation*}
+If the process reaches $n_-$, let $b_-=a_c/a_M(t_-)$ and define
+\begin{equation}
+R_M=\frac{M m_M(t_{*,M})-\sum_{j\ge2}f_j(b_-)U_j(n_-)}{x_c\sqrt M}.\label{eq:score}
+\end{equation}
+If the process does not reach $n_-$, set $R_M=0$ for now; we will show later that this case has probability
+$o(1)$. $R_M$ is an extrapolated score, computed directly from the degree histogram at the entry time $n_-$,
+and it can be negative.
+
+\subsection{Concentration before the bottleneck and dynamic innovation}\label{sec:mp-stop}
+\begin{lemma}[Uniform concentration before stopping]
+Let $\theta_M$ be the first step at which the number of degree-one vertices is zero. For fixed $\delta>0$,
+take $\vartheta_M=\sqrt M(\log M)^6$. Then on $n\le\theta_M\wedge(d-\delta M)$, the uniform errors of
+$Q_n-M\ell_M(n/M)$ and of $U_j(n)-M u_j(n/M)$ ($2\le j\le\lceil\log M\rceil$) are all $O_p(\vartheta_M)$.
+\end{lemma}
+The argument uses the backward binomial weights and $f_j$, and stops the process at $\theta_M$. The maximum
+initial degree is at most $L_M=\lceil\log M\rceil$ with high probability. As long as the number of remaining
+stubs is $\Theta(M)$, the backward equation cancels the main drift, and the per-step remainder is controlled
+by $C_\delta L_M^4/M$, with the projected martingale difference uniformly bounded. Combining three tools
+gives the conclusion: the Azuma concentration inequality, the bounded-difference concentration of the initial
+state, and a union bound over $O(ML_M)$ target times and degrees. The fluid gap at the entry is
+$M\varepsilon_M^2=M^{3/4}$, much larger than $\vartheta_M$, so the process reaches $n_-$ with probability
+$1-o(1)$. The detailed estimates are in Appendix~\ref{app:technical}.
+
+A Doob decomposition of the backward functional gives
+\begin{equation}
+R_M=\beta_k r+\frac{G_M(h_c)}{\mu_c}+W+o_p(1).\label{eq:decomp}
+\end{equation}
+On the right are, in order, the deterministic term from the window location, the initial-state part, and the
+dynamic innovation $W$. The normalized increments of $W$ are $O(M^{-1/2})$, and its predictable quadratic
+variation tends to the deterministic constant $\tau_k^2$. Let $\Psi_M$ be measurable with respect to the
+initial-state information and uniformly bounded. The stable decomposition we need is
+\begin{equation}
+\E[\Psi_Me^{iuW}]-e^{-u^2\tau_k^2/2}\E[\Psi_M]\longrightarrow0.\label{eq:stable}
+\end{equation}
+The proof applies a one-step Taylor expansion to the compensated exponential, with the sum of the remainders
+$O(M^{-1/2})$; together with the uniform boundedness of the quadratic variation and its convergence to the
+deterministic value, this gives \eqref{eq:stable}. Taking $\Psi_M$ to be the characteristic function of the
+initial-state vector yields simultaneously the joint Gaussian limit and the independence between the
+innovation and the initial-state limit. The detailed estimates are in Appendix~\ref{app:technical}.
+
+Next we compute the dynamic variance. On the critical fluid trajectory let $b=a_c/a(t)$ and
+$g_j(b)=f_j(b)-f_{j-1}(b)$, and set $g_1=0$. A random partner hits a vertex of degree $j\ge2$ with
+probability $p_j(t)=j u_j(t)/m(t)$; the remaining probability mass goes into $p_1$. Each step deletes $k-1$
+fixed partners, so
+\begin{equation}
+\tau_k^2=\frac{k-1}{x_c^2}\int_0^{t_c}
+\left[\sum_jp_j(t)g_j(b)^2-\left(\sum_jp_j(t)g_j(b)\right)^2\right]dt.\label{eq:tau}
+\end{equation}
+Let $s_c=1-a_c$. The initial-state contribution $\sigma_0^2$ and the total variance simplify to
+\begin{align*}
+\sigma_0^2&=(1/\mu_c+s_c^2)e^{\mu_c(s_c^2-1)}
+-e^{-2x_c}[1+(1-x_c)^2/\mu_c],\\
+\sigma_k^2&=\sigma_0^2+\tau_k^2=e^{-x_c}q_c\left(1-\frac{k a_c}{k-1}\right).
+\end{align*}
+Using $\Gamma(e,e)=2\mu_c^2$ and $\Gamma(e,h_c)=\mu_ce^{-x_c}x_c(x_c-2)$, \eqref{eq:decomp} yields
+\eqref{eq:eta}. The influence function $h_c$ is determined by the complete degree profile. Tracking only the
+two lowest-order statistics of the initial state gives the wrong value $\eta_3\approx-0.398$.
+
+\subsection{The sign of the score determines the peeling outcome}\label{sec:mp-global}
+Consider the window $[t_{*,M}-\varepsilon_M,t_{*,M}+\varepsilon_M]$ around the bottleneck. For all times
+inside the window at which the process has not yet stopped (including the stopping time itself), the local
+noise freezing gives
+\begin{equation}
+Q_n=x_c\sqrt M R_M+M[\ell_M(n/M)-\ell_M(t_{*,M})]+o_p(\sqrt M),\label{eq:freeze}
+\end{equation}
+with the error uniform over these times. The reason is as follows. Inside the window the added martingale
+fluctuation is $O_p(\sqrt{M\varepsilon_M})$, and the accumulated error of the centered drift is
+$O_p(\varepsilon_M\vartheta_M)$ times a logarithmic factor, both $o_p(\sqrt M)$. The difference between the
+backward weights at the entry and the actual heavy-stub weights satisfies a bound of the same order. The
+detailed estimates are in Appendix~\ref{app:technical}.
+
+From this one can deduce success or failure from the sign of the score. Fix $\zeta>0$. If $R_M\le-\zeta$ and
+the process has still not stopped by the central time, \eqref{eq:freeze} gives $Q<0$, a contradiction, so
+peeling fails. If $R_M\ge\zeta$, the lower bound on the local fluid difference is $-O(1)$, so a first stop
+inside the window likewise contradicts \eqref{eq:freeze}. Outside the window, until only few edges remain,
+the positive gap of the fluid together with the uniform concentration before stopping rule out a first stop.
+
+Finally one must rule out a small core. Let $d\le AM$. If $e$ edges form a subgraph of minimum degree at
+least two, their endpoints occupy at most $v=\lfloor ke/2\rfloor$ vertices, hence
+\begin{equation*}
+\Pr(\exists\text{such }e\text{ edges})
+\le \binom{d}{e}\binom{M}{v}(v/M)^{ke}
+\le[C_{k,A}(e/M)^{k/2-1}]^e.
+\end{equation*}
+For $k\ge3$ one can choose $\delta_0>0$ small enough that the sum over $1\le e\le\delta_0M$ is $o(1)$. If
+the process crosses the bottleneck yet still fails in the end, the residual part would violate this bound.
+Thus the outcome is determined on both sides of the safe interval $\pm\zeta$; letting $\zeta\downarrow0$ and
+using that the Gaussian limit has no atoms gives \eqref{eq:transfer}.
+
+\subsection{Transfer from the configuration model to the Plain model}\label{sec:mp-plain}
+In the configuration model, call an edge bad if some endpoint is repeated within that edge, and let
+$N^{\rm bad}_M$ be the number of bad edges. The edges are independent, and each edge is bad with probability
+$\binom{k}{2}/M+O(M^{-2})$, so
+\begin{equation*}
+N^{\rm bad}_M\Rightarrow\Pois(\Lambda_k),\qquad
+\Lambda_k=\alpha_c\binom{k}{2}.
+\end{equation*}
+Conditioning on $N^{\rm bad}_M=0$ gives exactly the Plain model. The probability of this event tends to
+$e^{-\Lambda_k}>0$, so error events of probability $o(1)$ transfer directly. But for the joint Gaussian law
+to be preserved after conditioning, it must also be asymptotically independent of $N^{\rm bad}_M$.
+
+Let $Y_M=(X_{\rm one},R_M)$. Consider planting a fixed number $l$ of special edges. Planting changes the
+initial quadratic energy by $O_p(l\log M+l^2)$ and changes the difference-bounded initial influence function
+by $O_l(1)$. In ordinary edge-deletion steps the partner pool changes by only finitely many stubs, and the
+per-step corrections to the projected drift and quadratic variation are $O_l(M^{-1})$; there are at most $l$
+special deletion steps. Hence the Gaussian limit of $Y_M$ at the precritical time is unchanged. The detailed
+estimates are in Appendix~\ref{app:technical}.
+
+For any bounded continuous function $f$, exchangeability of the element labels gives
+\begin{equation*}
+\E[f(Y_M)(N^{\rm bad}_M)_l]\longrightarrow
+\Lambda_k^l\E f(Y),
+\end{equation*}
+where $(b)_l$ is the falling factorial. Expanding the indicator of having no bad edges with
+inclusion-exclusion, and bounding the tail of the series by $\|f\|_\infty(dp_M)^l/l!$, gives
+\begin{equation*}
+\E[f(Y_M)\mathbf1_{\{N^{\rm bad}_M=0\}}]
+\longrightarrow e^{-\Lambda_k}\E f(Y).
+\end{equation*}
+Dividing both sides by the probability of having no bad edges transfers the joint Gaussian law to the Plain
+model. Combined with the preceding symmetric-difference error, the Plain result in the one-sided case
+follows. Methodologically this step is close to existing conditioning strategies for defects\cite{jl}.
+
+\subsection{Proof of Theorem~\ref{thm:sign} and Corollary~\ref{cor:balanced}}\label{sec:signproof}
+For a joint measurement invariant under permutation of the element labels, one can first generate the
+unsigned graph $\mathcal G$ and then distribute the signs uniformly according to the given composition.
+Define the weighted overlap graph
+\begin{equation*}
+m_{ij}=|S_i\cap S_j|,\quad
+\Omega=\sum_{i<j}m_{ij},\quad \Omega_2=\sum_{i<j}m_{ij}^2,\quad
+\ell_i=\sum_{j\ne i}m_{ij},\quad\bar\ell=2\Omega/d.
+\end{equation*}
+Here $\Omega$ is the total overlap weight. For general $d/M\to\alpha>0$, with $\mu=k\alpha$,
+\begin{equation}
+\Omega_2/M\xrightarrow p\mu^2/2,\quad
+M^{-1}\sum_i(\ell_i-\bar\ell)^2\xrightarrow p\mu^2,\quad
+\max_i \ell_i=O_p(\log M).\label{eq:selfavg}
+\end{equation}
+The first relation comes from the concentration of the overlap mean and $\E(\Omega_2-\Omega)=O(1)$. The
+second expands into a sum over overlap edges and adjacent edge pairs, then counts by the pattern of shared
+elements to obtain a variance of $O(M)$. The third follows from $\ell_i\le k\max_vD_v$.
+
+Write the sign quadratic form as $Y_s=\sum_{i<j}m_{ij}s_i s_j$. The construction has two steps: first
+generate independent signs $t_i$ with $\E t_i=\rho_M$, then flip a uniformly chosen subset of the surplus
+sign class so that the total sign count equals the given value exactly. Let $\xi_i=t_i-\rho_M$. When
+$|\rho|<1$, the number of signs to flip is $O_p(\sqrt d)$. Projecting to correct the total count gives
+\begin{equation*}
+Y_s-\rho_M^2\Omega=
+\rho_M\sum_i(\ell_i-\bar\ell)\xi_i+
+\sum_{i<j}m_{ij}\xi_i\xi_j+o_p(\sqrt M).
+\end{equation*}
+The dependency graph of the main terms on the right has maximum degree $O(\log M)$, so the $r$-th connected
+cumulant divided by $M^{r/2}$ tends to zero ($r\ge3$). The linear and quadratic terms are uncorrelated, and
+the total variance is
+\begin{equation*}
+\rho_M^2(1-\rho_M^2)\sum_i(\ell_i-\bar\ell)^2+(1-\rho_M^2)^2\Omega_2.
+\end{equation*}
+By \eqref{eq:selfavg}, divided by $M$ this tends to $\mu^2(1-\rho^4)/2$. The detailed estimates are in
+Appendix~\ref{app:technical}.
+
+Let $\gamma=(d\rho_M^2-1)/(d-1)$. Combining the exact finite-sample conditional mean with the CLT above gives
+\begin{equation}
+X=\gamma X_{\rm one}+V,\qquad
+\E[e^{iuV}\mid\mathcal G]\xrightarrow p
+\exp[-u^2(1-\rho^4)/2].\label{eq:quenched}
+\end{equation}
+The conditional characteristic function is bounded, so the convergence also holds in $L^1$. This proves that
+$V$ is asymptotically independent of any graph-measurable vector that already has a joint limit. The endpoint
+case $|\rho|=1$ is handled by $\E V^2=1-\gamma^2\to0$, and there is no need to establish a uniform CLT on
+the rare sign class. This completes the proof of Theorem~\ref{thm:sign}. Combining it with the one-sided
+joint limit gives the correlation coefficient $\eta_k\rho^2$, completing the chain of proof of the main
+theorem.
+
+When $\rho_M\to0$, on the event $\mathcal S$ whose probability is bounded away from zero, $\gamma X_{\rm
+one}$ tends to zero; the $L^1$ error of \eqref{eq:quenched} divided by $\Pr(\mathcal S)$ still tends to
+zero. The event is invariant under permutation, so the signs can be randomized legitimately. This proves
+Corollary~\ref{cor:balanced}.
+
+\subsubsection{Technical estimates}\label{app:technical}
+This subsection gives the key estimates in the main chain of proof, with notation continuing from the main
+text and the preceding subsections. All constants may depend on the fixed $k$ and on the distance $\delta$ to
+the exhaustion of the endpoints, but not on the target time, the truncation degree, or $M$.
+
+\subsubsection{Error of the initial de-Poissonization}
+Let $L=kd$ and $w=\lceil\sqrt M\log M\rceil$. On the deterministic interval $[L-w,L+w]$, construct a forward
+martingale in the order in which endpoints are added, and use Doob's maximal inequality to control the
+martingale difference between any two times. The event $|N-L|\le w$ has probability tending to one, so this
+method covers both $N<L$ and $N\ge L$ simultaneously, without a conditional-independence assumption for
+deleting endpoints in reverse.
+
+For $e_M$, the accumulated difference between the average increment and $1$ is at most
+$O(w^2/M)=O(\log^2 M)$. For $h_c$, write the average increment as $A_h(l)$. Bounded differences give
+$A_h(L)-\E A_h(L)=O_p(M^{-1/2})$; the difference between the Binomial and Poisson expectations on a single
+bin is $O(M^{-1})$; each added endpoint changes $A_h$ by at most $C/M$. This again gives an accumulated
+drift error of $O_p(\log^2M)$. The second moment of the maximum of the martingale corresponding to $h_c$ is
+$O(w)$. For $e_M$, stop the martingale when the maximum degree exceeds $\lceil\log M\rceil$; this moment is
+$O(w\log^2M)=o(M)$. The degree increases monotonically as endpoints are added, so a union bound on the
+binomial tail at the right endpoint alone rules out the bad event of truncation failure.
+
+For the triangular array, first take the drift coefficient as $a_{f,M}=\E[f(P_M+1)-f(P_M)]$ with
+$P_M\sim\Pois(\mu_M)$. For $e_M$ this coefficient is exactly one; for $h_c$ it differs from the critical
+value $a_f$ by $O(M^{-1/2})$, which after multiplying by $N-L=O_p(\sqrt M)$ contributes only $O_p(1)$.
+Applying the ordinary CLT to the Poisson triple $(e_M,h_c,P_M)$ and subtracting $a_f$ times the total-count
+coordinate gives all the cross-covariances of \eqref{eq:bridge}. One can also cite directly the existing
+conditional CLT, namely Janson's Theorem 2.2\cite{janson2001}. Its conditions all hold here: the Poisson
+parameter lies in a positive compact interval, the lattice characteristic function satisfies a uniform
+quadratic lower bound, and the required fixed-order moments are bounded. The theorem does not require the
+quadratic energy to have a positive exponential moment.
+
+\subsubsection{One-step drift of the backward functional and uniform concentration}
+Fix the target step $n$, and let the current step be $s<n$. Each step deletes exactly the $k$ stubs of one
+edge, so the number of remaining stubs $N_s=k(d-s)$ is deterministic, and the cancellation in the backward
+equation is exact. On the interval under consideration, $N_s\ge k\delta M$ and the maximum degree is at most
+$L_M=\lceil\log M\rceil$. For
+\[
+\phi_l(b)=\Pr\{\operatorname{Bin}(l,b)=j\},\quad j\ge2,
+\qquad\text{or}\qquad \phi_l(b)=f_l(b),
+\]
+we have $\phi_0=\phi_1=0$ and $|\phi_l-\phi_{l-1}|\le2$. Let $b_s=a_M(n/M)/a_M(s/M)$ and
+$V_s=\sum_v\phi_{D_v(s)}(b_s)$. Fixing $b_s$, write $\Delta_l=\phi_{l-1}-\phi_l$ and
+$A=\sum_vD_v\Delta_{D_v}$; then $|A|\le2N_s$. The forced-deleted leaves contribute nothing to either $V$ or
+$A$. Each deleted partner changes $A$ by at most $CL_M$, and the denominator decreases by only one. Exposing
+the fixed $k-1$ partners in order gives
+\[
+\E[\Delta V\mid\mathcal F_s,\ b_s\text{ fixed}]
+=\frac{k-1}{N_s}A+O(L_M/M).
+\]
+This comparison already covers the case where the same vertex is hit several times, and does not need the
+hits to be independent.
+
+On an interval at fixed distance from the exhaustion of the endpoints, the first two time derivatives of $b$
+are bounded. From the differences of Bernstein polynomials we have $|\partial_b\phi_l|\le CL_M^2$ and
+$|\partial_b^2\phi_l|\le CL_M^3$. First expand the time change in the post-deletion state, then switch back
+to the pre-deletion state: the second-order remainders over all vertices sum to $O(L_M^3/M)$; at most $k$
+vertices change, and the cross terms this produces are $O(L_M^2/M)$. The backward equation cancels the
+first-order main terms in both the sampling and the time directions, hence
+\[
+|\E[V_{s+1}-V_s\mid\mathcal F_s]|\le CL_M^3/M
+\le CL_M^4/M.
+\]
+After $O(M)$ steps the accumulated error is $o(\sqrt M)$. After the process stops, the state and the weights
+freeze together. The conditional random difference of each step comes only from at most $k$ deletions, so the
+centered martingale difference is at most $4k$ in absolute value.
+
+The weight sum at the starting point satisfies a uniform bounded-difference condition for each independent
+endpoint, and its expectation differs from the Poisson thinning value by $O(1)$. The Azuma inequality plus a
+union bound over the $O(ML_M)$ targets $(n,j)$ gives the uniform $O_p(\vartheta_M)$ bound in
+Section~\ref{sec:mp-stop}. The tail of the Poisson distribution at $j>L_M$, weighted by any fixed polynomial
+and multiplied by $M$, still tends to zero. The statement above includes the moment of the first stop.
+
+\subsubsection{Convergence of the dynamic bracket and its separation from the initial state}
+Deleting one partner contributes $g_j(b)$ to the projection. When the number of remaining stubs is
+$\Theta(M)$, the variance correction from sampling without replacement and from repeated hits is
+$O(L_M/M)$; switching the weights of the next moment back to the current weights produces another error of
+$O(L_M^2/M)$. So the true one-step conditional variance is
+\[
+(k-1)\left[\sum_{j\ge2}p_jg_j^2-
+ \left(\sum_{j\ge2}p_jg_j\right)^2\right]+O(L_M^2/M).
+\]
+Replacing the state by the fluid value via uniform concentration gives an error of
+$O_p(\vartheta_M L_M^2/M)=o_p(1)$. Truncating the Poisson tail and writing the sum as a Riemann sum gives
+\eqref{eq:tau}; the missing final segment of the integral has length $\varepsilon_M\to0$, and the integrand
+is bounded, so this part can be ignored.
+
+Let $Z_s$ be the normalized stopped martingale and $C_s=\langle Z\rangle_s$. On the whole sample space
+$|\Delta Z_s|\le4k/(x_c\sqrt M)$, and
+\[
+0\le C_s\le\frac{16k^2d}{x_c^2M},\qquad C_{n_-}\xrightarrow p\tau_k^2.
+\]
+Applying a one-step conditional Taylor expansion to the compensated exponential $\exp(iuZ_s+u^2C_s/2)$, the
+second-order terms cancel and the sum of the third-order remainders is $O(M^{-1/2})$. The modulus of the
+exponential is controlled by the deterministic upper bound above. For any $\Psi_M$ measurable with respect to
+the initial state and satisfying $|\Psi_M|\le1$, the same telescoping sum gives
+\[
+\left|\E[\Psi_Me^{iuZ_{n_-}}]
+-e^{-u^2\tau_k^2/2}\E \Psi_M\right|
+\le C_u\left(M^{-1/2}+\E|C_{n_-}-\tau_k^2|\right)=o(1).
+\]
+This proves \eqref{eq:stable} uniformly over all initial-state test functions, and does not need sigma-fields
+nested in $M$. The independence between the Gaussian limit of the initial state and the dynamic innovation
+follows.
+
+\subsubsection{Stopping near the bottleneck and the global outcome}
+Write $\mathcal E_n=Q_n-M\ell_M(n/M)$ and $\Delta U_2=U_2-Mu_2$. Sequential partner deletion gives the true
+drift
+\[
+\E[Q_{n+1}-Q_n\mid\mathcal F_n]
+=-1+(k-1)\frac{2U_2-Q_n}{Mm_M(n/M)}+O(M^{-1}).
+\]
+Each deletion changes $2U_2-Q$ by at most three, so this remainder does not require truncating the maximum
+degree. After subtracting the fluid drift, the remaining main term is
+\[
+\frac{k-1}{Mm_M(n/M)}(2\Delta U_2-\mathcal E_n).
+\]
+Over a window of length $O(M\varepsilon_M)$ it accumulates to $O_p(\varepsilon_M\vartheta_M)=o_p(\sqrt M)$.
+Multiplying the increments by $\mathbf1_{\{n<\theta_M\}}$ produces a stopped martingale on the original
+probability space, with maximum fluctuation $O_p(\sqrt{M\varepsilon_M})$ inside the window. The last step can
+reach $\theta_M$, so this control also covers the stopping moment.
+
+At the entry write $\Delta U_j=U_j(n_-)-Mu_{M,j}(n_-/M)$. The Poisson thinning identity together with
+handling the rounding gives
+\[
+x_c\sqrt M R_M-M\ell_M(t_{*,M})
+=-\sum_{j\ge2}f_j(b_-)\Delta U_j+O(1).
+\]
+Since $|j-f_j(b_-)|\le C\varepsilon_Mj^2$, the above differs from the true entry fluctuation
+$-\sum j\Delta U_j$ by $O_p(\varepsilon_M\vartheta_ML_M^3)+o(1)=o_p(\sqrt M)$. This proves
+\eqref{eq:freeze}.
+
+The global positivity of the fluid degree-one density comes from the fact that the function
+$-\log(1-q)/q^{k-1}$ attains its minimum $\mu_c$ uniquely at $q_c$. Hence the critical fluid has only this
+one interior zero before exhaustion. On a compact interval at fixed distance from the exhaustion of the
+endpoints, the gap outside the window is at least $cM\varepsilon_M^2-O(\sqrt M)$, so the uniform bound before
+stopping rules out a first stop in that interval and outside the window. Inside the window the lowest value
+of the fluid difference is $-O(1)$, because the derivative at $t_{*,M}$ is $O(M^{-1/2})$ while the local
+second derivative has a positive lower bound.
+
+The rounding in the small-core count can also be handled with uniform constants. Let $v=\lfloor ke/2\rfloor$;
+the vertex factor in the binomial upper bound is $e^v(v/M)^{ke-v}$. Its logarithmic derivative
+$ke/v-\log(v/M)>0$, so one may replace $v$ by the real number $ke/2$ as an upper bound. Take
+$C_{k,A}=e^{1+k/2}A(k/2)^{k/2}$ and choose $\delta_0$ so that $C_{k,A}\delta_0^{k/2-1}<1/2$. Summing the
+part with $e\le\log M$ as a geometric series and the part with larger $e\le\delta_0M$ as $2^{-e}$, both
+parts are $o(1)$. A path with positive score that reaches the moment with fewer than $\delta_0M$ edges
+remaining would violate this bound if it still failed; a path with negative score has its degree-one count
+drop to zero before the central time. Finally letting the safe interval $\zeta\downarrow0$ completes the
+transfer to the real event.
+
+\subsubsection{Limit after planting finitely many bad edges and the inclusion-exclusion expansion}
+At time zero, expose all special edges and the initial degrees of the ordinary edges. Given this information,
+the ordinary labeled stubs can be distributed uniformly into the slots of the ordinary edges; as each
+ordinary edge is exposed, the assignment of the remaining slots is still uniform. When choosing the leaf with
+the smallest vertex label, whether it belongs to a special edge is already predictable. The ordinary partner
+pool differs from the full pool by at most $kl$ stubs, so the total variation of the per-step sampling kernel
+is $O_l(M^{-1})$, and the corrections to the drift and bracket of the bounded projected increment are of the
+same order. There are at most $l$ special steps, whose total contribution is $O_l(1)$.
+
+Thus the initial limit, the uniform concentration, the arrival at the precritical time, and the
+compensated-exponential argument all preserve the same limit after planting. Planting preserves the limiting
+distribution, not the score of each individual graph; special edges may change the final outcome of an
+individual graph.
+
+Let $I_e$ be the indicator that edge $e$ is bad. After fixing $l$ edges with $I_e=1$, the remaining edges are
+still independent, so the planting lemma applies. Invariance of the edge labels gives the mixed factorial
+moment formula. Since $\sup_M dp_M<\infty$, the absolute value of the $l$-th term of the inclusion-exclusion
+series is at most $\|f\|_\infty (dp_M)^l/l!$, and the tail of the series tends to zero uniformly in $M$. This
+completes the transfer of the Gaussian law. The symmetric-difference error of the true failure is handled
+separately by dividing by the probability of having no bad edges, which tends to a positive number; the two
+transfers are done in two steps.
+
+\subsubsection{From iid signs to a fixed total sign count}
+Fix a deterministic graph satisfying \eqref{eq:selfavg}, and first handle the case $|\rho|<1$. Then
+$\Omega=O(d)$ and $\Omega_\ell=\sum_i\ell_i^2=O(d)$. Take iid signs $t_i$ and let
+\[
+S=\sum_i t_i,\quad q=|S-d\rho_M|/2,\quad
+\epsilon=\operatorname{sign}(S-d\rho_M),\quad J=\{i:t_i=\epsilon\}.
+\]
+Write $N=|J|$. Draw a uniformly chosen $q$-subset $U$ of $J$ and flip its signs. This mechanism is
+equivariant under label permutations, and the output composition is fixed, so the output is exactly the
+uniform distribution on that composition. Write $h_i=\sum_jm_{ij}t_j$ and
+$I_U=\sum_{i<j,\ i,j\in U}m_{ij}$; expanding edge by edge gives
+\[
+Y_s-Y_t=-2\epsilon\sum_{i\in U}h_i+4I_U.\label{eq:batchflip}
+\]
+The edges inside $U$ have both endpoints flipped, so their actual contribution is unchanged; the first term
+counts them twice, so the correction $4I_U$ cannot be omitted.
+
+Consider the two cases of $\epsilon$ separately with $T_\epsilon=\sum_i\mathbf1_{\{t_i=\epsilon\}}h_i$, whose
+expectation is $p_\epsilon\rho_M\sum_i \ell_i$ with $p_\epsilon=(1+\epsilon\rho_M)/2$. Redrawing $t_z$ changes
+$T_\epsilon$ by at most $4\ell_z$, so the Efron--Stein inequality gives $\Var T_\epsilon\le
+C\Omega_\ell=O(d)$. Both groups have size $p_\epsilon d+O_p(\sqrt d)$, so for both $\epsilon$ simultaneously
+$\bar h_J=\rho_M\bar\ell+O_p(d^{-1/2})$. This also covers the random $\epsilon$ selected by $S$.
+
+Given $t$, sampling without replacement gives the exact variance, together with the expectation bound on the
+internal edges:
+\begin{align*}
+\Var\left(\sum_{i\in U}h_i\given t\right)
+&=\frac{q(N-q)}{N(N-1)}\sum_{i\in J}(h_i-\bar h_J)^2
+\le\frac{q\Omega_\ell}{N-1},\\
+0\le\E[I_U\mid t]&\le\frac{q(q-1)}{N(N-1)}\Omega.
+\end{align*}
+On the event $q\le K\sqrt d$, $N\ge cd$, apply the conditional Chebyshev and Markov inequalities and then let
+$K$ grow; the sampling error is $O_p(d^{1/4})$ and $I_U=O_p(1)$. For a degenerate group the variance is
+simply set to zero. Combining $2\epsilon q=S-d\rho_M$ with \eqref{eq:batchflip} gives
+\[
+Y_s=Y_t-\rho_M\bar\ell(S-d\rho_M)+o_p(\sqrt d),
+\]
+which is the fixed-total-count projection of Section~\ref{sec:signproof}.
+
+The counting behind the graph self-averaging is as follows. Two distinct overlap pairs sharing only one
+element have a constant conditional mean by the symmetry of vertex permutations, so their covariance is zero.
+Expanding $\sum_i \ell_i^2$ gives star-triple terms; if two star-triples share two or three elements, their
+joint support graph is connected. Exposing independent $k$-subsets in order along a spanning tree, the
+product expectations are $O(M^{-3})$ and $O(M^{-2})$ respectively, with $O(d^4)$ and $O(d^3)$ corresponding
+terms, so the total variance is $O(M)$. One does not need to assume that all overlaps are mutually
+independent.
+
+After projection, the local terms of the linear and quadratic parts number $O(d)$ in total, and the size of
+each term as well as the maximum degree of the dependency graph is $O(1+\Delta)$, where
+$\Delta=\max_i \ell_i$. The connected cumulant of fixed order $r\ge3$ satisfies
+\[
+|\kappa_r|\le C_r d(1+\Delta)^{2r-1}=o(M^{r/2}).
+\]
+The variance converges as computed in Section~\ref{sec:signproof}, and the method of moments gives the normal
+limit. For a random graph, take a subsequence of an arbitrary subsequence on which the relevant statistics
+converge almost surely and $\Delta\le\log^2d$ holds eventually; arguing graph by graph on this subsequence
+yields convergence in probability of the conditional characteristic function. The exact centering coefficient
+$\gamma=(d\rho_M^2-1)/(d-1)$ differs from $\rho_M^2$ by a quantity whose product with $\Omega$ is $O(1)$.
+The conditional characteristic function is bounded, so the convergence holds in $L^1$, and one may multiply by
+any bounded graph-measurable test function to establish joint asymptotic independence. The endpoint
+$|\rho|=1$ uses the exact total-variance identity of Section~\ref{sec:signproof}, and the above construction
+is not performed on the rare sign class.
+
+\subsubsection{Non-degeneracy of the constants}
+The integrand of the dynamic variance is strictly positive on a positive-length interval before the critical
+point, so $\tau_k^2>0$. For the initial-state part, the Cauchy--Schwarz inequality gives
+$\eta_k^2\le \sigma_0^2/(\sigma_0^2+\tau_k^2)<1$, which guarantees that the density of the selection law is
+strictly positive. Since $\beta_k<0$ and failure corresponds to a low score, the threshold is indeed
+$z_r=-\beta_k r/\sigma_k$.
+
+All remainders in the finite-dimensional joins are handled by Slutsky's theorem. Conditioning on having no
+bad edges preserves $o_p(1)$ because the probability of that event has a positive lower bound. When the score
+threshold is replaced by the true failure, the error of the joint CDF is bounded for all $x$ simultaneously
+by the probability of the symmetric difference of the events. Finally, dividing by $\Phi(z_r)>0$ gives the
+conditional distribution; the limit is continuous, so the CDF convergence is uniform. The convergence of the
+conditional mean additionally uses the uniform integrability from $\E X^2=1$ to truncate; the convergence of
+the quantile additionally uses the strict positivity of the limiting density. The argument above is for a
+fixed-level quantile.

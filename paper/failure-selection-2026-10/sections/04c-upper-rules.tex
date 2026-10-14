@@ -1,0 +1,50 @@
+\subsection{Implementation rules at finite size}\label{sec:rules}
+Theorem~\ref{thm:upper} and Proposition~\ref{prop:axis} are asymptotic statements. At finite
+size two systematic biases require correction, and both admit analytic expressions without
+fitted parameters.
+
+The first is the threshold center shift. The critical threshold shift given by
+Dembo--Montanari\cite{dm}, rescaled to the scale of this paper, replaces $z(n)$ with
+\begin{equation*}
+z_{\rm sh} = z(n) + C_k M^{-1/6}.
+\end{equation*}
+The constant $C_k$ is given in closed form by Airy integrals and the critical constants
+(Appendix~\ref{app:ck}); for $k = 3, 4, 5, 6$, $C_k \approx 1.930$, $2.015$, $2.016$, $2.005$.
+The empirical basis is given in Section~\ref{sec:threshold}.
+
+The second is the chi-square shape correction. At finite size the unconditional measurement
+is closer to the standardized chi-square $(M-1)$ distribution (Section~\ref{sec:chisq}), and
+the quantile requires the additional term
+\begin{equation*}
+\kappa(u) = \frac{\chi^2_{M-1,u} - (M-1)}{\sqrt{2(M-1)}} - \Phi^{-1}(u).
+\end{equation*}
+Both corrections vanish as $M \to \infty$ and do not affect the asymptotic coverage.
+
+Both corrections act on the acceptance threshold of Section~\ref{sec:upper-construct}:
+replacing $z(n)$ by $z_{\rm sh}$ and adding $\kappa(u)$ to the quantile gives the corrected
+selection threshold
+\begin{equation}
+n + s(n)\bigl[q_{\rm sel}\bigl(u;\,z_{\rm sh},\,\eta_k b^2/n^2\bigr) + \kappa(u)\bigr].
+\label{eq:corrected}
+\end{equation}
+It describes macro-core failure. On the low-load side below the critical window, failure comes
+mainly from repeated edges, and using \eqref{eq:corrected} alone gives undercoverage
+(Section~\ref{sec:num-loadaxis}). The two implementation rules below handle this in different
+ways; the comparison baseline is the unconditional threshold $n + s(n)\Phi^{-1}(u)$, which
+applies no selection correction at all.
+
+The envelope rule takes, for each candidate, the lower of \eqref{eq:corrected} and the
+unconditional threshold. The acceptance set is the union of the acceptance sets of the two
+thresholds, so a candidate is rejected only when both thresholds reject it, and the probability
+that the true value is wrongly rejected is at most the probability under either threshold alone.
+For $k = 3, 4$ the quantile of the selection law lies above the Gaussian quantile, so the
+envelope rule takes the unconditional threshold; for $k \ge 5$ the corrected selection
+threshold is lower, and the envelope rule applies the selection correction.
+
+The mixture rule replaces the selection law in \eqref{eq:corrected} with the mixture law $H_n$
+of Section~\ref{sec:loadaxis}, again taking the coordinate $z_{\rm sh}$ and adding $\kappa(u)$;
+the macro-layer weight is $\Phi(z_{\rm sh})/(\Phi(z_{\rm sh}) + 1 - e^{-\lambda_n})$, where
+$1 - e^{-\lambda_n}$ is the Poisson approximation to the repeated-edge probability. It describes
+the two failure mechanisms explicitly and covers the entire load axis. The envelope rule is
+simpler in form, while the mixture rule gives a narrower upper bound on the low-load side at
+$k=3$. End-to-end checks of the two rules are given in Section~\ref{sec:e2e}.

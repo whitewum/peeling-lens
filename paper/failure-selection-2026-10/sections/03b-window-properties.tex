@@ -1,0 +1,47 @@
+\subsection{Conditional mean, variance, and quantile}\label{sec:mean}
+The protocol uses three numerical features of the truncated distribution. The conditional mean and the conditional variance
+describe the direction and the dispersion of the shift of the estimate, and the lower quantile directly determines the threshold of
+the second-round capacity. This subsection derives their expressions one by one from the limiting distribution of
+Theorem~\ref{thm:main}.
+
+\paragraph{The first two moments.}
+Theorem~\ref{thm:main} gives uniform convergence of the distribution functions. Lifting this to convergence of moments requires
+uniform integrability. For every $M$, $\E X^2=1$ holds exactly, and the limiting failure probability $\Phi(z_r)$ is positive; from
+this one verifies the uniform integrability of $X^2$ under failure (Appendix~\ref{app:normalization}), and the first two conditional
+moments converge to the corresponding values of the limiting distribution.
+
+The limiting distribution is the distribution of the first coordinate of a bivariate normal truncated to the half-plane
+$\{y\le z_r\}$; its moments can be expressed through the truncated moments of a standard normal. Let $A(z)=\phi(z)/\Phi(z)$ denote
+the inverse Mills ratio. The mean of a standard normal variable truncated to $\{y\le z\}$ is $-A(z)$, and its variance is
+$1-A(z)[z+A(z)]$. In the limiting bivariate normal, the first coordinate decomposes into $c$ times the standardized score plus a
+normal term of variance $1-c^2$ that is independent of the score. The truncation acts only on the score, leaving the independent
+term unaffected. Hence
+\begin{equation*}
+\E[X\mid F]\longrightarrow-cA(z_r),\qquad
+\Var(X\mid F)\longrightarrow1-c^2A(z_r)\bigl[z_r+A(z_r)\bigr].
+\end{equation*}
+The shift of the mean equals the correlation coefficient $c$ times the average downward shift $A(z_r)$ of the score after
+truncation: the part of the measurement proportional to the score moves together with the score, rightward when $c<0$ and leftward
+when $c>0$. The conditional variance is less than one, because truncation compresses the fluctuations along the score direction
+while the part independent of the score is preserved unchanged. Under balanced signs $c=0$, both return to their unconditional
+values, consistent with Corollary~\ref{cor:balanced}. The smaller $z_r$ is (that is, the higher the load), the lower the failure
+probability, the larger $A(z_r)$, and the more pronounced the shift.
+
+\paragraph{Quantile.}
+Let $q_{\rm sel}(u;z,c)$ denote the quantile at level $u\in(0,1)$ of the distribution function $\Phi_2(x,z;c)/\Phi(z)$. This
+distribution has density
+\begin{equation*}
+f_{\rm sel}(x;z,c)=\frac{\phi(x)}{\Phi(z)}
+\Phi\!\left(\frac{z-cx}{\sqrt{1-c^2}}\right)
+\end{equation*}
+which is positive everywhere, and the distribution function is strictly increasing, so the conditional quantile at every fixed level
+converges to $q_{\rm sel}$.
+
+Which side the quantile moves toward is likewise determined by the sign of $c$. Since
+$\partial_c\Phi_2(x,z;c)=\phi_2(x,z;c)>0$, at every fixed $x$ the conditional distribution function increases strictly in $c$; at
+$c=0$ it is the standard normal distribution function. Lifting the distribution function overall means that the quantile at every
+level shifts leftward. Thus when $c>0$ all limiting quantiles lie below the corresponding standard normal values, and when $c<0$
+they all lie above.
+
+Thus far the failure-conditioned law inside the critical window is determined by only two numbers, $z_r$ and
+$c=\eta_k\rho_\infty^2$. The direction of the shift of the mean, the variance, and the quantile all depend on the sign of $\eta_k$.

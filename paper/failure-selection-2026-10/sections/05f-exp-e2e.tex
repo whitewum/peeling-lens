@@ -1,0 +1,43 @@
+\subsection{Coverage of the upper bound for unknown $d$}\label{sec:e2e}
+The preceding sections test the conditional law under a known true load and sign composition. This section tests what the protocol can actually use: using only the post-failure observable
+$\widehat d$ and the total sign $b$, construct the upper bound $U$ following Section~\ref{sec:upper}, and check whether it covers the true $d$.
+What is tested here is the coverage of the post-failure upper bound, namely the probability that $U<d$, and it does not involve a second decoding round.
+
+The end-to-end test comprises 288 test units, with the criterion fixed before running: the non-coverage rate of the envelope rule does not exceed $u$, and that of the mixture rule does not exceed $1.3u$.
+Neither rule has any test unit rejected, with maximum ratios of 1.106 and 1.151 respectively. Table~\ref{tab:e2e} summarizes the two rules and the
+unconditional threshold by region. We also tested two further candidate rules: the asymptotic form of Proposition~\ref{prop:axis} without a
+finite-size correction, whose maximum reaches $1.2$ times the nominal value, and the rule that switches the threshold according to
+$\widehat d$, whose maximum reaches $3.24$ times. Their definitions and results appear in Appendix~\ref{app:exp-e2e-other}.
+
+\begin{table}[!htbp]
+\centering
+\caption{End-to-end test. miss$/u$ is the ratio of the non-coverage rate to the nominal level, listed as median/maximum; the width is the median of $(U-d)/\sqrt M$.}
+\label{tab:e2e}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llrccccc}
+\toprule
+ & & & \multicolumn{3}{c}{miss$/u$ (median/max)} & \multicolumn{2}{c}{width}\\
+\cmidrule(lr){4-6}\cmidrule(lr){7-8}
+$k$ & region & units & Envelope & Mixture & Uncond. & Envelope & Mixture\\
+\midrule
+3 & window ($z_0\in\{0,-2\}$) & 48 & 0.63/1.04 & 0.98/1.08 & 0.63/1.04 & 2.73 & 2.71\\
+3 & tail ($z_0\in\{-3.5,-4.5\}$) & 40 & 0.74/1.03 & 0.97/1.05 & 0.74/1.03 & 2.73 & 2.69\\
+3 & low load ($z_0\in\{-6,-10\}$) & 32 & 0.94/1.10 & 0.97/1.15 & 0.94/1.10 & 2.21 & 1.83\\
+5 & window & 48 & 0.98/1.07 & 0.99/1.07 & 1.08/1.87 & 1.86 & 1.86\\
+5 & tail & 32 & 0.91/1.11 & 0.92/1.13 & 1.36/2.65 & 1.77 & 1.77\\
+5 & boundary region (splitting) & 72 & 0.83/1.00 & 0.92/1.04 & 1.01/3.14 & 1.91 & 1.91\\
+6 & window ($z_0\in\{0,-1.5\}$) & 16 & 1.00/1.04 & 1.00/1.04 & 1.15/2.15 & 1.65 & 1.63\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Three points can be read from the table. First, the maximum ratio of the envelope rule and the mixture rule is within $1.15$ in all regions, and the median does not exceed $1$. Second, for $k=3$ the
+unconditional threshold and the envelope rule give exactly the same result, because for $k=3,4$ the envelope rule takes precisely the
+unconditional threshold; once $k\ge5$, the unconditional threshold reaches maximum ratios of $1.87$, $2.65$, and $3.14$ in the
+window, tail, and boundary regions respectively, and among the 288 test units there are 90 whose $99.9\%$ lower bound exceeds
+$u$. This is direct evidence that the selection correction is necessary at realistic scales. Third, for $k\ge5$ the widths of the two rules are almost identical; for $k=3$ the mixture rule is narrower,
+with a median width of $1.83\sqrt M$ on the low-load side against $2.21\sqrt M$ for the envelope rule, at the cost of a non-coverage rate closer to the nominal value. The envelope rule is conservative in the $k=3$
+window (median ratio $0.63$), which is the cost of giving up the selection correction for $k=3,4$. The proportion of empty acceptance sets $\mathcal C_M$ is at most
+$0.009$, occurring in the near-one-sided composition of the $k=3$ window, and does not exceed $0.002$ in the remaining regions. The test covers only $M\ge4096$ and the above configurations,
+and does not cover the far low-load region for $k\ge5$ or the sparse end where $d/\sqrt M$ is small.

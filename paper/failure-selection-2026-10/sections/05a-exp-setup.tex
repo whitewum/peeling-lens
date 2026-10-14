@@ -1,0 +1,68 @@
+\section{Numerical Evaluation}\label{sec:numerics}
+The numerical evaluation has two parts. Sections~\ref{sec:constants}--\ref{sec:num-loadaxis}
+verify the theory term by term under the known true load and sign composition, while
+Section~\ref{sec:e2e} constructs an upper bound from only the quantities observable after
+failure and checks its coverage. Table~\ref{tab:exp-overview} lists the question addressed in
+each section and the corresponding theoretical result.
+
+\begin{table}[!htbp]
+\centering
+\caption{Overview of the experiments.}
+\label{tab:exp-overview}
+\small
+\begin{tabular}{lp{.5\linewidth}ll}
+\toprule
+Section & Question tested & Corresponding theory & Result\\
+\midrule
+\ref{sec:constants} & the conditional variance, the direction of the conditional mean, and the decay of $\rho^2$ & Theorem~\ref{thm:main} & Figure~\ref{fig:selection}\\
+\ref{sec:threshold} & the shift of the threshold center at finite size & the shift constant $C_k$ & Figure~\ref{fig:threshold}\\
+\ref{sec:chisq} & the shape of the unconditional measurement under balanced signs & the chi-square correction & Figure~\ref{fig:chisq}\\
+\ref{sec:calib} & the accuracy of the lower-tail probability after combining the two corrections & Eq.~\eqref{eq:corrected} & Figure~\ref{fig:calib}\\
+\ref{sec:num-loadaxis} & the separation of the macro layer and the repeated-edge layer at low load & Proposition~\ref{prop:lowload}, \ref{prop:mixture} & Figure~\ref{fig:twomech}\\
+\ref{sec:e2e} & the coverage and width of the upper bound $U$ when $d$ is unknown & the envelope rule and the mixture rule & Table~\ref{tab:e2e}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Experimental Design and Comparison Targets}\label{sec:exp-design}
+\emph{Simulation setup.} The experiments use an independent Plain mapping and ideal peeling.
+The analytic constants are computed by a separate script and are not fitted to the simulation
+data. The left-tail series contains $k\in\{3,5\}$, $M\in\{256,1024,4096,16384,65536\}$, and
+four target coordinates $\{-2,-2.5,-3,-3.5\}$, for 40 configurations in total. Because $d$
+must be an integer, the actual window location is determined by the chosen integer $d$.
+
+\emph{Three coordinates.} The first is the theorem coordinate:
+\begin{equation*}
+z_0=\frac{(d/M-\alpha_c)\sqrt M}{w_k},\qquad w_k=\sigma_k/|\beta_k|.
+\end{equation*}
+The second is the shifted coordinate $z_{\rm sh}=z_0+C_kM^{-1/6}$, with the numerical values
+of the shift constant $C_k$ in Section~\ref{sec:rules} and the closed form in
+Appendix~\ref{app:ck}. The result of DM concerns the configuration model;
+Section~\ref{sec:threshold} verifies this shift on the Plain model. A sequence obtained by
+fixing $z_{\rm sh}$ corresponds to a single limiting $r$, and therefore satisfies the
+conditions of the theorem. The third is the empirical coordinate $z_{\rm emp}=\Phi^{-1}(\widehat p_F)$,
+recovered from the measured failure rate and used only for diagnosis.
+
+\emph{Classification of failures.} A run fails when the 2-core is nonempty after peeling.
+According to the number of edges in the remaining core, failures are divided into macro-core
+failures and small-core failures; a small core containing a pair of identical edges is
+assigned to the repeated-edge layer. A macro core is identified by the core edge count
+exceeding $0.1d$\footnote{Direct sampling uses the threshold $0.1M$. On all configurations
+with $M\ge1024$ the two criteria give the same conclusion; the difference appears only in the
+41 configurations with $M\le256$.}.
+
+\emph{Data split.} For configurations with complete records, the samples are split by trial
+index into two disjoint halves: the empirical threshold and the empirical failure rate come
+from the training half, and the actual lower-tail probability is computed on the failing
+samples of the test half. The calibration table contains 624 configuration/sign rows,
+involving 115 distinct $(k,M,d)$.
+
+\emph{Thresholds compared.} Sections~\ref{sec:constants}--\ref{sec:num-loadaxis} use the true
+load and sign composition and compare four thresholds: the unconditional normal threshold,
+the unconditional chi-square threshold, the threshold given by the selection law, and the
+corrected selection threshold of Eq.~\eqref{eq:corrected} (with $n=d$ and
+$b^2/n^2=\rho^2$). Both corrections come from analytic formulas and contain no fitted
+coefficients; the basis for the chi-square term is given in Section~\ref{sec:chisq}.
+Section~\ref{sec:e2e} compares the envelope rule and the mixture rule of
+Section~\ref{sec:rules}, with the unconditional threshold as the baseline and $d$ given by the
+inversion of Section~\ref{sec:upper}.
